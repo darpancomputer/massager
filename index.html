@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook - Log in or Sign up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #ffffff;
+            padding: 10px 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1877f2;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+        
+        .login-container h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1c1e21;
+        }
+        
+        .input-field {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .input-field input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .login-btn {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .login-btn:hover {
+            background-color: #166fe5;
+        }
+        
+        .forgot-password {
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 20px;
+        }
+        
+        .divider {
+            border-bottom: 1px solid #dadde1;
+            margin: 20px 0;
+        }
+        
+        .create-account-btn {
+            background-color: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .create-account-btn:hover {
+            background-color: #36a420;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #737373;
+        }
+        
+        /* Registration Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #1c1e21;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #606770;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #606770;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccd0d5;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+        
+        .register-btn {
+            background-color: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        /* Profile Section (hidden by default) */
+        .profile-section {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .profile-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .profile-btn {
+            background-color: #e4e6eb;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            z-index: 1;
+        }
+        
+        .dropdown-content a {
+            color: #1c1e21;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f0f2f5;
+        }
+        
+        .profile-dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        /* Navigation Icons */
+        .nav-icons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-icon {
+            color: #65676b;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #f0f2f5;
+            border-radius: 50px;
+            padding: 8px 12px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: none;
+            outline: none;
+            width: 100%;
+            padding: 5px;
+        }
+        
+        .search-bar i {
+            color: #65676b;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section (visible by default) -->
+        <header>
+            <div class="logo">facebook</div>
+        </header>
+        
+        <div class="main-content">
+            <div class="login-container">
+                <h1>Log in to Facebook</h1>
+                <div class="input-field">
+                    <input type="text" id="login-email" placeholder="Email address or phone number">
+                </div>
+                <div class="input-field">
+                    <input type="password" id="login-password" placeholder="Password">
+                </div>
+                <button class="login-btn" id="login-button">Log In</button>
+                <a href="#" class="forgot-password">Forgot password?</a>
+                <div class="divider"></div>
+                <button class="create-account-btn" id="create-account-btn">Create new account</button>
+            </div>
+        </div>
+        
+        <footer>
+            <div>Meta</div>
+        </footer>
+        
+        <!-- Registration Modal (hidden by default) -->
+        <div class="modal" id="registration-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Sign Up</h2>
+                    <button class="close-btn" id="close-modal">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <button class="register-btn" id="register-button">Sign Up</button>
+            </div>
+        </div>
+        
+        <!-- Profile Section (hidden by default) -->
+        <div class="profile-section" id="profile-section">
+            <div class="profile-header">
+                <div class="profile-dropdown">
+                    <button class="profile-btn">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">Settings</a>
+                        <a href="#" id="logout-btn">Log Out</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search Facebook">
+            </div>
+            
+            <!-- User content would go here -->
+            <div style="text-align: center; padding: 20px;">
+                <h2>Welcome to your profile!</h2>
+                <p id="welcome-message"></p>
+            </div>
+        </div>
+        
+        <!-- Navigation Icons (hidden by default) -->
+        <div class="nav-icons" id="nav-icons">
+            <a href="#" class="nav-icon"><i class="fas fa-home"></i></a>
+            <a href="#" class="nav-icon"><i class="fas fa-search"></i></a>
+            <a href="#" class="nav-icon"><i class="fas fa-comment"></i></a>
+            <a href="#" class="nav-icon"><i class="fas fa-bell"></i></a>
+            <a href="#" class="nav-icon"><i class="fas fa-book"></i></a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
+  authDomain: "massage-8c66f.firebaseapp.com",
+  databaseURL: "https://massage-8c66f-default-rtdb.firebaseio.com",
+  projectId: "massage-8c66f",
+  storageBucket: "massage-8c66f.firebasestorage.app",
+  messagingSenderId: "557008720018",
+  appId: "1:557008720018:web:22055db26bbfb2bab3d64b"
+};
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // DOM Elements
+        const loginButton = document.getElementById('login-button');
+        const createAccountBtn = document.getElementById('create-account-btn');
+        const registerButton = document.getElementById('register-button');
+        const closeModal = document.getElementById('close-modal');
+        const registrationModal = document.getElementById('registration-modal');
+        const profileSection = document.getElementById('profile-section');
+        const loginContainer = document.querySelector('.login-container');
+        const logoutBtn = document.getElementById('logout-btn');
+        const navIcons = document.getElementById('nav-icons');
+        const welcomeMessage = document.getElementById('welcome-message');
+
+        // Show registration modal
+        createAccountBtn.addEventListener('click', () => {
+            registrationModal.style.display = 'flex';
+        });
+
+        // Close registration modal
+        closeModal.addEventListener('click', () => {
+            registrationModal.style.display = 'none';
+        });
+
+        // Register new user
+        registerButton.addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (validate_email(email) === false || validate_password(password) === false) {
+                alert('Email or Password is invalid');
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // User registered successfully
+                    const user = userCredential.user;
+                    
+                    // Add user to Realtime Database
+                    const userData = {
+                        username: username,
+                        email: email,
+                        last_login: Date.now()
+                    };
+                    
+                    database.ref('users/' + user.uid).set(userData)
+                        .then(() => {
+                            alert('User created successfully!');
+                            registrationModal.style.display = 'none';
+                            showProfileSection(user.uid, username);
+                        })
+                        .catch((error) => {
+                            alert(error.message);
+                        });
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        });
+
+        // Login existing user
+        loginButton.addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // User logged in successfully
+                    const user = userCredential.user;
+                    
+                    // Get user data from Realtime Database
+                    database.ref('users/' + user.uid).once('value')
+                        .then((snapshot) => {
+                            const userData = snapshot.val();
+                            showProfileSection(user.uid, userData.username);
+                        })
+                        .catch((error) => {
+                            alert(error.message);
+                        });
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        });
+
+        // Logout user
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut()
+                .then(() => {
+                    // User signed out successfully
+                    profileSection.style.display = 'none';
+                    navIcons.style.display = 'none';
+                    loginContainer.style.display = 'block';
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        });
+
+        // Show profile section after login/registration
+        function showProfileSection(userId, username) {
+            loginContainer.style.display = 'none';
+            profileSection.style.display = 'block';
+            navIcons.style.display = 'flex';
+            welcomeMessage.textContent = `Hello, ${username}!`;
+            
+            // Update last login time in database
+            database.ref('users/' + userId).update({
+                last_login: Date.now()
+            });
+        }
+
+        // Validation functions
+        function validate_email(email) {
+            const expression = /^[^@]+@\w+(\.\w+)+\w$/;
+            return expression.test(email);
+        }
+
+        function validate_password(password) {
+            return password.length >= 6;
+        }
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in
+                database.ref('users/' + user.uid).once('value')
+                    .then((snapshot) => {
+                        const userData = snapshot.val();
+                        showProfileSection(user.uid, userData.username);
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
