@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -40,7 +40,7 @@
     .card { background:#fff; border-radius:8px; padding:15px; box-shadow:0 1px 2px rgba(0,0,0,.08); margin-bottom:20px; }
     .users-list h2, .friend-requests h2 { margin:0 0 12px 0; color:#1c1e21; }
 
-    .user-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #eee; }
+    .user-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #eee; cursor:default; }
     .user-avatar { width:40px; height:40px; border-radius:50%; background:#e4e6eb; display:flex; align-items:center; justify-content:center; color:#1877f2; }
     .user-info { flex:1; }
     .user-name { font-weight:bold; }
@@ -99,6 +99,9 @@
     }
 
     .you-badge { font-size:12px; color:#fff; background:#6c757d; padding:2px 6px; border-radius:8px; margin-left:8px; }
+
+    /* small helper for clickable user */
+    .user-item.clickable { cursor:pointer; }
   </style>
 </head>
 <body>
@@ -232,17 +235,16 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
-  authDomain: "massage-8c66f.firebaseapp.com",
-  databaseURL: "https://massage-8c66f-default-rtdb.firebaseio.com",
-  projectId: "massage-8c66f",
-  storageBucket: "massage-8c66f.firebasestorage.app",
-  messagingSenderId: "557008720018",
-  appId: "1:557008720018:web:22055db26bbfb2bab3d64b"
-};
+    // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
+      authDomain: "massage-8c66f.firebaseapp.com",
+      databaseURL: "https://massage-8c66f-default-rtdb.firebaseio.com",
+      projectId: "massage-8c66f",
+      storageBucket: "massage-8c66f.firebasestorage.app",
+      messagingSenderId: "557008720018",
+      appId: "1:557008720018:web:22055db26bbfb2bab3d64b"
+    };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
@@ -556,6 +558,15 @@ const firebaseConfig = {
         `;
         // Create friend action button for non-self users
         createFriendActionButton(uid, actionDiv);
+
+        // Make the whole item clickable to send request (but avoid clicks when pressing inner buttons)
+        item.classList.add('clickable');
+        item.addEventListener('click', (e) => {
+          // If the click originated from a button inside the item, ignore here
+          if (e.target.closest('button')) return;
+          // send friend request (will handle duplicates / existing requests in the function)
+          sendFriendRequest(uid);
+        });
       }
 
       // If current user is admin, show admin controls
@@ -589,13 +600,17 @@ const firebaseConfig = {
           // Request sent by current user to uid
           btn.textContent = 'Cancel';
           btn.className = 'cancel-request-btn';
-          btn.addEventListener('click', () => cancelFriendRequest(uid));
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            cancelFriendRequest(uid);
+          });
           container.appendChild(btn);
         } else if (incomingSnap.exists()) {
-          // Incoming request from uid to current user — show "Accept" here too
+          // Incoming request from uid to current user — show "Respond" here too
           btn.textContent = 'Respond';
           btn.className = 'add-friend-btn';
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             // Scroll to friend requests area for convenience
             document.getElementById('friend-requests-card').scrollIntoView({behavior:'smooth'});
           });
@@ -604,14 +619,17 @@ const firebaseConfig = {
           // No relation - show Add Friend
           btn.textContent = 'Add Friend';
           btn.className = 'add-friend-btn';
-          btn.addEventListener('click', () => sendFriendRequest(uid));
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sendFriendRequest(uid);
+          });
           container.appendChild(btn);
         }
       }).catch(err => {
         console.error('Error creating friend button:', err);
         btn.textContent = 'Add Friend';
         btn.className = 'add-friend-btn';
-        btn.addEventListener('click', () => sendFriendRequest(uid));
+        btn.addEventListener('click', (e) => { e.stopPropagation(); sendFriendRequest(uid); });
         container.appendChild(btn);
       });
     }
@@ -622,7 +640,7 @@ const firebaseConfig = {
       const makeAdminBtn = document.createElement('button');
       makeAdminBtn.className = 'make-admin-btn';
       makeAdminBtn.textContent = 'Make Admin';
-      makeAdminBtn.addEventListener('click', () => makeUserAdmin(uid));
+      makeAdminBtn.addEventListener('click', (e) => { e.stopPropagation(); makeUserAdmin(uid); });
       container.appendChild(makeAdminBtn);
 
       // Block/unblock button
@@ -631,7 +649,8 @@ const firebaseConfig = {
         const blockBtn = document.createElement('button');
         blockBtn.className = isBlocked ? 'unblock-btn' : 'block-btn';
         blockBtn.textContent = isBlocked ? 'Unblock' : 'Block';
-        blockBtn.addEventListener('click', () => {
+        blockBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
           if (isBlocked) unblockUser(uid);
           else blockUser(uid);
         });
@@ -641,14 +660,35 @@ const firebaseConfig = {
 
     // Send friend request
     async function sendFriendRequest(toUid) {
-      if (!currentUserData) {
+      if (!currentUserData || !currentUser) {
         alert('User data is still loading, please try again.');
         return;
       }
-      
+
+      if (toUid === currentUser.uid) {
+        alert('You cannot send a friend request to yourself.');
+        return;
+      }
+
       showLoading();
-      
+
       try {
+        // Check if already friends
+        const fsnap = await db.ref(`users/${currentUser.uid}/friends/${toUid}`).once('value');
+        if (fsnap.exists()) {
+          alert('You are already friends.');
+          hideLoading();
+          return;
+        }
+
+        // Check if request already sent
+        const alreadySent = await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).once('value');
+        if (alreadySent.exists()) {
+          alert('Friend request already sent.');
+          hideLoading();
+          return;
+        }
+
         const senderUsername = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'Someone');
         await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
           fromUid: currentUser.uid,
@@ -656,9 +696,19 @@ const firebaseConfig = {
           status: 'pending',
           timestamp: Date.now()
         });
+
+        // Optional: add a notification
+        await db.ref(`users/${toUid}/notifications`).push({
+          type: 'friend_request',
+          fromUid: currentUser.uid,
+          message: `${senderUsername} sent you a friend request`,
+          timestamp: Date.now()
+        });
+
         alert('Friend request sent!');
       } catch (error) {
-        alert('Failed to send friend request: ' + error.message);
+        console.error('Failed to send friend request:', error);
+        alert('Failed to send friend request: ' + (error.message || 'Unknown error'));
       } finally {
         hideLoading();
       }
@@ -744,10 +794,8 @@ const firebaseConfig = {
           friendRequestsContainer.appendChild(item);
           
           // Add event listeners to buttons
-          item.querySelector('.accept-btn').addEventListener('click', 
-            () => acceptFriendRequest(fromUid));
-          item.querySelector('.decline-btn').addEventListener('click', 
-            () => declineFriendRequest(fromUid));
+          item.querySelector('.accept-btn').addEventListener('click', (e) => { e.stopPropagation(); acceptFriendRequest(fromUid); });
+          item.querySelector('.decline-btn').addEventListener('click', (e) => { e.stopPropagation(); declineFriendRequest(fromUid); });
         });
       }
     }
