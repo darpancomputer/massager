@@ -29,7 +29,7 @@
     .profile-dropdown { position:relative; display:inline-block; }
     .profile-btn { background:#e4e6eb; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
 
-    .dropdown-content { display:none; position:absolute; right:0; background:#fff; min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:6px; z-index:2; }
+    .dropdown-content { display:none; position:absolute; right:0; background:#fff; min-width:220px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:6px; z-index:2; }
     .dropdown-content a, .dropdown-content button { color:#1c1e21; padding:10px 14px; text-decoration:none; display:block; font-size:14px; background:none; border:none; width:100%; text-align:left; cursor:pointer; }
     .dropdown-content a:hover, .dropdown-content button:hover { background:#f0f2f5; }
 
@@ -46,7 +46,11 @@
     .user-name { font-weight:bold; }
     .user-status { font-size:12px; color:#65676b; }
 
-    .add-friend-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; }
+    .add-friend-btn, .cancel-request-btn, .make-admin-btn, .block-btn, .unblock-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; }
+    .cancel-request-btn { background:#ffb400; }
+    .make-admin-btn { background:#6f42c1; }
+    .block-btn { background:#ff3b30; }
+    .unblock-btn { background:#28a745; }
 
     .friend-requests .request-item { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid #eee; }
     .request-actions { margin-left:auto; display:flex; gap:6px; }
@@ -74,6 +78,25 @@
     /* admin panel */
     .admin-panel { display:none; }
     .badge { background:#ff3b30; color:#fff; font-size:12px; padding:2px 6px; border-radius:12px; margin-left:6px; }
+
+    /* notification list */
+    .noti-list { max-height:200px; overflow:auto; }
+    
+    /* Loading spinner */
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border-left-color: #1877f2;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -117,6 +140,16 @@
             <span id="req-count" class="badge" style="position:absolute; top:-6px; right:-6px; display:none;">0</span>
           </div>
 
+          <div id="notification-dropdown" style="position:relative;">
+            <button id="noti-btn" class="profile-btn" title="Notifications">
+              <i class="fas fa-envelope"></i>
+            </button>
+            <div class="dropdown-content" id="noti-list" style="right:60px; display:none; width:300px;">
+              <div style="padding:8px; font-weight:bold;">Notifications</div>
+              <div id="noti-items" class="noti-list" style="padding:8px;"></div>
+            </div>
+          </div>
+
           <div class="profile-dropdown">
             <button class="profile-btn" id="profile-btn">
               <i class="fas fa-user"></i>
@@ -144,10 +177,11 @@
 
           <div class="card admin-panel" id="admin-panel">
             <h2>Admin Panel</h2>
-            <div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <button id="view-all-chats-btn">View All Chats</button>
+              <button id="view-all-users-btn">View All Users</button>
             </div>
-            <div id="admin-output" style="margin-top:12px;"></div>
+            <div id="admin-output" style="margin-top:12px; max-height:420px; overflow:auto;"></div>
           </div>
         </div>
 
@@ -192,7 +226,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
-   // Your web app's Firebase configuration
+  // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
   authDomain: "massage-8c66f.firebaseapp.com",
@@ -202,14 +236,13 @@ const firebaseConfig = {
   messagingSenderId: "557008720018",
   appId: "1:557008720018:web:22055db26bbfb2bab3d64b"
 };
-    // ------------------------------------------------------------
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
 
-    // DOM
+    // DOM Elements
     const loginPage = document.getElementById('login-page');
     const appContainer = document.getElementById('app-container');
     const loginButton = document.getElementById('login-button');
@@ -231,105 +264,135 @@ const firebaseConfig = {
     const adminPanelBtn = document.getElementById('admin-panel-btn');
     const adminOutput = document.getElementById('admin-output');
     const viewAllChatsBtn = document.getElementById('view-all-chats-btn');
+    const viewAllUsersBtn = document.getElementById('view-all-users-btn');
     const backBtn = document.getElementById('back-btn');
+    const notiBtn = document.getElementById('noti-btn');
+    const notiListEl = document.getElementById('noti-list');
+    const notiItems = document.getElementById('noti-items');
 
-    // state
+    // State variables
     let currentUser = null;
-    let currentUserData = null; // user info from db
+    let currentUserData = null;
     let currentChatFriend = null;
     let pendingRequests = {};
+    let notifications = {};
 
-    // Profile dropdown toggle
-    profileBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', () => dropdownContent.style.display = 'none');
-
-    // Navigation tabs (simple)
-    document.getElementById('home-tab').addEventListener('click', (e) => { e.preventDefault(); });
-    document.getElementById('chat-tab').addEventListener('click', (e) => { e.preventDefault(); });
-
-    // Login
-    loginButton.addEventListener('click', () => {
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-      if (!email || !password) return alert('Enter email and password');
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then(cred => {
-          currentUser = cred.user;
-          postLoginInit();
-        })
-        .catch(err => alert(err.message));
-    });
-
-    // Create account
-    createAccountBtn.addEventListener('click', () => {
-      const email = prompt('Enter your email:');
-      const password = prompt('Enter your password (min 6 chars):');
-      const username = prompt('Enter your username:');
-      if (!email || !password || !username) return alert('All fields required');
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((cred) => {
-          currentUser = cred.user;
-          // Save user to db with default role 'user'
-          saveUserToDB(currentUser.uid, {
-            uid: currentUser.uid,
-            username: username,
-            email: email,
-            role: 'user',
-            friends: {}
-          }).then(() => {
-            postLoginInit();
-          });
-        })
-        .catch(err => alert(err.message));
-    });
-
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-      auth.signOut().then(() => {
-        currentUser = null;
-        currentUserData = null;
-        loginPage.style.display = 'flex';
-        appContainer.style.display = 'none';
-      });
-    });
-
-    // Save user helper
-    function saveUserToDB(uid, obj) {
-      return db.ref('users/' + uid).set(obj);
+    // Initialize the application
+    function init() {
+      setupEventListeners();
+      auth.onAuthStateChanged(handleAuthStateChange);
     }
 
-    // After login actions: ensure user record exists, load lists, listeners
-    function postLoginInit() {
-      if (!currentUser) return;
-      // ensure user record exists
+    // Set up event listeners
+    function setupEventListeners() {
+      // Profile dropdown toggle
+      profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+      });
+      
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', () => { 
+        dropdownContent.style.display = 'none'; 
+        notiListEl.style.display = 'none'; 
+      });
+
+      // Notification dropdown toggle
+      notiBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notiListEl.style.display = notiListEl.style.display === 'block' ? 'none' : 'block';
+      });
+
+      // Navigation tabs
+      document.getElementById('home-tab').addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        // Add tab switching logic here if needed
+      });
+      
+      document.getElementById('chat-tab').addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        // Add tab switching logic here if needed
+      });
+
+      // Login
+      loginButton.addEventListener('click', handleLogin);
+
+      // Create account
+      createAccountBtn.addEventListener('click', handleCreateAccount);
+
+      // Logout
+      logoutBtn.addEventListener('click', handleLogout);
+
+      // Send message
+      sendBtn.addEventListener('click', sendMessage);
+      messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+
+      // Back button in chat
+      backBtn.addEventListener('click', () => {
+        currentChatFriend = null;
+        currentChatName.textContent = '';
+        backBtn.style.display = 'none';
+        chatMessages.innerHTML = '<div style="color:#888">Select a friend to start chat</div>';
+      });
+
+      // Admin buttons
+      viewAllChatsBtn.addEventListener('click', viewAllChats);
+      viewAllUsersBtn.addEventListener('click', viewAllUsers);
+
+      // Friend requests button
+      requestsBtn.addEventListener('click', () => {
+        const card = document.getElementById('friend-requests-card');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+
+    // Handle authentication state changes
+    function handleAuthStateChange(user) {
+      if (user) {
+        currentUser = user;
+        initializeAppAfterLogin();
+      } else {
+        loginPage.style.display = 'flex';
+        appContainer.style.display = 'none';
+      }
+    }
+
+    // Initialize app after successful login
+    function initializeAppAfterLogin() {
+      showLoading();
+      
+      // Ensure user record exists
       db.ref('users/' + currentUser.uid).once('value').then(snap => {
         if (!snap.exists()) {
-          // create default user record using email as username fallback
+          // Create default user record
           const username = currentUser.email.split('@')[0];
           saveUserToDB(currentUser.uid, {
             uid: currentUser.uid,
             username: username,
             email: currentUser.email,
             role: 'user',
-            friends: {}
-          }).then(() => initAfterEnsureUser());
+            friends: {},
+            blocked: false
+          }).then(() => loadAppData());
         } else {
-          initAfterEnsureUser();
+          loadAppData();
         }
+      }).catch(error => {
+        console.error("Error checking user record:", error);
+        hideLoading();
       });
     }
 
-    function initAfterEnsureUser() {
-      // get current user data and initialize UI
+    // Load all app data after user record is confirmed
+    function loadAppData() {
+      // Get current user data
       db.ref('users/' + currentUser.uid).on('value', snap => {
         currentUserData = snap.val();
         currentUserEmailLabel.textContent = currentUserData.email || '';
-        // show admin panel button if admin
+        
+        // Show admin panel button if admin
         if (currentUserData && currentUserData.role === 'admin') {
           adminPanelEl.style.display = 'block';
           adminPanelBtn.style.display = 'block';
@@ -337,183 +400,473 @@ const firebaseConfig = {
           adminPanelEl.style.display = 'none';
           adminPanelBtn.style.display = 'none';
         }
+        
+        hideLoading();
       });
 
       loginPage.style.display = 'none';
       appContainer.style.display = 'block';
 
+      // Load all components
       loadAllUsers();
       listenFriendRequests();
       loadFriendsList();
+      listenNotifications();
     }
 
-    // Load all users for sending friend requests
+    // Handle login
+    function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      
+      if (!email || !password) {
+        alert('Please enter both email and password');
+        return;
+      }
+      
+      showLoading();
+      
+      auth.signInWithEmailAndPassword(email, password)
+        .then(cred => {
+          currentUser = cred.user;
+        })
+        .catch(err => {
+          hideLoading();
+          alert(err.message);
+        });
+    }
+
+    // Handle account creation
+    function handleCreateAccount() {
+      const email = prompt('Enter your email:');
+      if (!email) return;
+      
+      const password = prompt('Enter your password (min 6 chars):');
+      if (!password || password.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+      }
+      
+      const username = prompt('Enter your username:');
+      if (!username) {
+        alert('Username is required');
+        return;
+      }
+      
+      showLoading();
+      
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((cred) => {
+          currentUser = cred.user;
+          // Save user to database
+          return saveUserToDB(currentUser.uid, {
+            uid: currentUser.uid,
+            username: username,
+            email: email,
+            role: 'user',
+            friends: {},
+            blocked: false
+          });
+        })
+        .catch(err => {
+          hideLoading();
+          alert(err.message);
+        });
+    }
+
+    // Handle logout
+    function handleLogout() {
+      showLoading();
+      auth.signOut().then(() => {
+        currentUser = null;
+        currentUserData = null;
+        loginPage.style.display = 'flex';
+        appContainer.style.display = 'none';
+        hideLoading();
+      }).catch(error => {
+        hideLoading();
+        console.error("Logout error:", error);
+      });
+    }
+
+    // Save user to database
+    function saveUserToDB(uid, userData) {
+      return db.ref('users/' + uid).set(userData);
+    }
+
+    // Load all users for friend requests
     function loadAllUsers() {
+      showLoading('users-list-container');
+      
       db.ref('users').on('value', snapshot => {
-        const all = snapshot.val() || {};
+        const allUsers = snapshot.val() || {};
         usersListContainer.innerHTML = '';
 
-        for (const uid in all) {
+        for (const uid in allUsers) {
           if (uid === currentUser.uid) continue;
-          const u = all[uid];
-          const item = document.createElement('div');
-          item.className = 'user-item';
-          item.innerHTML = `
-            <div class="user-avatar"><i class="fas fa-user"></i></div>
-            <div class="user-info">
-              <div class="user-name">${escapeHtml(u.username || '(no-name)')}</div>
-              <div class="user-status">${escapeHtml(u.email || '')}</div>
-            </div>
-            <div>
-              <button class="add-friend-btn" data-uid="${uid}">Add Friend</button>
-            </div>
-          `;
-          usersListContainer.appendChild(item);
+          
+          const user = allUsers[uid];
+          const userItem = createUserItem(uid, user);
+          usersListContainer.appendChild(userItem);
+        }
+        
+        hideLoading('users-list-container');
+      }, error => {
+        hideLoading('users-list-container');
+        console.error("Error loading users:", error);
+      });
+    }
 
-          // disable add button if already friends
-          const btn = item.querySelector('.add-friend-btn');
-          db.ref(`users/${currentUser.uid}/friends/${uid}`).once('value').then(snap => {
-            if (snap.exists()) {
-              btn.textContent = 'Friends';
-              btn.disabled = true;
-              btn.style.background = '#6c757d';
+    // Create user item element
+    function createUserItem(uid, user) {
+      const item = document.createElement('div');
+      item.className = 'user-item';
+
+      // Create action buttons area
+      const actionDiv = document.createElement('div');
+      const adminControls = document.createElement('div');
+      adminControls.style.marginLeft = '8px';
+
+      // Check friendship status and create appropriate button
+      createFriendActionButton(uid, actionDiv);
+      
+      // If current user is admin, show admin controls
+      if (currentUserData && currentUserData.role === 'admin') {
+        createAdminControls(uid, adminControls);
+      }
+
+      item.innerHTML = `
+        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <div class="user-info">
+          <div class="user-name">${escapeHtml(user.username || '(no-name)')}</div>
+          <div class="user-status">${escapeHtml(user.email || '')}</div>
+        </div>
+      `;
+      
+      item.appendChild(actionDiv);
+      item.appendChild(adminControls);
+      return item;
+    }
+
+    // Create friend action button based on relationship status
+    function createFriendActionButton(uid, container) {
+      const btn = document.createElement('button');
+      btn.setAttribute('data-uid', uid);
+
+      db.ref(`users/${currentUser.uid}/friends/${uid}`).once('value').then(fsnap => {
+        if (fsnap.exists()) {
+          // Already friends
+          btn.textContent = 'Friends';
+          btn.disabled = true;
+          btn.style.background = '#6c757d';
+          container.appendChild(btn);
+        } else {
+          // Check if request was already sent
+          db.ref(`users/${uid}/friendRequests/${currentUser.uid}`).once('value').then(rsnap => {
+            if (rsnap.exists()) {
+              // Request sent - show Cancel button
+              btn.textContent = 'Cancel';
+              btn.className = 'cancel-request-btn';
+              btn.addEventListener('click', () => cancelFriendRequest(uid));
+              container.appendChild(btn);
             } else {
-              // Also check if request already sent
-              db.ref(`users/${uid}/friendRequests/${currentUser.uid}`).once('value').then(rsnap => {
-                if (rsnap.exists()) {
-                  btn.textContent = 'Requested';
-                  btn.disabled = true;
-                  btn.style.background = '#e4e6eb';
-                  btn.style.color = '#333';
-                }
-              });
+              // No request - show Add Friend button
+              btn.textContent = 'Add Friend';
+              btn.className = 'add-friend-btn';
+              btn.addEventListener('click', () => sendFriendRequest(uid));
+              container.appendChild(btn);
             }
           });
-
-          btn.addEventListener('click', (e) => {
-            const toUid = e.target.getAttribute('data-uid');
-            sendFriendRequest(toUid);
-          });
         }
+      });
+    }
+
+    // Create admin controls for user management
+    function createAdminControls(uid, container) {
+      // Make admin button
+      const makeAdminBtn = document.createElement('button');
+      makeAdminBtn.className = 'make-admin-btn';
+      makeAdminBtn.textContent = 'Make Admin';
+      makeAdminBtn.addEventListener('click', () => makeUserAdmin(uid));
+      container.appendChild(makeAdminBtn);
+
+      // Block/unblock button
+      db.ref(`users/${uid}/blocked`).once('value').then(bsnap => {
+        const isBlocked = bsnap.exists() && bsnap.val() === true;
+        const blockBtn = document.createElement('button');
+        blockBtn.className = isBlocked ? 'unblock-btn' : 'block-btn';
+        blockBtn.textContent = isBlocked ? 'Unblock' : 'Block';
+        blockBtn.addEventListener('click', () => {
+          if (isBlocked) unblockUser(uid);
+          else blockUser(uid);
+        });
+        container.appendChild(blockBtn);
       });
     }
 
     // Send friend request
     async function sendFriendRequest(toUid) {
-      if (!currentUserData) return alert('User data loading, try again.');
-      // write request under recipient's friendRequests node
-      const senderUsername = currentUserData.username || currentUser.email.split('@')[0];
-      await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
-        fromUid: currentUser.uid,
-        fromUsername: senderUsername,
-        status: 'pending',
-        timestamp: Date.now()
-      });
-      alert('Friend request sent!');
+      if (!currentUserData) {
+        alert('User data is still loading, please try again.');
+        return;
+      }
+      
+      showLoading();
+      
+      try {
+        const senderUsername = currentUserData.username || currentUser.email.split('@')[0];
+        await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
+          fromUid: currentUser.uid,
+          fromUsername: senderUsername,
+          status: 'pending',
+          timestamp: Date.now()
+        });
+        alert('Friend request sent!');
+      } catch (error) {
+        alert('Failed to send friend request: ' + error.message);
+      } finally {
+        hideLoading();
+      }
     }
 
-    // Listen for incoming friend requests for current user
+    // Cancel friend request
+    function cancelFriendRequest(toUid) {
+      if (!confirm('Are you sure you want to cancel this friend request?')) return;
+      
+      showLoading();
+      
+      db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).remove()
+        .then(() => {
+          alert('Friend request cancelled.');
+        })
+        .catch(err => {
+          alert('Error cancelling request: ' + err.message);
+        })
+        .finally(() => {
+          hideLoading();
+        });
+    }
+
+    // Listen for incoming friend requests
     function listenFriendRequests() {
       const ref = db.ref(`users/${currentUser.uid}/friendRequests`);
+      
       ref.on('value', snapshot => {
-        const reqs = snapshot.val() || {};
-        pendingRequests = reqs;
-        renderFriendRequests(reqs);
-        // update badge count
-        const count = Object.keys(reqs).filter(k => reqs[k].status === 'pending').length;
-        if (count > 0) {
+        const requests = snapshot.val() || {};
+        pendingRequests = requests;
+        renderFriendRequests(requests);
+        
+        // Update badge count
+        const pendingCount = Object.keys(requests).filter(
+          k => requests[k].status === 'pending'
+        ).length;
+        
+        if (pendingCount > 0) {
           reqCountBadge.style.display = 'inline-block';
-          reqCountBadge.textContent = count;
+          reqCountBadge.textContent = pendingCount;
         } else {
           reqCountBadge.style.display = 'none';
         }
+      }, error => {
+        console.error("Error listening to friend requests:", error);
       });
     }
 
     // Render friend requests UI
     function renderFriendRequests(requests) {
       friendRequestsContainer.innerHTML = '';
+      
+      if (Object.keys(requests).length === 0) {
+        friendRequestsContainer.innerHTML = '<div style="padding:12px;color:#666;">No pending friend requests</div>';
+        return;
+      }
+      
       for (const fromUid in requests) {
-        const r = requests[fromUid];
-        if (r.status !== 'pending') continue;
-        // load sender info (username/email)
+        const request = requests[fromUid];
+        if (request.status !== 'pending') continue;
+        
+        // Load sender info
         db.ref(`users/${fromUid}`).once('value').then(snap => {
-          const sender = snap.val() || { username: r.fromUsername || 'Unknown', email: '' };
+          const sender = snap.val() || { 
+            username: request.fromUsername || 'Unknown', 
+            email: '' 
+          };
+          
           const item = document.createElement('div');
           item.className = 'request-item';
           item.innerHTML = `
             <div class="user-avatar"><i class="fas fa-user"></i></div>
             <div class="user-info">
               <div class="user-name">${escapeHtml(sender.username)}</div>
-              <div class="user-status">${escapeHtml(sender.email || r.fromUsername || '')}</div>
+              <div class="user-status">${escapeHtml(sender.email || request.fromUsername || '')}</div>
             </div>
             <div class="request-actions">
               <button class="accept-btn" data-uid="${fromUid}">Accept</button>
               <button class="decline-btn" data-uid="${fromUid}">Decline</button>
             </div>
           `;
+          
           friendRequestsContainer.appendChild(item);
-
-          item.querySelector('.accept-btn').addEventListener('click', () => acceptFriendRequest(fromUid));
-          item.querySelector('.decline-btn').addEventListener('click', () => declineFriendRequest(fromUid));
+          
+          // Add event listeners to buttons
+          item.querySelector('.accept-btn').addEventListener('click', 
+            () => acceptFriendRequest(fromUid));
+          item.querySelector('.decline-btn').addEventListener('click', 
+            () => declineFriendRequest(fromUid));
         });
       }
     }
 
-    // Accept friend request: add to both users' friends and remove request
+    // Accept friend request
     function acceptFriendRequest(friendUid) {
+      if (!confirm('Accept this friend request?')) return;
+      
+      showLoading();
+      
       const updates = {};
       updates[`users/${currentUser.uid}/friends/${friendUid}`] = true;
       updates[`users/${friendUid}/friends/${currentUser.uid}`] = true;
       updates[`users/${currentUser.uid}/friendRequests/${friendUid}`] = null;
-      // optionally remove the reciprocal request if exists
       updates[`users/${friendUid}/friendRequests/${currentUser.uid}`] = null;
 
-      db.ref().update(updates).then(() => {
-        alert('Friend request accepted!');
-        loadFriendsList();
-      }).catch(err => alert(err.message));
+      db.ref().update(updates)
+        .then(() => {
+          alert('Friend request accepted!');
+          loadFriendsList();
+          
+          // Notify the friend that their request was accepted
+          db.ref(`users/${friendUid}/notifications`).push({
+            type: 'request_accepted',
+            fromUid: currentUser.uid,
+            message: `${currentUserData.username || 'Someone'} accepted your friend request.`,
+            timestamp: Date.now()
+          });
+        })
+        .catch(err => {
+          alert('Error accepting request: ' + err.message);
+        })
+        .finally(() => {
+          hideLoading();
+        });
     }
 
-    // Decline friend request (just remove)
+    // Decline friend request
     function declineFriendRequest(friendUid) {
+      if (!confirm('Decline this friend request?')) return;
+      
+      showLoading();
+      
       db.ref(`users/${currentUser.uid}/friendRequests/${friendUid}`).remove()
-        .then(() => alert('Friend request declined!'))
-        .catch(err => alert(err.message));
+        .then(() => {
+          // Notify the sender that their request was declined
+          db.ref(`users/${friendUid}/notifications`).push({
+            type: 'request_rejected',
+            fromUid: currentUser.uid,
+            message: `${currentUserData.username || 'Someone'} declined your friend request.`,
+            timestamp: Date.now()
+          });
+          alert('Friend request declined!');
+        })
+        .catch(err => {
+          alert('Error declining request: ' + err.message);
+        })
+        .finally(() => {
+          hideLoading();
+        });
     }
 
-    // Load friends list into contacts
+    // Listen to notifications
+    function listenNotifications() {
+      const ref = db.ref(`users/${currentUser.uid}/notifications`);
+      
+      ref.on('value', snap => {
+        const nots = snap.val() || {};
+        notifications = nots;
+        renderNotifications(nots);
+      }, error => {
+        console.error("Error listening to notifications:", error);
+      });
+    }
+
+    // Render notifications
+    function renderNotifications(nots) {
+      notiItems.innerHTML = '';
+      const notificationsArray = [];
+      
+      for (const nid in nots) {
+        notificationsArray.push({ id: nid, ...nots[nid] });
+      }
+      
+      // Sort by timestamp (newest first)
+      notificationsArray.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      
+      if (notificationsArray.length === 0) {
+        notiItems.innerHTML = '<div style="color:#666;padding:12px;">No notifications</div>';
+        return;
+      }
+      
+      notificationsArray.forEach(notification => {
+        const div = document.createElement('div');
+        div.style.padding = '6px';
+        div.style.borderBottom = '1px solid #eee';
+        div.innerHTML = `
+          <div style="font-size:13px;">${escapeHtml(notification.message)}</div>
+          <div style="font-size:11px;color:#888;">${new Date(notification.timestamp).toLocaleString()}</div>
+        `;
+        notiItems.appendChild(div);
+      });
+    }
+
+    // Load friends list
     function loadFriendsList() {
+      showLoading('contacts-list');
+      
       const ref = db.ref(`users/${currentUser.uid}/friends`);
+      
       ref.on('value', snapshot => {
         const friends = snapshot.val() || {};
         contactsList.innerHTML = '';
+        
         if (Object.keys(friends).length === 0) {
-          contactsList.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from left panel.</div>';
-        } else {
-          for (const fid in friends) {
-            db.ref(`users/${fid}`).once('value').then(snap => {
-              const f = snap.val() || { username: 'Unknown' };
-              const contactItem = document.createElement('div');
-              contactItem.className = 'contact';
-              contactItem.style.display = 'flex';
-              contactItem.style.alignItems = 'center';
-              contactItem.style.padding = '12px';
-              contactItem.style.borderBottom = '1px solid #eee';
-              contactItem.innerHTML = `
-                <div class="user-avatar"><i class="fas fa-user"></i></div>
-                <div class="user-info" style="flex:1;">
-                  <div class="user-name">${escapeHtml(f.username)}</div>
-                  <div class="user-status">Online</div>
-                </div>
-              `;
-              contactsList.appendChild(contactItem);
-
-              contactItem.addEventListener('click', () => openChat(fid, f.username));
-            });
-          }
+          contactsList.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from the users list.</div>';
+          return;
         }
+        
+        for (const friendId in friends) {
+          db.ref(`users/${friendId}`).once('value').then(snap => {
+            const friend = snap.val() || { username: 'Unknown' };
+            createFriendContactItem(friendId, friend);
+          });
+        }
+        
+        hideLoading('contacts-list');
+      }, error => {
+        hideLoading('contacts-list');
+        console.error("Error loading friends list:", error);
       });
+    }
+
+    // Create friend contact item
+    function createFriendContactItem(friendId, friend) {
+      const contactItem = document.createElement('div');
+      contactItem.className = 'contact';
+      contactItem.style.display = 'flex';
+      contactItem.style.alignItems = 'center';
+      contactItem.style.padding = '12px';
+      contactItem.style.borderBottom = '1px solid #eee';
+      contactItem.style.cursor = 'pointer';
+      
+      contactItem.innerHTML = `
+        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <div class="user-info" style="flex:1;">
+          <div class="user-name">${escapeHtml(friend.username)}</div>
+          <div class="user-status">Online</div>
+        </div>
+      `;
+      
+      contactsList.appendChild(contactItem);
+      
+      contactItem.addEventListener('click', () => openChat(friendId, friend.username));
     }
 
     // Open chat with friend
@@ -522,101 +875,294 @@ const firebaseConfig = {
       currentChatName.textContent = friendName;
       backBtn.style.display = 'inline-block';
       currentChatName.style.display = 'inline-block';
-      // load messages
+      
+      // Load messages
       loadChatMessages(friendId);
     }
 
-    backBtn.addEventListener('click', () => {
-      currentChatFriend = null;
-      currentChatName.textContent = '';
-      backBtn.style.display = 'none';
-      chatMessages.innerHTML = '<div style="color:#888">Select a friend to start chat</div>';
-    });
-
-    // Load chat messages between current user and friend
+    // Load chat messages
     function loadChatMessages(friendId) {
-      chatMessages.innerHTML = '';
+      showLoading('chat-messages');
+      
       const chatId = [currentUser.uid, friendId].sort().join('_');
       const ref = db.ref(`chats/${chatId}`);
-      ref.off(); // remove previous listeners if any
+      
+      // Clear previous listeners
+      ref.off();
+      
+      // Clear chat area
+      chatMessages.innerHTML = '';
+      
       ref.on('child_added', snap => {
-        const m = snap.val();
-        addMessageToChat(m);
+        const message = snap.val();
+        addMessageToChat(message);
+        hideLoading('chat-messages');
+      }, error => {
+        hideLoading('chat-messages');
+        console.error("Error loading messages:", error);
       });
     }
 
-    // Add message UI
+    // Add message to chat UI
     function addMessageToChat(message) {
       const div = document.createElement('div');
-      div.className = 'message ' + (message.sender === currentUser.uid ? 'sent' : 'received');
-      div.innerHTML = `<div>${escapeHtml(message.text)}</div><div class="message-time">${new Date(message.timestamp).toLocaleTimeString()}</div>`;
+      div.className = 'message ' + 
+        (message.sender === currentUser.uid ? 'sent' : 'received');
+      
+      div.innerHTML = `
+        <div>${escapeHtml(message.text)}</div>
+        <div class="message-time">${new Date(message.timestamp).toLocaleTimeString()}</div>
+      `;
+      
       chatMessages.appendChild(div);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
     // Send message
-    function sendMessage() {
+    async function sendMessage() {
       const text = messageInput.value.trim();
       if (!text) return;
-      if (!currentChatFriend) return alert('Select a friend to chat with');
+      if (!currentChatFriend) {
+        alert('Please select a friend to chat with');
+        return;
+      }
+      
+      showLoading();
+      
+      try {
+        // Check block status
+        const [meSnap, friendSnap] = await Promise.all([
+          db.ref(`users/${currentUser.uid}/blocked`).once('value'),
+          db.ref(`users/${currentChatFriend.id}/blocked`).once('value')
+        ]);
+        
+        const meBlocked = meSnap.exists() && meSnap.val() === true;
+        const friendBlocked = friendSnap.exists() && friendSnap.val() === true;
 
-      const chatId = [currentUser.uid, currentChatFriend.id].sort().join('_');
-      const msg = {
-        text: text,
-        sender: currentUser.uid,
-        timestamp: Date.now()
-      };
-      db.ref(`chats/${chatId}`).push(msg).then(() => {
+        if (meBlocked) {
+          alert('You are blocked and cannot send messages.');
+          return;
+        }
+        
+        if (friendBlocked) {
+          alert('This user is blocked. Cannot send messages.');
+          return;
+        }
+
+        const chatId = [currentUser.uid, currentChatFriend.id].sort().join('_');
+        const message = {
+          text: text,
+          sender: currentUser.uid,
+          timestamp: Date.now()
+        };
+        
+        await db.ref(`chats/${chatId}`).push(message);
         messageInput.value = '';
-      });
-    }
-
-    sendBtn.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
-    });
-
-    // Utility: escape html
-    function escapeHtml(s) {
-      if (!s && s !== 0) return '';
-      return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+      } catch (error) {
+        alert('Failed to send message: ' + error.message);
+      } finally {
+        hideLoading();
+      }
     }
 
     // Admin: view all chats
-    viewAllChatsBtn.addEventListener('click', () => {
-      if (!currentUserData || currentUserData.role !== 'admin') return alert('Admin only');
-      adminOutput.innerHTML = 'Loading all chats...';
+    function viewAllChats() {
+      if (!currentUserData || currentUserData.role !== 'admin') {
+        alert('Admin access required');
+        return;
+      }
+      
+      showLoading('admin-output');
+      
       db.ref('chats').once('value').then(snap => {
         const chats = snap.val() || {};
-        let out = '';
+        let outputHtml = '';
+        
         for (const chatId in chats) {
-          out += `<div style="padding:6px;border-bottom:1px solid #eee;"><strong>${chatId}</strong> — messages: ${Object.keys(chats[chatId] || {}).length}</div>`;
+          const messages = chats[chatId] || {};
+          outputHtml += `
+            <div style="padding:6px;border-bottom:1px solid #eee;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong>${chatId}</strong>
+                <button data-chat="${chatId}" class="view-chat-btn">View</button>
+              </div>
+              <div id="chat-${escapeHtml(chatId)}" style="display:none; margin-top:8px; padding-left:8px;"></div>
+            </div>
+          `;
         }
-        adminOutput.innerHTML = out || '<div>No chats yet</div>';
+        
+        adminOutput.innerHTML = outputHtml || '<div>No chats yet</div>';
+        
+        // Add event listeners to view buttons
+        const viewButtons = adminOutput.querySelectorAll('.view-chat-btn');
+        viewButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            const chatId = e.target.getAttribute('data-chat');
+            toggleChatView(chatId);
+          });
+        });
+        
+        hideLoading('admin-output');
+      }).catch(error => {
+        hideLoading('admin-output');
+        console.error("Error loading chats:", error);
       });
-    });
+    }
 
-    // small helper: show friend requests card when bell clicked
-    requestsBtn.addEventListener('click', () => {
-      const card = document.getElementById('friend-requests-card');
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-
-    // Auth state change: initialize on page load
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        currentUser = user;
-        postLoginInit();
-      } else {
-        loginPage.style.display = 'flex';
-        appContainer.style.display = 'none';
+    // Toggle chat view in admin panel
+    function toggleChatView(chatId) {
+      const container = adminOutput.querySelector(`#chat-${cssEscape(chatId)}`);
+      if (!container) return;
+      
+      if (container.style.display === 'block') {
+        container.style.display = 'none';
+        return;
       }
-    });
+      
+      container.innerHTML = 'Loading messages...';
+      container.style.display = 'block';
+      
+      db.ref(`chats/${chatId}`).once('value').then(snap => {
+        const messages = snap.val() || {};
+        let messagesHtml = '';
+        
+        for (const mid in messages) {
+          const message = messages[mid];
+          messagesHtml += `
+            <div style="padding:8px;border-bottom:1px dashed #eee;">
+              <div style="font-size:13px;">
+                <strong>${escapeHtml(message.sender)}</strong>
+                <span style="color:#888;font-size:12px;">
+                  ${new Date(message.timestamp).toLocaleString()}
+                </span>
+              </div>
+              <div style="margin-top:6px;">${escapeHtml(message.text)}</div>
+            </div>
+          `;
+        }
+        
+        container.innerHTML = messagesHtml || '<div>No messages</div>';
+      });
+    }
+
+    // Admin: view all users
+    function viewAllUsers() {
+      if (!currentUserData || currentUserData.role !== 'admin') {
+        alert('Admin access required');
+        return;
+      }
+      
+      showLoading('admin-output');
+      
+      db.ref('users').once('value').then(snap => {
+        const users = snap.val() || {};
+        let outputHtml = '';
+        
+        for (const uid in users) {
+          const user = users[uid] || {};
+          outputHtml += `
+            <div style="padding:8px;border-bottom:1px solid #eee;">
+              <div>
+                <strong>${escapeHtml(user.username || uid)}</strong>
+                — ${escapeHtml(user.email || '')}
+              </div>
+              <div style="margin-top:6px;">
+                Role: ${escapeHtml(user.role || 'user')}
+                — Blocked: ${user.blocked ? 'yes' : 'no'}
+              </div>
+            </div>
+          `;
+        }
+        
+        adminOutput.innerHTML = outputHtml || '<div>No users</div>';
+        hideLoading('admin-output');
+      }).catch(error => {
+        hideLoading('admin-output');
+        console.error("Error loading users:", error);
+      });
+    }
+
+    // Admin: make user admin
+    function makeUserAdmin(uid) {
+      if (!confirm('Make this user an admin?')) return;
+      
+      showLoading();
+      
+      db.ref(`users/${uid}/role`).set('admin')
+        .then(() => alert('User is now admin.'))
+        .catch(error => alert('Error: ' + error.message))
+        .finally(() => hideLoading());
+    }
+
+    // Admin: block user
+    function blockUser(uid) {
+      if (!confirm('Block this user? Blocked users cannot send messages.')) return;
+      
+      showLoading();
+      
+      db.ref(`users/${uid}/blocked`).set(true)
+        .then(() => alert('User blocked.'))
+        .catch(error => alert('Error: ' + error.message))
+        .finally(() => hideLoading());
+    }
+
+    // Admin: unblock user
+    function unblockUser(uid) {
+      if (!confirm('Unblock this user?')) return;
+      
+      showLoading();
+      
+      db.ref(`users/${uid}/blocked`).remove()
+        .then(() => alert('User unblocked.'))
+        .catch(error => alert('Error: ' + error.message))
+        .finally(() => hideLoading());
+    }
+
+    // Show loading indicator
+    function showLoading(containerId) {
+      const container = containerId ? document.getElementById(containerId) : document.body;
+      const spinner = document.createElement('div');
+      spinner.className = 'spinner';
+      spinner.id = 'loading-spinner';
+      
+      if (containerId) {
+        container.innerHTML = '';
+        container.appendChild(spinner);
+      } else {
+        document.body.appendChild(spinner);
+      }
+    }
+
+    // Hide loading indicator
+    function hideLoading(containerId) {
+      if (containerId) {
+        const container = document.getElementById(containerId);
+        const spinner = container.querySelector('#loading-spinner');
+        if (spinner) spinner.remove();
+      } else {
+        const spinner = document.getElementById('loading-spinner');
+        if (spinner) spinner.remove();
+      }
+    }
+
+    // Utility: escape HTML
+    function escapeHtml(unsafe) {
+      if (unsafe === null || unsafe === undefined) return '';
+      return String(unsafe)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Utility: escape for CSS IDs
+    function cssEscape(str) {
+      return str.replace(/[^a-zA-Z0-9_-]/g, '_');
+    }
+
+    // Initialize the app
+    init();
   </script>
 </body>
 </html>
