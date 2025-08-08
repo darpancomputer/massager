@@ -97,12 +97,14 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .you-badge { font-size:12px; color:#fff; background:#6c757d; padding:2px 6px; border-radius:8px; margin-left:8px; }
   </style>
 </head>
 <body>
   <div class="container">
     <!-- Login Page -->
-    <div class="login-page" id="login-page">
+    <div class="login-page" id="login-page" style="display:flex;">
       <header>
         <div class="logo">Social Messenger</div>
       </header>
@@ -150,6 +152,11 @@
             </div>
           </div>
 
+          <div style="display:flex; flex-direction:column; align-items:flex-end; margin-right:8px;">
+            <div id="profile-name" style="font-weight:bold;"></div>
+            <div id="current-user-email" style="font-size:12px; color:#666;"></div>
+          </div>
+
           <div class="profile-dropdown">
             <button class="profile-btn" id="profile-btn">
               <i class="fas fa-user"></i>
@@ -192,7 +199,6 @@
                 <button class="back-btn" id="back-btn" style="display:none;"><i class="fas fa-arrow-left"></i> Back</button>
                 <span id="current-chat-name" style="font-weight:bold; margin-left:10px;"></span>
               </div>
-              <div id="current-user-email" style="font-size:13px; color:#666;"></div>
             </div>
 
             <div class="chat-container" style="margin-top:12px;">
@@ -226,7 +232,8 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
-  // Your web app's Firebase configuration
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
   authDomain: "massage-8c66f.firebaseapp.com",
@@ -258,6 +265,7 @@ const firebaseConfig = {
     const sendBtn = document.getElementById('send-btn');
     const currentChatName = document.getElementById('current-chat-name');
     const currentUserEmailLabel = document.getElementById('current-user-email');
+    const profileNameLabel = document.getElementById('profile-name');
     const reqCountBadge = document.getElementById('req-count');
     const requestsBtn = document.getElementById('requests-btn');
     const adminPanelEl = document.getElementById('admin-panel');
@@ -306,12 +314,10 @@ const firebaseConfig = {
       // Navigation tabs
       document.getElementById('home-tab').addEventListener('click', (e) => { 
         e.preventDefault(); 
-        // Add tab switching logic here if needed
       });
       
       document.getElementById('chat-tab').addEventListener('click', (e) => { 
         e.preventDefault(); 
-        // Add tab switching logic here if needed
       });
 
       // Login
@@ -352,8 +358,16 @@ const firebaseConfig = {
     function handleAuthStateChange(user) {
       if (user) {
         currentUser = user;
+
+        // Immediately set header info so user sees themselves right away
+        profileNameLabel.textContent = currentUser.email ? currentUser.email.split('@')[0] : '';
+        currentUserEmailLabel.textContent = currentUser.email || '';
+
         initializeAppAfterLogin();
       } else {
+        // cleanup listeners if needed
+        currentUser = null;
+        currentUserData = null;
         loginPage.style.display = 'flex';
         appContainer.style.display = 'none';
       }
@@ -363,55 +377,51 @@ const firebaseConfig = {
     function initializeAppAfterLogin() {
       showLoading();
       
-      // Ensure user record exists
+      // Ensure user record exists (use update to avoid overwriting)
       db.ref('users/' + currentUser.uid).once('value').then(snap => {
         if (!snap.exists()) {
           // Create default user record
-          const username = currentUser.email.split('@')[0];
-          saveUserToDB(currentUser.uid, {
+          const username = currentUser.email ? currentUser.email.split('@')[0] : 'user';
+          return saveUserToDB(currentUser.uid, {
             uid: currentUser.uid,
             username: username,
             email: currentUser.email,
             role: 'user',
             friends: {},
             blocked: false
-          }).then(() => loadAppData());
-        } else {
-          loadAppData();
+          });
         }
       }).catch(error => {
         console.error("Error checking user record:", error);
-        hideLoading();
+      }).finally(() => {
+        // After ensuring DB record, attach live listener for this user's data
+        db.ref('users/' + currentUser.uid).on('value', snap => {
+          currentUserData = snap.val();
+          if (currentUserData) {
+            profileNameLabel.textContent = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : '');
+            currentUserEmailLabel.textContent = currentUserData.email || currentUser.email || '';
+            // Show admin controls if admin
+            if (currentUserData.role === 'admin') {
+              adminPanelEl.style.display = 'block';
+              adminPanelBtn.style.display = 'block';
+            } else {
+              adminPanelEl.style.display = 'none';
+              adminPanelBtn.style.display = 'none';
+            }
+          }
+          hideLoading();
+        });
+
+        // Show app UI
+        loginPage.style.display = 'none';
+        appContainer.style.display = 'block';
+
+        // Load components (these will attach their own listeners)
+        loadAllUsers();
+        listenFriendRequests();
+        loadFriendsList();
+        listenNotifications();
       });
-    }
-
-    // Load all app data after user record is confirmed
-    function loadAppData() {
-      // Get current user data
-      db.ref('users/' + currentUser.uid).on('value', snap => {
-        currentUserData = snap.val();
-        currentUserEmailLabel.textContent = currentUserData.email || '';
-        
-        // Show admin panel button if admin
-        if (currentUserData && currentUserData.role === 'admin') {
-          adminPanelEl.style.display = 'block';
-          adminPanelBtn.style.display = 'block';
-        } else {
-          adminPanelEl.style.display = 'none';
-          adminPanelBtn.style.display = 'none';
-        }
-        
-        hideLoading();
-      });
-
-      loginPage.style.display = 'none';
-      appContainer.style.display = 'block';
-
-      // Load all components
-      loadAllUsers();
-      listenFriendRequests();
-      loadFriendsList();
-      listenNotifications();
     }
 
     // Handle login
@@ -489,9 +499,9 @@ const firebaseConfig = {
       });
     }
 
-    // Save user to database
+    // Save user to database (use update to avoid wiping children)
     function saveUserToDB(uid, userData) {
-      return db.ref('users/' + uid).set(userData);
+      return db.ref('users/' + uid).update(userData);
     }
 
     // Load all users for friend requests
@@ -503,8 +513,7 @@ const firebaseConfig = {
         usersListContainer.innerHTML = '';
 
         for (const uid in allUsers) {
-          if (uid === currentUser.uid) continue;
-          
+          // Show everyone including current user, but mark current user
           const user = allUsers[uid];
           const userItem = createUserItem(uid, user);
           usersListContainer.appendChild(userItem);
@@ -524,25 +533,36 @@ const firebaseConfig = {
 
       // Create action buttons area
       const actionDiv = document.createElement('div');
+      actionDiv.style.marginLeft = '8px';
       const adminControls = document.createElement('div');
       adminControls.style.marginLeft = '8px';
 
-      // Check friendship status and create appropriate button
-      createFriendActionButton(uid, actionDiv);
-      
+      // If this is the current user, show "You" badge and disable actions
+      if (currentUser && uid === currentUser.uid) {
+        item.innerHTML = `
+          <div class="user-avatar"><i class="fas fa-user"></i></div>
+          <div class="user-info">
+            <div class="user-name">${escapeHtml(user.username || '(no-name)')} <span class="you-badge">You</span></div>
+            <div class="user-status">${escapeHtml(user.email || '')}</div>
+          </div>
+        `;
+      } else {
+        item.innerHTML = `
+          <div class="user-avatar"><i class="fas fa-user"></i></div>
+          <div class="user-info">
+            <div class="user-name">${escapeHtml(user.username || '(no-name)')}</div>
+            <div class="user-status">${escapeHtml(user.email || '')}</div>
+          </div>
+        `;
+        // Create friend action button for non-self users
+        createFriendActionButton(uid, actionDiv);
+      }
+
       // If current user is admin, show admin controls
-      if (currentUserData && currentUserData.role === 'admin') {
+      if (currentUserData && currentUserData.role === 'admin' && uid !== currentUser.uid) {
         createAdminControls(uid, adminControls);
       }
 
-      item.innerHTML = `
-        <div class="user-avatar"><i class="fas fa-user"></i></div>
-        <div class="user-info">
-          <div class="user-name">${escapeHtml(user.username || '(no-name)')}</div>
-          <div class="user-status">${escapeHtml(user.email || '')}</div>
-        </div>
-      `;
-      
       item.appendChild(actionDiv);
       item.appendChild(adminControls);
       return item;
@@ -553,31 +573,46 @@ const firebaseConfig = {
       const btn = document.createElement('button');
       btn.setAttribute('data-uid', uid);
 
-      db.ref(`users/${currentUser.uid}/friends/${uid}`).once('value').then(fsnap => {
+      // Check friendship status and friendRequests
+      Promise.all([
+        db.ref(`users/${currentUser.uid}/friends/${uid}`).once('value'),
+        db.ref(`users/${uid}/friendRequests/${currentUser.uid}`).once('value'),
+        db.ref(`users/${currentUser.uid}/friendRequests/${uid}`).once('value')
+      ]).then(([fsnap, rsnap, incomingSnap]) => {
         if (fsnap.exists()) {
           // Already friends
           btn.textContent = 'Friends';
           btn.disabled = true;
           btn.style.background = '#6c757d';
           container.appendChild(btn);
-        } else {
-          // Check if request was already sent
-          db.ref(`users/${uid}/friendRequests/${currentUser.uid}`).once('value').then(rsnap => {
-            if (rsnap.exists()) {
-              // Request sent - show Cancel button
-              btn.textContent = 'Cancel';
-              btn.className = 'cancel-request-btn';
-              btn.addEventListener('click', () => cancelFriendRequest(uid));
-              container.appendChild(btn);
-            } else {
-              // No request - show Add Friend button
-              btn.textContent = 'Add Friend';
-              btn.className = 'add-friend-btn';
-              btn.addEventListener('click', () => sendFriendRequest(uid));
-              container.appendChild(btn);
-            }
+        } else if (rsnap.exists()) {
+          // Request sent by current user to uid
+          btn.textContent = 'Cancel';
+          btn.className = 'cancel-request-btn';
+          btn.addEventListener('click', () => cancelFriendRequest(uid));
+          container.appendChild(btn);
+        } else if (incomingSnap.exists()) {
+          // Incoming request from uid to current user — show "Accept" here too
+          btn.textContent = 'Respond';
+          btn.className = 'add-friend-btn';
+          btn.addEventListener('click', () => {
+            // Scroll to friend requests area for convenience
+            document.getElementById('friend-requests-card').scrollIntoView({behavior:'smooth'});
           });
+          container.appendChild(btn);
+        } else {
+          // No relation - show Add Friend
+          btn.textContent = 'Add Friend';
+          btn.className = 'add-friend-btn';
+          btn.addEventListener('click', () => sendFriendRequest(uid));
+          container.appendChild(btn);
         }
+      }).catch(err => {
+        console.error('Error creating friend button:', err);
+        btn.textContent = 'Add Friend';
+        btn.className = 'add-friend-btn';
+        btn.addEventListener('click', () => sendFriendRequest(uid));
+        container.appendChild(btn);
       });
     }
 
@@ -614,7 +649,7 @@ const firebaseConfig = {
       showLoading();
       
       try {
-        const senderUsername = currentUserData.username || currentUser.email.split('@')[0];
+        const senderUsername = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'Someone');
         await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
           fromUid: currentUser.uid,
           fromUsername: senderUsername,
@@ -738,7 +773,7 @@ const firebaseConfig = {
           db.ref(`users/${friendUid}/notifications`).push({
             type: 'request_accepted',
             fromUid: currentUser.uid,
-            message: `${currentUserData.username || 'Someone'} accepted your friend request.`,
+            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} accepted your friend request.`,
             timestamp: Date.now()
           });
         })
@@ -762,7 +797,7 @@ const firebaseConfig = {
           db.ref(`users/${friendUid}/notifications`).push({
             type: 'request_rejected',
             fromUid: currentUser.uid,
-            message: `${currentUserData.username || 'Someone'} declined your friend request.`,
+            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} declined your friend request.`,
             timestamp: Date.now()
           });
           alert('Friend request declined!');
@@ -829,17 +864,20 @@ const firebaseConfig = {
         
         if (Object.keys(friends).length === 0) {
           contactsList.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from the users list.</div>';
+          hideLoading('contacts-list');
           return;
         }
         
+        const promises = [];
         for (const friendId in friends) {
-          db.ref(`users/${friendId}`).once('value').then(snap => {
+          // fetch each friend data
+          promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
             const friend = snap.val() || { username: 'Unknown' };
             createFriendContactItem(friendId, friend);
-          });
+          }).catch(err => console.error('Error loading friend data', err)));
         }
-        
-        hideLoading('contacts-list');
+
+        Promise.all(promises).then(() => hideLoading('contacts-list')).catch(() => hideLoading('contacts-list'));
       }, error => {
         hideLoading('contacts-list');
         console.error("Error loading friends list:", error);
@@ -941,11 +979,13 @@ const firebaseConfig = {
 
         if (meBlocked) {
           alert('You are blocked and cannot send messages.');
+          hideLoading();
           return;
         }
         
         if (friendBlocked) {
           alert('This user is blocked. Cannot send messages.');
+          hideLoading();
           return;
         }
 
@@ -1126,10 +1166,22 @@ const firebaseConfig = {
       spinner.id = 'loading-spinner';
       
       if (containerId) {
-        container.innerHTML = '';
-        container.appendChild(spinner);
+        // don't wipe admin output if showing admin panel
+        if (containerId === 'admin-output') {
+          const wrapper = document.createElement('div');
+          wrapper.style.minHeight = '40px';
+          wrapper.appendChild(spinner);
+          container.innerHTML = '';
+          container.appendChild(wrapper);
+        } else {
+          container.innerHTML = '';
+          container.appendChild(spinner);
+        }
       } else {
-        document.body.appendChild(spinner);
+        // avoid adding multiple top-level spinners
+        if (!document.getElementById('loading-spinner')) {
+          document.body.appendChild(spinner);
+        }
       }
     }
 
@@ -1137,6 +1189,7 @@ const firebaseConfig = {
     function hideLoading(containerId) {
       if (containerId) {
         const container = document.getElementById(containerId);
+        if (!container) return;
         const spinner = container.querySelector('#loading-spinner');
         if (spinner) spinner.remove();
       } else {
