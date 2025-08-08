@@ -1,3 +1,5 @@
+fix code 
+
 <!DOCTYPE html>
 <html lang="ne">
 <head>
@@ -52,8 +54,7 @@
     .block-btn { background:#ff3b30; }
     .unblock-btn { background:#28a745; }
 
-    .friend-requests .request-item { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid #eee; cursor: pointer; transition: background-color 0.2s; }
-    .friend-requests .request-item:hover { background-color: #f5f5f5; }
+    .friend-requests .request-item { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid #eee; }
     .request-actions { margin-left:auto; display:flex; gap:6px; }
     .accept-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
     .decline-btn { background:#e4e6eb; color:#1c1e21; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
@@ -236,7 +237,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
-    // Your web app's Firebase configuration
+    // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
     const firebaseConfig = {
       apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
       authDomain: "massage-8c66f.firebaseapp.com",
@@ -758,7 +759,7 @@
       });
     }
 
-    // Render friend requests UI - MODIFIED to accept on click
+    // Render friend requests UI
     function renderFriendRequests(requests) {
       friendRequestsContainer.innerHTML = '';
       
@@ -795,21 +796,8 @@
           friendRequestsContainer.appendChild(item);
           
           // Add event listeners to buttons
-          item.querySelector('.accept-btn').addEventListener('click', (e) => { 
-            e.stopPropagation(); 
-            acceptFriendRequest(fromUid); 
-          });
-          item.querySelector('.decline-btn').addEventListener('click', (e) => { 
-            e.stopPropagation(); 
-            declineFriendRequest(fromUid); 
-          });
-          
-          // Add click handler to the entire item to accept the request
-          item.addEventListener('click', (e) => {
-            // Don't trigger if clicking on buttons
-            if (e.target.closest('button')) return;
-            acceptFriendRequest(fromUid);
-          });
+          item.querySelector('.accept-btn').addEventListener('click', (e) => { e.stopPropagation(); acceptFriendRequest(fromUid); });
+          item.querySelector('.decline-btn').addEventListener('click', (e) => { e.stopPropagation(); declineFriendRequest(fromUid); });
         });
       }
     }
@@ -936,7 +924,7 @@
           promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
             const friend = snap.val() || { username: 'Unknown' };
             createFriendContactItem(friendId, friend);
-          }).catch(err => console.error('Error loading friend data', err));
+          }).catch(err => console.error('Error loading friend data', err)));
         }
 
         Promise.all(promises).then(() => hideLoading('contacts-list')).catch(() => hideLoading('contacts-list'));
