@@ -1,585 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        /* Top Bar Styles */
-        .top-bar {
-            background-color: #ffffff;
-            padding: 10px 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .profile-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .profile-btn {
-            background-color: #e4e6eb;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background-color: white;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 6px;
-            z-index: 1;
-        }
-        
-        .dropdown-content a {
-            color: #1c1e21;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 14px;
-        }
-        
-        .dropdown-content a:hover {
-            background-color: #f0f2f5;
-        }
-        
-        .profile-dropdown:hover .dropdown-content {
-            display: block;
-        }
-        
-        /* Search Bar */
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background-color: #f0f2f5;
-            border-radius: 50px;
-            padding: 8px 12px;
-            width: 100%;
-            max-width: 500px;
-        }
-        
-        .search-bar input {
-            border: none;
-            background: none;
-            outline: none;
-            width: 100%;
-            padding: 5px;
-        }
-        
-        .search-bar i {
-            color: #65676b;
-            margin-right: 8px;
-        }
-        
-        /* Main Content Styles */
-        .main-content {
-            display: flex;
-            flex: 1;
-            padding: 20px;
-        }
-        
-        /* Login Container (visible when not logged in) */
-        .login-container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 400px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .login-container h1 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #1c1e21;
-        }
-        
-        .input-field {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        
-        .input-field input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #dddfe2;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        
-        .login-btn {
-            background-color: #1877f2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 12px;
-            width: 100%;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-        
-        .login-btn:hover {
-            background-color: #166fe5;
-        }
-        
-        .forgot-password {
-            color: #1877f2;
-            text-decoration: none;
-            font-size: 14px;
-            display: block;
-            margin-bottom: 20px;
-        }
-        
-        .divider {
-            border-bottom: 1px solid #dadde1;
-            margin: 20px 0;
-        }
-        
-        .create-account-btn {
-            background-color: #42b72a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-        
-        .create-account-btn:hover {
-            background-color: #36a420;
-        }
-        
-        /* Registration Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 400px;
-            max-width: 90%;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .modal-header h2 {
-            margin: 0;
-            font-size: 24px;
-            color: #1c1e21;
-        }
-        
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #606770;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #606770;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccd0d5;
-            border-radius: 4px;
-            font-size: 15px;
-        }
-        
-        .register-btn {
-            background-color: #42b72a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 10px;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        
-        /* Chat Section */
-        .chat-section {
-            display: none;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            flex: 1;
-        }
-        
-        .chat-container {
-            display: flex;
-            height: calc(100vh - 80px);
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .contacts-list {
-            width: 300px;
-            border-right: 1px solid #e4e6eb;
-            overflow-y: auto;
-        }
-        
-        .contact {
-            padding: 15px;
-            border-bottom: 1px solid #e4e6eb;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-        
-        .contact:hover {
-            background-color: #f0f2f5;
-        }
-        
-        .contact.active {
-            background-color: #e7f3ff;
-        }
-        
-        .contact-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #e4e6eb;
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .contact-info {
-            flex-grow: 1;
-        }
-        
-        .contact-name {
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-        
-        .contact-last-message {
-            font-size: 13px;
-            color: #65676b;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .chat-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .chat-header {
-            padding: 15px;
-            border-bottom: 1px solid #e4e6eb;
-            display: flex;
-            align-items: center;
-        }
-        
-        .chat-messages {
-            flex-grow: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background-color: #f0f2f5;
-        }
-        
-        .message {
-            margin-bottom: 15px;
-            max-width: 70%;
-            padding: 10px 15px;
-            border-radius: 18px;
-        }
-        
-        .message.received {
-            background-color: white;
-            align-self: flex-start;
-        }
-        
-        .message.sent {
-            background-color: #1877f2;
-            color: white;
-            align-self: flex-end;
-        }
-        
-        .message-sender {
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 12px;
-        }
-        
-        .message-time {
-            font-size: 11px;
-            text-align: right;
-            margin-top: 5px;
-            opacity: 0.7;
-        }
-        
-        .chat-input {
-            padding: 15px;
-            border-top: 1px solid #e4e6eb;
-            display: flex;
-        }
-        
-        .chat-input input {
-            flex-grow: 1;
-            padding: 12px;
-            border: 1px solid #dddfe2;
-            border-radius: 20px;
-            font-size: 16px;
-            outline: none;
-        }
-        
-        .send-btn {
-            background-color: #1877f2;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-        
-        /* Navigation Icons */
-        .nav-icons {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-        
-        .nav-icon {
-            color: #65676b;
-            font-size: 24px;
-            text-decoration: none;
-            position: relative;
-        }
-        
-        /* Notifications */
-        .has-notifications {
-            position: relative;
-        }
-        
-        .has-notifications::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 10px;
-            height: 10px;
-            background-color: #ff0000;
-            border-radius: 50%;
-        }
-        
-        .notification-dropdown {
-            position: absolute;
-            right: 0;
-            background-color: white;
-            width: 300px;
-            max-height: 400px;
-            overflow-y: auto;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 6px;
-            z-index: 1;
-            display: none;
-        }
-        
-        .notification-item {
-            padding: 12px;
-            border-bottom: 1px solid #f0f2f5;
-        }
-        
-        .notification-item.unread {
-            background-color: #f0f8ff;
-        }
-        
-        .notification-item:hover {
-            background-color: #f0f2f5;
-        }
-        
-        .notification-time {
-            font-size: 12px;
-            color: #65676b;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Social Messenger</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { margin:0; padding:0; background:#f0f2f5; }
+    .container { display:flex; flex-direction:column; min-height:100vh; }
+
+    header { background:#fff; padding:10px 20px; box-shadow:0 1px 3px rgba(0,0,0,.1); display:flex; justify-content:space-between; align-items:center; }
+    .logo { font-size:24px; font-weight:bold; color:#1877f2; }
+
+    .main-content { display:flex; flex:1; align-items:center; justify-content:center; padding:20px; }
+    .login-container { background:#fff; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,.1); padding:20px; width:400px; text-align:center; }
+    .login-container h1 { font-size:18px; margin-bottom:20px; color:#1c1e21; }
+    .input-field { margin-bottom:15px; text-align:left; }
+    .input-field input { width:100%; padding:12px; border:1px solid #dddfe2; border-radius:6px; font-size:16px; }
+    .login-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:12px; width:100%; font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:15px; }
+    .create-account-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:12px; width:100%; font-size:16px; cursor:pointer; }
+    .forgot-password { color:#1877f2; text-decoration:none; display:block; margin-bottom:10px; }
+
+    .app-container { display:none; flex-direction:column; width:100%; max-width:1200px; margin:0 auto; }
+
+    .search-bar { display:flex; align-items:center; background:#f0f2f5; border-radius:50px; padding:8px 15px; width:100%; max-width:500px; }
+    .search-bar input { border:none; background:none; outline:none; width:100%; padding:5px; }
+    .profile-dropdown { position:relative; display:inline-block; }
+    .profile-btn { background:#e4e6eb; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+
+    .dropdown-content { display:none; position:absolute; right:0; background:#fff; min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:6px; z-index:2; }
+    .dropdown-content a, .dropdown-content button { color:#1c1e21; padding:10px 14px; text-decoration:none; display:block; font-size:14px; background:none; border:none; width:100%; text-align:left; cursor:pointer; }
+    .dropdown-content a:hover, .dropdown-content button:hover { background:#f0f2f5; }
+
+    .content { display:flex; gap:20px; padding:20px; }
+    .left-column { width:34%; }
+    .right-column { flex:1; }
+
+    .card { background:#fff; border-radius:8px; padding:15px; box-shadow:0 1px 2px rgba(0,0,0,.08); margin-bottom:20px; }
+    .users-list h2, .friend-requests h2 { margin:0 0 12px 0; color:#1c1e21; }
+
+    .user-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #eee; }
+    .user-avatar { width:40px; height:40px; border-radius:50%; background:#e4e6eb; display:flex; align-items:center; justify-content:center; color:#1877f2; }
+    .user-info { flex:1; }
+    .user-name { font-weight:bold; }
+    .user-status { font-size:12px; color:#65676b; }
+
+    .add-friend-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; }
+
+    .friend-requests .request-item { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid #eee; }
+    .request-actions { margin-left:auto; display:flex; gap:6px; }
+    .accept-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
+    .decline-btn { background:#e4e6eb; color:#1c1e21; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
+
+    .chat-container { display:flex; height:70vh; border:1px solid #ddd; border-radius:8px; overflow:hidden; }
+    .contacts-list { width:30%; background:#fff; border-right:1px solid #ddd; overflow-y:auto; }
+    .chat-area { width:70%; display:flex; flex-direction:column; background:#f8f9fa; }
+
+    .chat-messages { flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+    .message { max-width:70%; padding:10px 15px; border-radius:18px; }
+    .received { background:#fff; align-self:flex-start; border-bottom-left-radius:5px; }
+    .sent { background:#1877f2; color:#fff; align-self:flex-end; border-bottom-right-radius:5px; }
+    .message-time { font-size:11px; color:#65676b; margin-top:5px; text-align:right; }
+
+    .message-input { display:flex; padding:15px; border-top:1px solid #ddd; background:#fff; }
+    .message-input input { flex:1; padding:12px; border:1px solid #ddd; border-radius:20px; outline:none; }
+    .message-input button { margin-left:10px; padding:12px 20px; background:#1877f2; color:#fff; border:none; border-radius:20px; cursor:pointer; }
+
+    .nav-icons { position:fixed; bottom:0; left:0; right:0; background:#fff; display:flex; justify-content:space-around; padding:10px 0; box-shadow:0 -2px 4px rgba(0,0,0,.1); }
+    .nav-icon { color:#65676b; font-size:24px; text-decoration:none; }
+    .nav-icon.active { color:#1877f2; }
+
+    /* admin panel */
+    .admin-panel { display:none; }
+    .badge { background:#ff3b30; color:#fff; font-size:12px; padding:2px 6px; border-radius:12px; margin-left:6px; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Top Bar with Profile and Search (visible when logged in) -->
-        <div class="top-bar" id="top-bar" style="display: none;">
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" id="search-input" placeholder="Search...">
-            </div>
-            <div class="profile-dropdown">
-                <button class="profile-btn">
-                    <i class="fas fa-user"></i>
-                </button>
-                <div class="dropdown-content">
-                    <a href="#">Settings</a>
-                    <a href="#" id="logout-btn">Log Out</a>
-                </div>
-            </div>
+  <div class="container">
+    <!-- Login Page -->
+    <div class="login-page" id="login-page">
+      <header>
+        <div class="logo">Social Messenger</div>
+      </header>
+
+      <div class="main-content">
+        <div class="login-container">
+          <h1>Log in to your account</h1>
+          <div class="input-field">
+            <input type="text" id="login-email" placeholder="Email address">
+          </div>
+          <div class="input-field">
+            <input type="password" id="login-password" placeholder="Password">
+          </div>
+          <button class="login-btn" id="login-button">Log In</button>
+          <a href="#" class="forgot-password" id="forgot-password">Forgot password?</a>
+          <div class="divider"></div>
+          <button class="create-account-btn" id="create-account-btn">Create new account</button>
         </div>
-        
-        <!-- Login Section (visible by default) -->
-        <div class="main-content">
-            <div class="login-container" id="login-container">
-                <h1>Log in to Chat App</h1>
-                <div class="input-field">
-                    <input type="text" id="login-email" placeholder="Email address">
-                </div>
-                <div class="input-field">
-                    <input type="password" id="login-password" placeholder="Password">
-                </div>
-                <button class="login-btn" id="login-button">Log In</button>
-                <a href="#" class="forgot-password">Forgot password?</a>
-                <div class="divider"></div>
-                <button class="create-account-btn" id="create-account-btn">Create new account</button>
-            </div>
-            
-            <!-- Chat Section (hidden by default) -->
-            <div class="chat-section" id="chat-section">
-                <div class="chat-container">
-                    <div class="contacts-list" id="contacts-list">
-                        <!-- Contacts will be loaded here -->
-                    </div>
-                    <div class="chat-area">
-                        <div class="chat-header" id="chat-header">
-                            <div class="contact-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="contact-info">
-                                <div class="contact-name" id="current-chat-name">Select a chat</div>
-                            </div>
-                        </div>
-                        <div class="chat-messages" id="chat-messages">
-                            <!-- Messages will appear here -->
-                            <div style="text-align: center; color: #65676b; margin-top: 50%;">
-                                Select a chat to start messaging
-                            </div>
-                        </div>
-                        <div class="chat-input">
-                            <input type="text" id="message-input" placeholder="Type a message...">
-                            <button class="send-btn" id="send-button">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Registration Modal (hidden by default) -->
-        <div class="modal" id="registration-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Sign Up</h2>
-                    <button class="close-btn" id="close-modal">&times;</button>
-                </div>
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Enter your username">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password">
-                </div>
-                <button class="register-btn" id="register-button">Sign Up</button>
-            </div>
-        </div>
-        
-        <!-- Navigation Icons (hidden by default) -->
-        <div class="nav-icons" id="nav-icons">
-            <a href="#" class="nav-icon"><i class="fas fa-home"></i></a>
-            <a href="#" class="nav-icon"><i class="fas fa-comment"></i></a>
-            <a href="#" class="nav-icon" id="notification-icon"><i class="fas fa-bell"></i></a>
-            <a href="#" class="nav-icon"><i class="fas fa-users"></i></a>
-            <a href="#" class="nav-icon"><i class="fas fa-cog"></i></a>
-        </div>
+      </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    
-    <script>
-    // Your web app's Firebase configuration
+    <!-- App Container -->
+    <div class="app-container" id="app-container">
+      <header>
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" placeholder="Search...">
+        </div>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div id="request-notification" style="position:relative;">
+            <button id="requests-btn" class="profile-btn" title="Friend requests">
+              <i class="fas fa-bell"></i>
+            </button>
+            <span id="req-count" class="badge" style="position:absolute; top:-6px; right:-6px; display:none;">0</span>
+          </div>
+
+          <div class="profile-dropdown">
+            <button class="profile-btn" id="profile-btn">
+              <i class="fas fa-user"></i>
+            </button>
+            <div class="dropdown-content" id="dropdown-content">
+              <button id="show-profile">Profile</button>
+              <button id="admin-panel-btn" style="display:none;">Admin Panel</button>
+              <button id="logout-btn">Log Out</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="left-column">
+          <div class="card users-list">
+            <h2>All Users</h2>
+            <div id="users-list-container"></div>
+          </div>
+
+          <div class="card friend-requests" id="friend-requests-card">
+            <h2>Friend Requests</h2>
+            <div id="friend-requests-container"></div>
+          </div>
+
+          <div class="card admin-panel" id="admin-panel">
+            <h2>Admin Panel</h2>
+            <div>
+              <button id="view-all-chats-btn">View All Chats</button>
+            </div>
+            <div id="admin-output" style="margin-top:12px;"></div>
+          </div>
+        </div>
+
+        <div class="right-column">
+          <div class="chat-page card" id="chat-page" style="display:block;">
+            <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <button class="back-btn" id="back-btn" style="display:none;"><i class="fas fa-arrow-left"></i> Back</button>
+                <span id="current-chat-name" style="font-weight:bold; margin-left:10px;"></span>
+              </div>
+              <div id="current-user-email" style="font-size:13px; color:#666;"></div>
+            </div>
+
+            <div class="chat-container" style="margin-top:12px;">
+              <div class="contacts-list card" id="contacts-list" style="margin:0; border-radius:0; border-right:none;"></div>
+
+              <div class="chat-area" style="margin:0; border-radius:0;">
+                <div class="chat-messages" id="chat-messages">
+                  <div style="color:#888;">Select a friend to start chat</div>
+                </div>
+
+                <div class="message-input">
+                  <input type="text" id="message-input" placeholder="Type a message...">
+                  <button id="send-btn">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-icons" id="nav-icons">
+        <a href="#" class="nav-icon active" id="home-tab"><i class="fas fa-home"></i></a>
+        <a href="#" class="nav-icon" id="chat-tab"><i class="fas fa-comment"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+   // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
   authDomain: "massage-8c66f.firebaseapp.com",
@@ -589,263 +202,421 @@ const firebaseConfig = {
   messagingSenderId: "557008720018",
   appId: "1:557008720018:web:22055db26bbfb2bab3d64b"
 };
+    // ------------------------------------------------------------
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
 
-        // DOM Elements
-        const loginButton = document.getElementById('login-button');
-        const createAccountBtn = document.getElementById('create-account-btn');
-        const registerButton = document.getElementById('register-button');
-        const closeModal = document.getElementById('close-modal');
-        const registrationModal = document.getElementById('registration-modal');
-        const loginContainer = document.getElementById('login-container');
-        const logoutBtn = document.getElementById('logout-btn');
-        const navIcons = document.getElementById('nav-icons');
-        const topBar = document.getElementById('top-bar');
-        const chatSection = document.getElementById('chat-section');
-        const contactsList = document.getElementById('contacts-list');
-        const chatMessages = document.getElementById('chat-messages');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-        const currentChatName = document.getElementById('current-chat-name');
-        const notificationIcon = document.getElementById('notification-icon');
-        const searchInput = document.getElementById('search-input');
+    // DOM
+    const loginPage = document.getElementById('login-page');
+    const appContainer = document.getElementById('app-container');
+    const loginButton = document.getElementById('login-button');
+    const createAccountBtn = document.getElementById('create-account-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const profileBtn = document.getElementById('profile-btn');
+    const dropdownContent = document.getElementById('dropdown-content');
+    const usersListContainer = document.getElementById('users-list-container');
+    const friendRequestsContainer = document.getElementById('friend-requests-container');
+    const contactsList = document.getElementById('contacts-list');
+    const chatMessages = document.getElementById('chat-messages');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const currentChatName = document.getElementById('current-chat-name');
+    const currentUserEmailLabel = document.getElementById('current-user-email');
+    const reqCountBadge = document.getElementById('req-count');
+    const requestsBtn = document.getElementById('requests-btn');
+    const adminPanelEl = document.getElementById('admin-panel');
+    const adminPanelBtn = document.getElementById('admin-panel-btn');
+    const adminOutput = document.getElementById('admin-output');
+    const viewAllChatsBtn = document.getElementById('view-all-chats-btn');
+    const backBtn = document.getElementById('back-btn');
 
-        // Variables
-        let currentUser = null;
-        let currentChatId = null;
+    // state
+    let currentUser = null;
+    let currentUserData = null; // user info from db
+    let currentChatFriend = null;
+    let pendingRequests = {};
 
-        // Show registration modal
-        createAccountBtn.addEventListener('click', () => {
-            registrationModal.style.display = 'flex';
-        });
+    // Profile dropdown toggle
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', () => dropdownContent.style.display = 'none');
 
-        // Close registration modal
-        closeModal.addEventListener('click', () => {
-            registrationModal.style.display = 'none';
-        });
+    // Navigation tabs (simple)
+    document.getElementById('home-tab').addEventListener('click', (e) => { e.preventDefault(); });
+    document.getElementById('chat-tab').addEventListener('click', (e) => { e.preventDefault(); });
 
-        // Register new user
-        registerButton.addEventListener('click', () => {
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+    // Login
+    loginButton.addEventListener('click', () => {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!email || !password) return alert('Enter email and password');
 
-            if (validate_email(email) === false || validate_password(password) === false) {
-                alert('Email or Password is invalid');
-                return;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(cred => {
+          currentUser = cred.user;
+          postLoginInit();
+        })
+        .catch(err => alert(err.message));
+    });
+
+    // Create account
+    createAccountBtn.addEventListener('click', () => {
+      const email = prompt('Enter your email:');
+      const password = prompt('Enter your password (min 6 chars):');
+      const username = prompt('Enter your username:');
+      if (!email || !password || !username) return alert('All fields required');
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((cred) => {
+          currentUser = cred.user;
+          // Save user to db with default role 'user'
+          saveUserToDB(currentUser.uid, {
+            uid: currentUser.uid,
+            username: username,
+            email: email,
+            role: 'user',
+            friends: {}
+          }).then(() => {
+            postLoginInit();
+          });
+        })
+        .catch(err => alert(err.message));
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => {
+        currentUser = null;
+        currentUserData = null;
+        loginPage.style.display = 'flex';
+        appContainer.style.display = 'none';
+      });
+    });
+
+    // Save user helper
+    function saveUserToDB(uid, obj) {
+      return db.ref('users/' + uid).set(obj);
+    }
+
+    // After login actions: ensure user record exists, load lists, listeners
+    function postLoginInit() {
+      if (!currentUser) return;
+      // ensure user record exists
+      db.ref('users/' + currentUser.uid).once('value').then(snap => {
+        if (!snap.exists()) {
+          // create default user record using email as username fallback
+          const username = currentUser.email.split('@')[0];
+          saveUserToDB(currentUser.uid, {
+            uid: currentUser.uid,
+            username: username,
+            email: currentUser.email,
+            role: 'user',
+            friends: {}
+          }).then(() => initAfterEnsureUser());
+        } else {
+          initAfterEnsureUser();
+        }
+      });
+    }
+
+    function initAfterEnsureUser() {
+      // get current user data and initialize UI
+      db.ref('users/' + currentUser.uid).on('value', snap => {
+        currentUserData = snap.val();
+        currentUserEmailLabel.textContent = currentUserData.email || '';
+        // show admin panel button if admin
+        if (currentUserData && currentUserData.role === 'admin') {
+          adminPanelEl.style.display = 'block';
+          adminPanelBtn.style.display = 'block';
+        } else {
+          adminPanelEl.style.display = 'none';
+          adminPanelBtn.style.display = 'none';
+        }
+      });
+
+      loginPage.style.display = 'none';
+      appContainer.style.display = 'block';
+
+      loadAllUsers();
+      listenFriendRequests();
+      loadFriendsList();
+    }
+
+    // Load all users for sending friend requests
+    function loadAllUsers() {
+      db.ref('users').on('value', snapshot => {
+        const all = snapshot.val() || {};
+        usersListContainer.innerHTML = '';
+
+        for (const uid in all) {
+          if (uid === currentUser.uid) continue;
+          const u = all[uid];
+          const item = document.createElement('div');
+          item.className = 'user-item';
+          item.innerHTML = `
+            <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <div class="user-info">
+              <div class="user-name">${escapeHtml(u.username || '(no-name)')}</div>
+              <div class="user-status">${escapeHtml(u.email || '')}</div>
+            </div>
+            <div>
+              <button class="add-friend-btn" data-uid="${uid}">Add Friend</button>
+            </div>
+          `;
+          usersListContainer.appendChild(item);
+
+          // disable add button if already friends
+          const btn = item.querySelector('.add-friend-btn');
+          db.ref(`users/${currentUser.uid}/friends/${uid}`).once('value').then(snap => {
+            if (snap.exists()) {
+              btn.textContent = 'Friends';
+              btn.disabled = true;
+              btn.style.background = '#6c757d';
+            } else {
+              // Also check if request already sent
+              db.ref(`users/${uid}/friendRequests/${currentUser.uid}`).once('value').then(rsnap => {
+                if (rsnap.exists()) {
+                  btn.textContent = 'Requested';
+                  btn.disabled = true;
+                  btn.style.background = '#e4e6eb';
+                  btn.style.color = '#333';
+                }
+              });
             }
+          });
 
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // User registered successfully
-                    const user = userCredential.user;
-                    
-                    // Add user to Realtime Database
-                    const userData = {
-                        username: username,
-                        email: email,
-                        last_login: Date.now()
-                    };
-                    
-                    database.ref('users/' + user.uid).set(userData)
-                        .then(() => {
-                            alert('Account created successfully!');
-                            registrationModal.style.display = 'none';
-                            showChatSection(user.uid, username);
-                        })
-                        .catch((error) => {
-                            alert(error.message);
-                        });
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
-        });
-
-        // Login existing user
-        loginButton.addEventListener('click', () => {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // User logged in successfully
-                    const user = userCredential.user;
-                    
-                    // Get user data from Realtime Database
-                    database.ref('users/' + user.uid).once('value')
-                        .then((snapshot) => {
-                            const userData = snapshot.val();
-                            showChatSection(user.uid, userData.username);
-                        })
-                        .catch((error) => {
-                            alert(error.message);
-                        });
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
-        });
-
-        // Logout user
-        logoutBtn.addEventListener('click', () => {
-            auth.signOut()
-                .then(() => {
-                    // User signed out successfully
-                    hideChatSection();
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
-        });
-
-        // Show chat section after login/registration
-        function showChatSection(userId, username) {
-            currentUser = { uid: userId, username: username };
-            
-            loginContainer.style.display = 'none';
-            topBar.style.display = 'flex';
-            chatSection.style.display = 'block';
-            navIcons.style.display = 'flex';
-            
-            // Update last login time in database
-            database.ref('users/' + userId).update({
-                last_login: Date.now()
-            });
-            
-            // Load contacts
-            loadContacts(userId);
+          btn.addEventListener('click', (e) => {
+            const toUid = e.target.getAttribute('data-uid');
+            sendFriendRequest(toUid);
+          });
         }
+      });
+    }
 
-        // Hide chat section (on logout)
-        function hideChatSection() {
-            loginContainer.style.display = 'block';
-            topBar.style.display = 'none';
-            chatSection.style.display = 'none';
-            navIcons.style.display = 'none';
-            currentUser = null;
-            currentChatId = null;
+    // Send friend request
+    async function sendFriendRequest(toUid) {
+      if (!currentUserData) return alert('User data loading, try again.');
+      // write request under recipient's friendRequests node
+      const senderUsername = currentUserData.username || currentUser.email.split('@')[0];
+      await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
+        fromUid: currentUser.uid,
+        fromUsername: senderUsername,
+        status: 'pending',
+        timestamp: Date.now()
+      });
+      alert('Friend request sent!');
+    }
+
+    // Listen for incoming friend requests for current user
+    function listenFriendRequests() {
+      const ref = db.ref(`users/${currentUser.uid}/friendRequests`);
+      ref.on('value', snapshot => {
+        const reqs = snapshot.val() || {};
+        pendingRequests = reqs;
+        renderFriendRequests(reqs);
+        // update badge count
+        const count = Object.keys(reqs).filter(k => reqs[k].status === 'pending').length;
+        if (count > 0) {
+          reqCountBadge.style.display = 'inline-block';
+          reqCountBadge.textContent = count;
+        } else {
+          reqCountBadge.style.display = 'none';
         }
+      });
+    }
 
-        // Load contacts
-        function loadContacts(userId) {
-            // In a real app, you would load the user's contacts/chats
-            // For demo, we'll load all users except the current one
-            database.ref('users').once('value').then(snapshot => {
-                contactsList.innerHTML = '';
-                
-                snapshot.forEach(childSnapshot => {
-                    if (childSnapshot.key !== userId) {
-                        const user = childSnapshot.val();
-                        const contactElement = document.createElement('div');
-                        contactElement.className = 'contact';
-                        contactElement.dataset.userId = childSnapshot.key;
-                        contactElement.innerHTML = `
-                            <div class="contact-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="contact-info">
-                                <div class="contact-name">${user.username}</div>
-                                <div class="contact-last-message">Click to start chatting</div>
-                            </div>
-                        `;
-                        
-                        contactElement.addEventListener('click', () => {
-                            openChat(childSnapshot.key, user.username);
-                        });
-                        
-                        contactsList.appendChild(contactElement);
-                    }
-                });
-            });
-        }
+    // Render friend requests UI
+    function renderFriendRequests(requests) {
+      friendRequestsContainer.innerHTML = '';
+      for (const fromUid in requests) {
+        const r = requests[fromUid];
+        if (r.status !== 'pending') continue;
+        // load sender info (username/email)
+        db.ref(`users/${fromUid}`).once('value').then(snap => {
+          const sender = snap.val() || { username: r.fromUsername || 'Unknown', email: '' };
+          const item = document.createElement('div');
+          item.className = 'request-item';
+          item.innerHTML = `
+            <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <div class="user-info">
+              <div class="user-name">${escapeHtml(sender.username)}</div>
+              <div class="user-status">${escapeHtml(sender.email || r.fromUsername || '')}</div>
+            </div>
+            <div class="request-actions">
+              <button class="accept-btn" data-uid="${fromUid}">Accept</button>
+              <button class="decline-btn" data-uid="${fromUid}">Decline</button>
+            </div>
+          `;
+          friendRequestsContainer.appendChild(item);
 
-        // Open chat with a user
-        function openChat(userId, username) {
-            currentChatId = userId;
-            currentChatName.textContent = username;
-            
-            // Clear and prepare chat area
-            chatMessages.innerHTML = '';
-            
-            // In a real app, you would load the chat history here
-            chatMessages.innerHTML = `
-                <div style="text-align: center; color: #65676b; margin-top: 20px;">
-                    Start of your conversation with ${username}
+          item.querySelector('.accept-btn').addEventListener('click', () => acceptFriendRequest(fromUid));
+          item.querySelector('.decline-btn').addEventListener('click', () => declineFriendRequest(fromUid));
+        });
+      }
+    }
+
+    // Accept friend request: add to both users' friends and remove request
+    function acceptFriendRequest(friendUid) {
+      const updates = {};
+      updates[`users/${currentUser.uid}/friends/${friendUid}`] = true;
+      updates[`users/${friendUid}/friends/${currentUser.uid}`] = true;
+      updates[`users/${currentUser.uid}/friendRequests/${friendUid}`] = null;
+      // optionally remove the reciprocal request if exists
+      updates[`users/${friendUid}/friendRequests/${currentUser.uid}`] = null;
+
+      db.ref().update(updates).then(() => {
+        alert('Friend request accepted!');
+        loadFriendsList();
+      }).catch(err => alert(err.message));
+    }
+
+    // Decline friend request (just remove)
+    function declineFriendRequest(friendUid) {
+      db.ref(`users/${currentUser.uid}/friendRequests/${friendUid}`).remove()
+        .then(() => alert('Friend request declined!'))
+        .catch(err => alert(err.message));
+    }
+
+    // Load friends list into contacts
+    function loadFriendsList() {
+      const ref = db.ref(`users/${currentUser.uid}/friends`);
+      ref.on('value', snapshot => {
+        const friends = snapshot.val() || {};
+        contactsList.innerHTML = '';
+        if (Object.keys(friends).length === 0) {
+          contactsList.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from left panel.</div>';
+        } else {
+          for (const fid in friends) {
+            db.ref(`users/${fid}`).once('value').then(snap => {
+              const f = snap.val() || { username: 'Unknown' };
+              const contactItem = document.createElement('div');
+              contactItem.className = 'contact';
+              contactItem.style.display = 'flex';
+              contactItem.style.alignItems = 'center';
+              contactItem.style.padding = '12px';
+              contactItem.style.borderBottom = '1px solid #eee';
+              contactItem.innerHTML = `
+                <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <div class="user-info" style="flex:1;">
+                  <div class="user-name">${escapeHtml(f.username)}</div>
+                  <div class="user-status">Online</div>
                 </div>
-            `;
-            
-            // Scroll to bottom
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+              `;
+              contactsList.appendChild(contactItem);
+
+              contactItem.addEventListener('click', () => openChat(fid, f.username));
+            });
+          }
         }
+      });
+    }
 
-        // Send message
-        function sendMessage() {
-            if (!currentUser || !currentChatId || !messageInput.value.trim()) return;
-            
-            const message = messageInput.value.trim();
-            const timestamp = Date.now();
-            
-            // In a real app, you would save the message to the database
-            // For demo, we'll just display it
-            displayMessage(currentUser.uid, currentUser.username, message, timestamp, true);
-            
-            // Clear input
-            messageInput.value = '';
-            
-            // Scroll to bottom
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Open chat with friend
+    function openChat(friendId, friendName) {
+      currentChatFriend = { id: friendId, name: friendName };
+      currentChatName.textContent = friendName;
+      backBtn.style.display = 'inline-block';
+      currentChatName.style.display = 'inline-block';
+      // load messages
+      loadChatMessages(friendId);
+    }
+
+    backBtn.addEventListener('click', () => {
+      currentChatFriend = null;
+      currentChatName.textContent = '';
+      backBtn.style.display = 'none';
+      chatMessages.innerHTML = '<div style="color:#888">Select a friend to start chat</div>';
+    });
+
+    // Load chat messages between current user and friend
+    function loadChatMessages(friendId) {
+      chatMessages.innerHTML = '';
+      const chatId = [currentUser.uid, friendId].sort().join('_');
+      const ref = db.ref(`chats/${chatId}`);
+      ref.off(); // remove previous listeners if any
+      ref.on('child_added', snap => {
+        const m = snap.val();
+        addMessageToChat(m);
+      });
+    }
+
+    // Add message UI
+    function addMessageToChat(message) {
+      const div = document.createElement('div');
+      div.className = 'message ' + (message.sender === currentUser.uid ? 'sent' : 'received');
+      div.innerHTML = `<div>${escapeHtml(message.text)}</div><div class="message-time">${new Date(message.timestamp).toLocaleTimeString()}</div>`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Send message
+    function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      if (!currentChatFriend) return alert('Select a friend to chat with');
+
+      const chatId = [currentUser.uid, currentChatFriend.id].sort().join('_');
+      const msg = {
+        text: text,
+        sender: currentUser.uid,
+        timestamp: Date.now()
+      };
+      db.ref(`chats/${chatId}`).push(msg).then(() => {
+        messageInput.value = '';
+      });
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    // Utility: escape html
+    function escapeHtml(s) {
+      if (!s && s !== 0) return '';
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Admin: view all chats
+    viewAllChatsBtn.addEventListener('click', () => {
+      if (!currentUserData || currentUserData.role !== 'admin') return alert('Admin only');
+      adminOutput.innerHTML = 'Loading all chats...';
+      db.ref('chats').once('value').then(snap => {
+        const chats = snap.val() || {};
+        let out = '';
+        for (const chatId in chats) {
+          out += `<div style="padding:6px;border-bottom:1px solid #eee;"><strong>${chatId}</strong> — messages: ${Object.keys(chats[chatId] || {}).length}</div>`;
         }
+        adminOutput.innerHTML = out || '<div>No chats yet</div>';
+      });
+    });
 
-        // Display message in chat
-        function displayMessage(senderId, senderName, text, timestamp, isSent) {
-            const messageElement = document.createElement('div');
-            messageElement.className = `message ${isSent ? 'sent' : 'received'}`;
-            
-            const timeString = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
-            messageElement.innerHTML = `
-                ${!isSent ? `<div class="message-sender">${senderName}</div>` : ''}
-                <div>${text}</div>
-                <div class="message-time">${timeString}</div>
-            `;
-            
-            chatMessages.appendChild(messageElement);
-        }
+    // small helper: show friend requests card when bell clicked
+    requestsBtn.addEventListener('click', () => {
+      const card = document.getElementById('friend-requests-card');
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
 
-        // Event listeners
-        sendButton.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        // Validation functions
-        function validate_email(email) {
-            const expression = /^[^@]+@\w+(\.\w+)+\w$/;
-            return expression.test(email);
-        }
-
-        function validate_password(password) {
-            return password.length >= 6;
-        }
-
-        // Check if user is already logged in
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in
-                database.ref('users/' + user.uid).once('value')
-                    .then((snapshot) => {
-                        const userData = snapshot.val();
-                        showChatSection(user.uid, userData.username);
-                    });
-            }
-        });
-    </script>
+    // Auth state change: initialize on page load
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        currentUser = user;
+        postLoginInit();
+      } else {
+        loginPage.style.display = 'flex';
+        appContainer.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
