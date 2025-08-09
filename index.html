@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ne">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -235,7 +235,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
-    // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
+    // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
       authDomain: "massage-8c66f.firebaseapp.com",
@@ -689,15 +689,31 @@
           return;
         }
 
+        // Generate a unique request ID
+        const requestId = db.ref().child('friend_requests').push().key;
+
         const senderUsername = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'Someone');
-        await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
+        
+        // Create updates object for atomic writes
+        const updates = {};
+        updates[`users/${toUid}/friendRequests/${currentUser.uid}`] = {
+          requestId: requestId,
           fromUid: currentUser.uid,
           fromUsername: senderUsername,
           status: 'pending',
           timestamp: Date.now()
-        });
+        };
+        updates[`friend_requests/${requestId}`] = {
+          senderId: currentUser.uid,
+          receiverId: toUid,
+          status: 'pending',
+          timestamp: Date.now()
+        };
 
-        // Optional: add a notification
+        // Execute all updates atomically
+        await db.ref().update(updates);
+
+        // Add notification
         await db.ref(`users/${toUid}/notifications`).push({
           type: 'friend_request',
           fromUid: currentUser.uid,
@@ -720,16 +736,32 @@
       
       showLoading();
       
-      db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).remove()
-        .then(() => {
-          alert('Friend request cancelled.');
-        })
-        .catch(err => {
-          alert('Error cancelling request: ' + err.message);
-        })
-        .finally(() => {
+      // First get the request ID to delete from friend_requests
+      db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).once('value').then(snap => {
+        const requestData = snap.val();
+        if (!requestData) {
           hideLoading();
-        });
+          return;
+        }
+
+        const requestId = requestData.requestId;
+        const updates = {};
+        updates[`users/${toUid}/friendRequests/${currentUser.uid}`] = null;
+        if (requestId) {
+          updates[`friend_requests/${requestId}`] = null;
+        }
+
+        return db.ref().update(updates);
+      })
+      .then(() => {
+        alert('Friend request cancelled.');
+      })
+      .catch(err => {
+        alert('Error cancelling request: ' + err.message);
+      })
+      .finally(() => {
+        hideLoading();
+      });
     }
 
     // Listen for incoming friend requests
@@ -794,58 +826,97 @@
           friendRequestsContainer.appendChild(item);
           
           // Add event listeners to buttons
-          item.querySelector('.accept-btn').addEventListener('click', (e) => { e.stopPropagation(); acceptFriendRequest(fromUid); });
-          item.querySelector('.decline-btn').addEventListener('click', (e) => { e.stopPropagation(); declineFriendRequest(fromUid); });
+          item.querySelector('.accept-btn').addEventListener('click', (e) => { 
+            e.stopPropagation(); 
+            acceptFriendRequest(fromUid, request.requestId); 
+          });
+          item.querySelector('.decline-btn').addEventListener('click', (e) => { 
+            e.stopPropagation(); 
+            declineFriendRequest(fromUid, request.requestId); 
+          });
         });
       }
     }
 
     // Accept friend request
-    function acceptFriendRequest(friendUid) {
+    async function acceptFriendRequest(friendUid, requestId) {
       if (!confirm('Accept this friend request?')) return;
       
       showLoading();
       
-      const updates = {};
-      updates[`users/${currentUser.uid}/friends/${friendUid}`] = true;
-      updates[`users/${friendUid}/friends/${currentUser.uid}`] = true;
-      updates[`users/${currentUser.uid}/friendRequests/${friendUid}`] = null;
-      updates[`users/${friendUid}/friendRequests/${currentUser.uid}`] = null;
-
-      db.ref().update(updates)
-        .then(() => {
-          alert('Friend request accepted!');
-          loadFriendsList();
-          
-          // Notify the friend that their request was accepted
-          db.ref(`users/${friendUid}/notifications`).push({
-            type: 'request_accepted',
-            fromUid: currentUser.uid,
-            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} accepted your friend request.`,
-            timestamp: Date.now()
-          });
-        })
-        .catch(err => {
-          alert('Error accepting request: ' + err.message);
-        })
-        .finally(() => {
+      try {
+        // Verify the request still exists
+        const requestSnap = await db.ref(`users/${currentUser.uid}/friendRequests/${friendUid}`).once('value');
+        if (!requestSnap.exists() || requestSnap.val().status !== 'pending') {
+          alert('This friend request no longer exists');
           hideLoading();
+          return;
+        }
+
+        // Prepare all updates
+        const updates = {
+          // Add to both users' friends lists
+          [`users/${currentUser.uid}/friends/${friendUid}`]: true,
+          [`users/${friendUid}/friends/${currentUser.uid}`]: true,
+          
+          // Remove from both users' friendRequests
+          [`users/${currentUser.uid}/friendRequests/${friendUid}`]: null,
+          [`users/${friendUid}/friendRequests/${currentUser.uid}`]: null,
+          
+          // Update request status in friend_requests
+          [`friend_requests/${requestId}/status`]: 'accepted',
+          
+          // Create a chat room
+          [`chats/${getChatId(currentUser.uid, friendUid)}/initiated`]: true
+        };
+
+        // Execute all updates atomically
+        await db.ref().update(updates);
+        
+        // Update UI and notify
+        alert('Friend request accepted!');
+        loadFriendsList();
+        
+        // Send notification to the other user
+        await db.ref(`users/${friendUid}/notifications`).push({
+          type: 'request_accepted',
+          fromUid: currentUser.uid,
+          message: `${currentUserData?.username || 'Someone'} accepted your friend request`,
+          timestamp: Date.now()
         });
+
+      } catch (error) {
+        console.error('Error accepting friend request:', error);
+        alert('Error: ' + (error.message || 'Failed to accept request'));
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // Helper function to generate consistent chat IDs
+    function getChatId(uid1, uid2) {
+      return [uid1, uid2].sort().join('_');
     }
 
     // Decline friend request
-    function declineFriendRequest(friendUid) {
+    function declineFriendRequest(friendUid, requestId) {
       if (!confirm('Decline this friend request?')) return;
       
       showLoading();
       
-      db.ref(`users/${currentUser.uid}/friendRequests/${friendUid}`).remove()
+      // Prepare updates
+      const updates = {
+        [`users/${currentUser.uid}/friendRequests/${friendUid}`]: null,
+        [`friend_requests/${requestId}/status`]: 'rejected'
+      };
+      
+      db.ref().update(updates)
         .then(() => {
           // Notify the sender that their request was declined
           db.ref(`users/${friendUid}/notifications`).push({
             type: 'request_rejected',
             fromUid: currentUser.uid,
-            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} declined your friend request.`,
+            message: `${currentUserData?.username || 'Someone'} declined your friend request`,
             timestamp: Date.now()
           });
           alert('Friend request declined!');
@@ -905,6 +976,9 @@
       showLoading('contacts-list');
       
       const ref = db.ref(`users/${currentUser.uid}/friends`);
+      
+      // Clear previous listener to avoid duplicates
+      ref.off();
       
       ref.on('value', snapshot => {
         const friends = snapshot.val() || {};
@@ -970,7 +1044,7 @@
     function loadChatMessages(friendId) {
       showLoading('chat-messages');
       
-      const chatId = [currentUser.uid, friendId].sort().join('_');
+      const chatId = getChatId(currentUser.uid, friendId);
       const ref = db.ref(`chats/${chatId}`);
       
       // Clear previous listeners
@@ -1037,7 +1111,7 @@
           return;
         }
 
-        const chatId = [currentUser.uid, currentChatFriend.id].sort().join('_');
+        const chatId = getChatId(currentUser.uid, currentChatFriend.id);
         const message = {
           text: text,
           sender: currentUser.uid,
