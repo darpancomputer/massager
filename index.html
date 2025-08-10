@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ne">
 <head>
@@ -72,9 +71,38 @@
     .message-input input { flex:1; padding:12px; border:1px solid #ddd; border-radius:20px; outline:none; }
     .message-input button { margin-left:10px; padding:12px 20px; background:#1877f2; color:#fff; border:none; border-radius:20px; cursor:pointer; }
 
-    .nav-icons { position:fixed; bottom:0; left:0; right:0; background:#fff; display:flex; justify-content:space-around; padding:10px 0; box-shadow:0 -2px 4px rgba(0,0,0,.1); }
-    .nav-icon { color:#65676b; font-size:24px; text-decoration:none; }
-    .nav-icon.active { color:#1877f2; }
+    /* Bottom navigation bar */
+    .bottom-nav { 
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #65676b;
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+    
+    .nav-item.active {
+      color: #1877f2;
+    }
+    
+    .nav-icon {
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
 
     /* admin panel */
     .admin-panel { display:none; }
@@ -103,6 +131,35 @@
 
     /* small helper for clickable user */
     .user-item.clickable { cursor:pointer; }
+    
+    /* Chat action buttons */
+    .chat-actions {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      background: #fff;
+      border-top: 1px solid #eee;
+    }
+    
+    .chat-action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      border: none;
+      color: #65676b;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    
+    .chat-action-btn i {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+    
+    .chat-action-btn.active {
+      color: #1877f2;
+    }
   </style>
 </head>
 <body>
@@ -223,9 +280,48 @@
         </div>
       </div>
 
-      <div class="nav-icons" id="nav-icons">
-        <a href="#" class="nav-icon active" id="home-tab"><i class="fas fa-home"></i></a>
-        <a href="#" class="nav-icon" id="chat-tab"><i class="fas fa-comment"></i></a>
+      <!-- Bottom Navigation Bar -->
+      <div class="bottom-nav">
+        <a href="#" class="nav-item active" id="home-nav">
+          <i class="fas fa-home nav-icon"></i>
+          <span>Home</span>
+        </a>
+        <a href="#" class="nav-item" id="friends-nav">
+          <i class="fas fa-user-friends nav-icon"></i>
+          <span>Friends</span>
+        </a>
+        <a href="#" class="nav-item" id="chat-nav">
+          <i class="fas fa-comment nav-icon"></i>
+          <span>Chats</span>
+        </a>
+        <a href="#" class="nav-item" id="requests-nav">
+          <i class="fas fa-user-plus nav-icon"></i>
+          <span>Requests</span>
+        </a>
+        <a href="#" class="nav-item" id="profile-nav">
+          <i class="fas fa-user nav-icon"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+      
+      <!-- Chat Action Buttons (shown when in chat) -->
+      <div class="chat-actions" id="chat-actions" style="display:none;">
+        <button class="chat-action-btn" id="chat-info-btn">
+          <i class="fas fa-info-circle"></i>
+          <span>Info</span>
+        </button>
+        <button class="chat-action-btn" id="chat-media-btn">
+          <i class="fas fa-images"></i>
+          <span>Media</span>
+        </button>
+        <button class="chat-action-btn" id="chat-files-btn">
+          <i class="fas fa-file-alt"></i>
+          <span>Files</span>
+        </button>
+        <button class="chat-action-btn" id="chat-call-btn">
+          <i class="fas fa-phone-alt"></i>
+          <span>Call</span>
+        </button>
       </div>
     </div>
   </div>
@@ -280,6 +376,20 @@
     const notiBtn = document.getElementById('noti-btn');
     const notiListEl = document.getElementById('noti-list');
     const notiItems = document.getElementById('noti-items');
+    const chatActions = document.getElementById('chat-actions');
+
+    // Bottom nav elements
+    const homeNav = document.getElementById('home-nav');
+    const friendsNav = document.getElementById('friends-nav');
+    const chatNav = document.getElementById('chat-nav');
+    const requestsNav = document.getElementById('requests-nav');
+    const profileNav = document.getElementById('profile-nav');
+
+    // Chat action buttons
+    const chatInfoBtn = document.getElementById('chat-info-btn');
+    const chatMediaBtn = document.getElementById('chat-media-btn');
+    const chatFilesBtn = document.getElementById('chat-files-btn');
+    const chatCallBtn = document.getElementById('chat-call-btn');
 
     // State variables
     let currentUser = null;
@@ -314,13 +424,61 @@
         notiListEl.style.display = notiListEl.style.display === 'block' ? 'none' : 'block';
       });
 
-      // Navigation tabs
-      document.getElementById('home-tab').addEventListener('click', (e) => { 
-        e.preventDefault(); 
+      // Bottom navigation
+      homeNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('home');
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
       
-      document.getElementById('chat-tab').addEventListener('click', (e) => { 
-        e.preventDefault(); 
+      friendsNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('friends');
+        // Scroll to friends list
+        document.getElementById('users-list-container').scrollIntoView({ behavior: 'smooth' });
+      });
+      
+      chatNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('chat');
+        // Scroll to chat area
+        document.getElementById('chat-page').scrollIntoView({ behavior: 'smooth' });
+      });
+      
+      requestsNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('requests');
+        // Scroll to friend requests
+        document.getElementById('friend-requests-card').scrollIntoView({ behavior: 'smooth' });
+      });
+      
+      profileNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('profile');
+        // Show profile dropdown
+        dropdownContent.style.display = 'block';
+      });
+
+      // Chat action buttons
+      chatInfoBtn.addEventListener('click', () => {
+        if (currentChatFriend) {
+          alert(`Chat info with ${currentChatFriend.name}`);
+        }
+      });
+      
+      chatMediaBtn.addEventListener('click', () => {
+        alert('Media sharing feature would be implemented here');
+      });
+      
+      chatFilesBtn.addEventListener('click', () => {
+        alert('File sharing feature would be implemented here');
+      });
+      
+      chatCallBtn.addEventListener('click', () => {
+        if (currentChatFriend) {
+          alert(`Calling ${currentChatFriend.name}`);
+        }
       });
 
       // Login
@@ -343,6 +501,7 @@
         currentChatFriend = null;
         currentChatName.textContent = '';
         backBtn.style.display = 'none';
+        chatActions.style.display = 'none';
         chatMessages.innerHTML = '<div style="color:#888">Select a friend to start chat</div>';
       });
 
@@ -355,6 +514,35 @@
         const card = document.getElementById('friend-requests-card');
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
+    }
+
+    // Set active navigation item
+    function setActiveNav(activeItem) {
+      // Remove active class from all
+      homeNav.classList.remove('active');
+      friendsNav.classList.remove('active');
+      chatNav.classList.remove('active');
+      requestsNav.classList.remove('active');
+      profileNav.classList.remove('active');
+      
+      // Add active class to selected
+      switch(activeItem) {
+        case 'home':
+          homeNav.classList.add('active');
+          break;
+        case 'friends':
+          friendsNav.classList.add('active');
+          break;
+        case 'chat':
+          chatNav.classList.add('active');
+          break;
+        case 'requests':
+          requestsNav.classList.add('active');
+          break;
+        case 'profile':
+          profileNav.classList.add('active');
+          break;
+      }
     }
 
     // Handle authentication state changes
@@ -424,6 +612,9 @@
         listenFriendRequests();
         loadFriendsList();
         listenNotifications();
+        
+        // Set home as active by default
+        setActiveNav('home');
       });
     }
 
@@ -962,6 +1153,7 @@
       currentChatName.textContent = friendName;
       backBtn.style.display = 'inline-block';
       currentChatName.style.display = 'inline-block';
+      chatActions.style.display = 'flex';
       
       // Load messages
       loadChatMessages(friendId);
