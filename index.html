@@ -10,20 +10,91 @@
     body { margin:0; padding:0; background:#f0f2f5; }
     .container { display:flex; flex-direction:column; min-height:100vh; max-width:600px; margin:0 auto; background:#fff; position: relative; }
 
-    header { background:#1877f2; padding:10px 15px; display:flex; justify-content:center; align-items:center; position: relative; }
-    .logo { font-size:20px; font-weight:bold; color:#fff; text-align: center; }
-    .header-icons { display:flex; gap:15px; position: absolute; right: 15px; }
-    .header-icon { color:#fff; font-size:20px; }
+    /* Login Page Header */
+    .login-header { 
+      background:#1877f2; 
+      padding:15px; 
+      text-align:center; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .login-logo { 
+      font-size:24px; 
+      font-weight:bold; 
+      color:#fff; 
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
 
-    .main-content { display:flex; flex:1; align-items:center; justify-content:center; padding:20px; }
-    .login-container { background:#fff; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,.1); padding:20px; width:100%; max-width:400px; text-align:center; }
-    .login-container h1 { font-size:18px; margin-bottom:20px; color:#1c1e21; }
-    .input-field { margin-bottom:15px; text-align:left; }
-    .input-field input { width:100%; padding:12px; border:1px solid #dddfe2; border-radius:6px; font-size:16px; }
-    .login-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:12px; width:100%; font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:15px; }
-    .create-account-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:12px; width:100%; font-size:16px; cursor:pointer; }
-    .forgot-password { color:#1877f2; text-decoration:none; display:block; margin-bottom:10px; }
+    /* Main Login Content */
+    .main-content { 
+      display:flex; 
+      flex:1; 
+      align-items:center; 
+      justify-content:center; 
+      padding:20px; 
+      background: url('https://www.transparenttextures.com/patterns/45-degree-fabric-light.png') #f0f2f5;
+    }
+    .login-container { 
+      background:#fff; 
+      border-radius:8px; 
+      box-shadow:0 2px 4px rgba(0,0,0,.1); 
+      padding:20px; 
+      width:100%; 
+      max-width:400px; 
+      text-align:center; 
+    }
+    .login-container h1 { 
+      font-size:18px; 
+      margin-bottom:20px; 
+      color:#1c1e21; 
+    }
+    .input-field { 
+      margin-bottom:15px; 
+      text-align:center; 
+    }
+    .input-field input { 
+      width:100%; 
+      padding:12px; 
+      border:1px solid #dddfe2; 
+      border-radius:6px; 
+      font-size:16px; 
+      text-align:center;
+    }
+    .login-btn { 
+      background:#1877f2; 
+      color:#fff; 
+      border:none; 
+      border-radius:6px; 
+      padding:12px; 
+      width:100%; 
+      font-size:18px; 
+      font-weight:bold; 
+      cursor:pointer; 
+      margin-bottom:15px; 
+    }
+    .create-account-btn { 
+      background:#42b72a; 
+      color:#fff; 
+      border:none; 
+      border-radius:6px; 
+      padding:12px; 
+      width:100%; 
+      font-size:16px; 
+      cursor:pointer; 
+    }
+    .forgot-password { 
+      color:#1877f2; 
+      text-decoration:none; 
+      display:block; 
+      margin-bottom:10px; 
+      text-align:center;
+    }
+    .divider {
+      height:1px;
+      background:#dadde1;
+      margin:20px 0;
+    }
 
+    /* App Container */
     .app-container { display:none; flex-direction:column; width:100%; height:100vh; }
 
     .search-bar { display:flex; align-items:center; background:#f0f2f5; border-radius:50px; padding:8px 15px; width:100%; }
@@ -61,7 +132,7 @@
     .accept-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
     .decline-btn { background:#e4e6eb; color:#1c1e21; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
 
-    .chat-container { display:flex; flex-direction:column; flex:1; height: calc(100vh - 120px); }
+    .chat-container { display:flex; flex-direction:column; flex:1; height: 100vh; }
     .chat-header { display:flex; align-items:center; padding:10px 15px; background:#1877f2; color:#fff; position: sticky; top: 0; z-index: 1; }
     .chat-header-info { flex:1; display:flex; align-items:center; gap:10px; }
     .chat-header-avatar { width:40px; height:40px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; color:#1877f2; }
@@ -196,9 +267,9 @@
 <body>
   <div class="container">
     <!-- Login Page -->
-    <div class="login-page" id="login-page" style="display:flex;">
-      <header>
-        <div class="logo">Social Messenger</div>
+    <div class="login-page" id="login-page" style="display:flex; flex-direction:column;">
+      <header class="login-header">
+        <div class="login-logo">Social Messenger</div>
       </header>
 
       <div class="main-content">
@@ -292,6 +363,10 @@
               <h2>Friend Requests</h2>
               <div id="friend-requests-container"></div>
             </div>
+            <div class="card users-list">
+              <h2>Friends List</h2>
+              <div id="friends-list-page-container"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -364,8 +439,8 @@
         </div>
       </div>
 
-      <!-- Bottom Navigation Bar -->
-      <div class="bottom-nav">
+      <!-- Bottom Navigation Bar - Hidden in chat page -->
+      <div class="bottom-nav" id="bottom-nav">
         <a href="#" class="nav-item active" id="home-nav">
           <i class="fas fa-home nav-icon"></i>
           <span>Home</span>
@@ -396,7 +471,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
- // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
+   // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
     const firebaseConfig = {
       apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
       authDomain: "massage-8c66f.firebaseapp.com",
@@ -425,6 +500,7 @@
     const viewAllUsersBtn = document.getElementById('view-all-users-btn');
     const backBtn = document.getElementById('back-btn');
     const friendsListContainer = document.getElementById('friends-list-container');
+    const friendsListPageContainer = document.getElementById('friends-list-page-container');
     const friendRequestsContainer = document.getElementById('friend-requests-container');
     const usersListContainer = document.getElementById('users-list-container');
     const chatMessages = document.getElementById('chat-messages');
@@ -441,6 +517,7 @@
     const friendsSearchBtn = document.getElementById('friends-search-btn');
     const usersSearchBtn = document.getElementById('users-search-btn');
     const friendsListBtn = document.getElementById('friends-list-btn');
+    const bottomNav = document.getElementById('bottom-nav');
 
     // Page elements
     const pages = {
@@ -726,9 +803,17 @@
         navItems[pageName].classList.add('active');
       }
       
+      // Hide bottom nav in chat page
+      if (pageName === 'chat') {
+        bottomNav.style.display = 'none';
+      } else {
+        bottomNav.style.display = 'flex';
+      }
+      
       // Load data if needed
       if (pageName === 'friends') {
         listenFriendRequests();
+        loadFriendsListForPage();
       } else if (pageName === 'requests') {
         loadAllUsers();
       } else if (pageName === 'profile') {
@@ -903,7 +988,7 @@
       });
     }
 
-    // Load friends list
+    // Load friends list for home page
     function loadFriendsList() {
       showLoading('friends-list-container');
       
@@ -925,7 +1010,7 @@
           promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
             const friend = snap.val() || { username: 'Unknown', uid: friendId };
             friendsList[friendId] = friend;
-            createFriendItem(friendId, friend);
+            createFriendItem(friendId, friend, friendsListContainer);
           }).catch(err => console.error('Error loading friend data', err)));
         }
 
@@ -936,8 +1021,41 @@
       });
     }
 
+    // Load friends list for friends page
+    function loadFriendsListForPage() {
+      showLoading('friends-list-page-container');
+      
+      const ref = db.ref(`users/${currentUser.uid}/friends`);
+      
+      ref.on('value', snapshot => {
+        friendsList = {};
+        const friends = snapshot.val() || {};
+        friendsListPageContainer.innerHTML = '';
+        
+        if (Object.keys(friends).length === 0) {
+          friendsListPageContainer.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from the People tab.</div>';
+          hideLoading('friends-list-page-container');
+          return;
+        }
+        
+        const promises = [];
+        for (const friendId in friends) {
+          promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
+            const friend = snap.val() || { username: 'Unknown', uid: friendId };
+            friendsList[friendId] = friend;
+            createFriendItem(friendId, friend, friendsListPageContainer);
+          }).catch(err => console.error('Error loading friend data', err)));
+        }
+
+        Promise.all(promises).then(() => hideLoading('friends-list-page-container')).catch(() => hideLoading('friends-list-page-container'));
+      }, error => {
+        hideLoading('friends-list-page-container');
+        console.error("Error loading friends list:", error);
+      });
+    }
+
     // Create friend item for friends list
-    function createFriendItem(friendId, friend) {
+    function createFriendItem(friendId, friend, container) {
       const item = document.createElement('div');
       item.className = 'user-item clickable';
       
@@ -949,7 +1067,7 @@
         </div>
       `;
       
-      friendsListContainer.appendChild(item);
+      container.appendChild(item);
       
       item.addEventListener('click', () => {
         currentChatFriend = { id: friendId, name: friend.username };
@@ -1182,6 +1300,7 @@
         .then(() => {
           alert('Friend request accepted!');
           loadFriendsList();
+          loadFriendsListForPage();
           
           db.ref(`users/${friendUid}/notifications`).push({
             type: 'request_accepted',
