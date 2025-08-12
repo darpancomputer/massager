@@ -94,39 +94,303 @@
       margin:20px 0;
     }
 
-    /* Consistent Header Styles for All Pages */
-    header { 
-      background:#1877f2; 
-      padding:10px 15px; 
-      display:flex; 
-      justify-content:space-between; 
-      align-items:center; 
+    /* App Container */
+    .app-container { display:none; flex-direction:column; width:100%; height:100vh; }
+
+    /* Header styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background: #1877f2;
+      color: white;
       position: sticky;
       top: 0;
       z-index: 10;
     }
-    .logo { 
-      font-size:20px; 
-      font-weight:bold; 
-      color:#fff; 
-      flex: 1;
-      text-align: center;
+    
+    .logo {
+      font-weight: bold;
+      font-size: 18px;
     }
-    .header-icons { 
+    
+    .header-icons {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .header-icon {
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    
+    .search-container {
+      position: relative;
+    }
+    
+    .search-bar { 
       display:flex; 
-      gap:15px; 
+      align-items:center; 
+      background:rgba(255,255,255,0.2); 
+      border-radius:50px; 
+      padding:5px 10px; 
+      width: 180px;
     }
-    .header-icon { 
-      color:#fff; 
-      font-size:20px; 
+    
+    .search-bar input { 
+      border:none; 
+      background:none; 
+      outline:none; 
+      width:100%; 
+      padding:5px; 
+      color: white;
+      font-size: 14px;
     }
-    .back-button {
-      color: #fff;
-      font-size: 20px;
-      margin-right: 10px;
+    
+    .search-bar input::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+    
+    .profile-dropdown { position:relative; display:inline-block; }
+    .profile-btn { background:#e4e6eb; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+
+    .dropdown-content { display:none; position:absolute; right:0; bottom:100%; background:#fff; min-width:220px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:6px; z-index:2; margin-bottom:10px; }
+    .dropdown-content a, .dropdown-content button { color:#1c1e21; padding:12px 16px; text-decoration:none; display:block; font-size:14px; background:none; border:none; width:100%; text-align:left; cursor:pointer; border-bottom:1px solid #eee; }
+    .dropdown-content a:hover, .dropdown-content button:hover { background:#f0f2f5; }
+    .dropdown-content button:last-child { border-bottom:none; }
+
+    .content { display:flex; flex-direction:column; flex:1; overflow:hidden; position: relative; }
+    .page { display:none; flex-direction:column; flex:1; overflow-y:auto; }
+    .page.active { display:flex; }
+
+    .card { background:#fff; border-radius:8px; padding:15px; box-shadow:0 1px 2px rgba(0,0,0,.08); margin-bottom:15px; }
+    .users-list h2, .friend-requests h2 { margin:0 0 12px 0; color:#1c1e21; font-size:16px; }
+
+    .user-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #eee; cursor:default; }
+    .user-avatar { width:40px; height:40px; border-radius:50%; background:#e4e6eb; display:flex; align-items:center; justify-content:center; color:#1877f2; position: relative; }
+    .user-info { flex:1; }
+    .user-name { font-weight:bold; font-size:15px; }
+    .user-status { font-size:12px; color:#65676b; }
+    .last-message { font-size: 13px; color: #65676b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .clickable { cursor: pointer; }
+
+    .add-friend-btn, .cancel-request-btn, .make-admin-btn, .block-btn, .unblock-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; }
+    .cancel-request-btn { background:#ffb400; }
+    .make-admin-btn { background:#6f42c1; }
+    .block-btn { background:#ff3b30; }
+    .unblock-btn { background:#28a745; }
+
+    .friend-requests .request-item { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid #eee; }
+    .request-actions { margin-left:auto; display:flex; gap:6px; }
+    .accept-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
+    .decline-btn { background:#e4e6eb; color:#1c1e21; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
+
+    .chat-container { display:flex; flex-direction:column; flex:1; height: 100vh; }
+    .chat-header { display:flex; align-items:center; padding:10px 15px; background:#1877f2; color:#fff; position: sticky; top: 0; z-index: 1; }
+    .chat-header-info { flex:1; display:flex; align-items:center; gap:10px; }
+    .chat-header-avatar { width:40px; height:40px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; color:#1877f2; position: relative; }
+    .chat-header-name { font-weight:bold; }
+    .chat-header-actions { display:flex; gap:15px; }
+    .chat-header-action { color:#fff; font-size:18px; cursor: pointer; }
+
+    .chat-messages { flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; background:#e5ddd5; }
+    .message { max-width:80%; padding:10px 15px; border-radius:18px; position:relative; }
+    .received { background:#fff; align-self:flex-start; border-bottom-left-radius:5px; }
+    .sent { background:#dcf8c6; align-self:flex-end; border-bottom-right-radius:5px; }
+    .message-time { font-size:11px; color:#65676b; margin-top:5px; text-align:right; }
+    .message-image { max-width: 100%; border-radius: 8px; margin-top: 5px; }
+
+    .message-input-container { display:flex; padding:10px; background:#f0f2f5; align-items:center; position: sticky; bottom: 0; }
+    .message-input { flex:1; display:flex; background:#fff; border-radius:20px; padding:5px 15px; align-items:center; }
+    .message-input input { flex:1; border:none; outline:none; padding:8px; background:none; }
+    .message-input-action { color:#65676b; font-size:20px; margin:0 5px; cursor:pointer; }
+    .send-btn { background:#1877f2; color:#fff; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+
+    /* Bottom navigation bar */
+    .bottom-nav { 
+      display: flex;
+      background: #fff;
+      border-top: 1px solid #eee;
+      padding: 8px 0;
+      position: sticky;
+      bottom: 0;
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #65676b;
+      font-size: 12px;
+      padding: 5px 0;
+    }
+    
+    .nav-item.active {
+      color: #1877f2;
+    }
+    
+    .nav-icon {
+      font-size: 22px;
+      margin-bottom: 3px;
     }
 
-    /* ... (rest of your existing CSS styles remain unchanged) ... */
+    /* Badges */
+    .badge { 
+      background:#ff3b30; 
+      color:#fff; 
+      font-size:10px; 
+      padding:2px 5px; 
+      border-radius:10px; 
+      position:absolute; 
+      top:-5px; 
+      right:-5px;
+    }
+    
+    .online-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: #31a24c;
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border-left-color: #1877f2;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .you-badge { 
+      font-size:10px; 
+      color:#fff; 
+      background:#6c757d; 
+      padding:2px 6px; 
+      border-radius:8px; 
+      margin-left:5px;
+    }
+
+    /* Profile page */
+    .profile-page { padding:15px; }
+    .profile-header { text-align:center; margin-bottom:20px; }
+    .profile-avatar { width:100px; height:100px; border-radius:50%; background:#e4e6eb; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:40px; color:#1877f2; position: relative; }
+    .profile-name { font-size:20px; font-weight:bold; margin-bottom:5px; }
+    .profile-email { color:#65676b; font-size:14px; }
+    .profile-menu { list-style:none; padding:0; margin:0; }
+    .profile-menu li { padding:12px 0; border-bottom:1px solid #eee; }
+    .profile-menu li:last-child { border-bottom:none; }
+    .profile-menu a { text-decoration:none; color:#1c1e21; display:block; }
+
+    /* Admin panel */
+    .admin-panel { display:none; padding:15px; }
+    .admin-panel h2 { margin-top:0; }
+    .admin-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:10px 15px; margin-right:10px; margin-bottom:10px; cursor:pointer; }
+
+    /* Scrollable containers */
+    .scrollable-container {
+      overflow-y: auto;
+      flex: 1;
+      padding-bottom: 60px;
+    }
+
+    /* Search results */
+    .search-results {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      width: 250px;
+      border-radius: 8px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+    }
+    
+    .modal-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    
+    .modal-input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    
+    .modal-btn {
+      padding: 8px 15px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .modal-btn-primary {
+      background: #1877f2;
+      color: white;
+    }
+    
+    .modal-btn-secondary {
+      background: #e4e6eb;
+      color: #1c1e21;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .container { max-width:100%; }
+      .chat-header { padding:10px; }
+      .chat-header-actions { gap:10px; }
+      .search-bar { width: 150px; }
+    }
   </style>
 </head>
 <body>
@@ -159,10 +423,14 @@
       <!-- Home Page -->
       <div class="page active" id="home-page">
         <header>
+          <button class="header-icon" id="back-btn-home" style="display: none;"><i class="fas fa-arrow-left"></i></button>
           <div class="logo">Social Messenger</div>
           <div class="header-icons">
-            <div class="search-container" style="position:relative;">
-              <i class="fas fa-search header-icon" id="search-btn"></i>
+            <div class="search-container">
+              <div class="search-bar">
+                <i class="fas fa-search" style="color: white; font-size: 14px;"></i>
+                <input type="text" id="search-input" placeholder="Search...">
+              </div>
               <div class="search-results" id="search-results"></div>
             </div>
             <div style="position:relative;">
@@ -184,14 +452,23 @@
 
       <!-- Chat Page -->
       <div class="page" id="chat-page">
-        <header>
-          <button class="back-button" id="back-btn"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo" id="current-chat-name">Chat</div>
-          <div class="header-icons">
-            <i class="fas fa-phone-alt header-icon" id="voice-call-btn"></i>
-            <i class="fas fa-video header-icon" id="video-call-btn"></i>
+        <div class="chat-header">
+          <button class="chat-header-action" id="back-btn"><i class="fas fa-arrow-left"></i></button>
+          <div class="chat-header-info">
+            <div class="chat-header-avatar" id="chat-header-avatar">
+              <i class="fas fa-user"></i>
+              <div id="chat-online-status" class="online-badge" style="display: none;"></div>
+            </div>
+            <div>
+              <div class="chat-header-name" id="current-chat-name"></div>
+              <div class="user-status" id="chat-status">Online</div>
+            </div>
           </div>
-        </header>
+          <div class="chat-header-actions">
+            <i class="fas fa-phone-alt chat-header-action" id="voice-call-btn"></i>
+            <i class="fas fa-video chat-header-action" id="video-call-btn"></i>
+          </div>
+        </div>
 
         <div class="chat-container">
           <div class="chat-messages" id="chat-messages">
@@ -199,8 +476,8 @@
           </div>
 
           <div class="message-input-container">
+            <i class="fas fa-plus-circle message-input-action" id="attach-btn"></i>
             <div class="message-input">
-              <i class="fas fa-paperclip message-input-action" id="attach-btn"></i>
               <input type="text" id="message-input" placeholder="Type a message...">
             </div>
             <button class="send-btn" id="send-btn"><i class="fas fa-paper-plane"></i></button>
@@ -211,10 +488,16 @@
       <!-- Friends Page -->
       <div class="page" id="friends-page">
         <header>
-          <button class="back-button" id="friends-back-btn"><i class="fas fa-arrow-left"></i></button>
+          <button class="header-icon" id="back-btn-friends"><i class="fas fa-arrow-left"></i></button>
           <div class="logo">Friends</div>
           <div class="header-icons">
-            <i class="fas fa-search header-icon" id="friends-search-btn"></i>
+            <div class="search-container">
+              <div class="search-bar">
+                <i class="fas fa-search" style="color: white; font-size: 14px;"></i>
+                <input type="text" id="friends-search-input" placeholder="Search friends...">
+              </div>
+              <div class="search-results" id="friends-search-results"></div>
+            </div>
           </div>
         </header>
 
@@ -235,10 +518,16 @@
       <!-- Requests Page -->
       <div class="page" id="requests-page">
         <header>
-          <button class="back-button" id="requests-back-btn"><i class="fas fa-arrow-left"></i></button>
+          <button class="header-icon" id="back-btn-requests"><i class="fas fa-arrow-left"></i></button>
           <div class="logo">People</div>
           <div class="header-icons">
-            <i class="fas fa-search header-icon" id="users-search-btn"></i>
+            <div class="search-container">
+              <div class="search-bar">
+                <i class="fas fa-search" style="color: white; font-size: 14px;"></i>
+                <input type="text" id="users-search-input" placeholder="Search users...">
+              </div>
+              <div class="search-results" id="users-search-results"></div>
+            </div>
           </div>
         </header>
 
@@ -255,7 +544,7 @@
       <!-- Profile Page -->
       <div class="page" id="profile-page">
         <header>
-          <button class="back-button" id="profile-back-btn"><i class="fas fa-arrow-left"></i></button>
+          <button class="header-icon" id="back-btn-profile"><i class="fas fa-arrow-left"></i></button>
           <div class="logo">Profile</div>
           <div class="header-icons">
             <i class="fas fa-cog header-icon" id="settings-btn"></i>
@@ -266,8 +555,9 @@
           <div class="scrollable-container">
             <div class="profile-page">
               <div class="profile-header">
-                <div class="profile-avatar">
+                <div class="profile-avatar" id="profile-avatar">
                   <i class="fas fa-user"></i>
+                  <div id="profile-online-status" class="online-badge"></div>
                 </div>
                 <div class="profile-name" id="profile-name-display"></div>
                 <div class="profile-email" id="profile-email-display"></div>
@@ -287,7 +577,7 @@
       <!-- Admin Panel -->
       <div class="page admin-panel" id="admin-page">
         <header>
-          <button class="back-button" id="admin-back-btn"><i class="fas fa-arrow-left"></i></button>
+          <button class="header-icon" id="back-btn-admin"><i class="fas fa-arrow-left"></i></button>
           <div class="logo">Admin Panel</div>
           <div class="header-icons"></div>
         </header>
@@ -325,6 +615,19 @@
         </a>
       </div>
     </div>
+    
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="edit-profile-modal">
+      <div class="modal-content">
+        <div class="modal-title">Edit Profile</div>
+        <input type="text" class="modal-input" id="edit-username" placeholder="Username">
+        <input type="email" class="modal-input" id="edit-email" placeholder="Email">
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-secondary" id="cancel-edit-btn">Cancel</button>
+          <button class="modal-btn modal-btn-primary" id="save-profile-btn">Save</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Firebase SDKs -->
@@ -333,7 +636,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
-  // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
+    // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
     const firebaseConfig = {
       apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
       authDomain: "massage-8c66f.firebaseapp.com",
@@ -361,9 +664,11 @@
     const viewAllChatsBtn = document.getElementById('view-all-chats-btn');
     const viewAllUsersBtn = document.getElementById('view-all-users-btn');
     const backBtn = document.getElementById('back-btn');
-    const friendsBackBtn = document.getElementById('friends-back-btn');
-    const requestsBackBtn = document.getElementById('requests-back-btn');
-    const profileBackBtn = document.getElementById('profile-back-btn');
+    const backBtnHome = document.getElementById('back-btn-home');
+    const backBtnFriends = document.getElementById('back-btn-friends');
+    const backBtnRequests = document.getElementById('back-btn-requests');
+    const backBtnProfile = document.getElementById('back-btn-profile');
+    const backBtnAdmin = document.getElementById('back-btn-admin');
     const friendsListContainer = document.getElementById('friends-list-container');
     const friendsListPageContainer = document.getElementById('friends-list-page-container');
     const friendRequestsContainer = document.getElementById('friend-requests-container');
@@ -372,17 +677,29 @@
     const messageInput = document.getElementById('message-input');
     const sendBtn = document.getElementById('send-btn');
     const currentChatName = document.getElementById('current-chat-name');
+    const chatHeaderAvatar = document.getElementById('chat-header-avatar');
+    const chatOnlineStatus = document.getElementById('chat-online-status');
+    const chatStatus = document.getElementById('chat-status');
     const profileNameDisplay = document.getElementById('profile-name-display');
     const profileEmailDisplay = document.getElementById('profile-email-display');
+    const profileAvatar = document.getElementById('profile-avatar');
+    const profileOnlineStatus = document.getElementById('profile-online-status');
     const voiceCallBtn = document.getElementById('voice-call-btn');
     const videoCallBtn = document.getElementById('video-call-btn');
     const attachBtn = document.getElementById('attach-btn');
+    const searchInput = document.getElementById('search-input');
+    const friendsSearchInput = document.getElementById('friends-search-input');
+    const usersSearchInput = document.getElementById('users-search-input');
     const searchResults = document.getElementById('search-results');
-    const searchBtn = document.getElementById('search-btn');
-    const friendsSearchBtn = document.getElementById('friends-search-btn');
-    const usersSearchBtn = document.getElementById('users-search-btn');
+    const friendsSearchResults = document.getElementById('friends-search-results');
+    const usersSearchResults = document.getElementById('users-search-results');
     const friendsListBtn = document.getElementById('friends-list-btn');
     const bottomNav = document.getElementById('bottom-nav');
+    const editProfileModal = document.getElementById('edit-profile-modal');
+    const editUsernameInput = document.getElementById('edit-username');
+    const editEmailInput = document.getElementById('edit-email');
+    const saveProfileBtn = document.getElementById('save-profile-btn');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
 
     // Page elements
     const pages = {
@@ -410,6 +727,8 @@
     let pendingRequests = {};
     let allUsers = {};
     let friendsList = {};
+    let onlineUsers = {};
+    let lastMessages = {};
 
     // Initialize the application
     function init() {
@@ -447,24 +766,20 @@
 
       // Back buttons
       backBtn.addEventListener('click', () => {
-        showPage('home');
-      });
-      
-      friendsBackBtn.addEventListener('click', () => {
-        showPage('home');
-      });
-      
-      requestsBackBtn.addEventListener('click', () => {
-        showPage('home');
-      });
-      
-      profileBackBtn.addEventListener('click', () => {
+        if (currentChatFriend) {
+          currentChatFriend = null;
+          currentChatName.textContent = '';
+          messageInput.value = '';
+          chatMessages.innerHTML = '<div style="color:#888; text-align:center; margin-top:20px;">Select a friend to start chat</div>';
+        }
         showPage('home');
       });
 
-      document.getElementById('admin-back-btn').addEventListener('click', () => {
-        showPage('home');
-      });
+      backBtnHome.addEventListener('click', () => showPage('home'));
+      backBtnFriends.addEventListener('click', () => showPage('home'));
+      backBtnRequests.addEventListener('click', () => showPage('home'));
+      backBtnProfile.addEventListener('click', () => showPage('home'));
+      backBtnAdmin.addEventListener('click', () => showPage('profile'));
 
       // Login
       loginButton.addEventListener('click', handleLogin);
@@ -480,8 +795,6 @@
       messageInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           sendMessage();
-          // Hide keyboard after sending
-          messageInput.blur();
         }
       });
 
@@ -523,70 +836,109 @@
         showPage('friends');
       });
 
+      // Edit profile
+      document.getElementById('edit-profile-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        showEditProfileModal();
+      });
+
+      saveProfileBtn.addEventListener('click', saveProfile);
+      cancelEditBtn.addEventListener('click', () => {
+        editProfileModal.style.display = 'none';
+      });
+
       // Search functionality
-      searchBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showSearchBox('home');
-      });
-
-      friendsSearchBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showSearchBox('friends');
-      });
-
-      usersSearchBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showSearchBox('users');
-      });
+      searchInput.addEventListener('input', () => searchFriends(searchInput.value));
+      friendsSearchInput.addEventListener('input', () => searchFriendRequests(friendsSearchInput.value));
+      usersSearchInput.addEventListener('input', () => searchAllUsers(usersSearchInput.value));
 
       // Close search results when clicking outside
       document.addEventListener('click', (e) => {
         if (!e.target.closest('.search-container')) {
           searchResults.style.display = 'none';
+          friendsSearchResults.style.display = 'none';
+          usersSearchResults.style.display = 'none';
         }
       });
     }
 
-    // Show search box
-    function showSearchBox(context) {
-      const searchTerm = prompt('Enter name to search:');
-      if (!searchTerm) return;
+    // Show edit profile modal
+    function showEditProfileModal() {
+      if (!currentUserData) return;
+      
+      editUsernameInput.value = currentUserData.username || '';
+      editEmailInput.value = currentUserData.email || '';
+      editProfileModal.style.display = 'flex';
+    }
+
+    // Save profile changes
+    function saveProfile() {
+      const newUsername = editUsernameInput.value.trim();
+      const newEmail = editEmailInput.value.trim();
+      
+      if (!newUsername) {
+        alert('Username is required');
+        return;
+      }
       
       showLoading();
       
-      // Search in appropriate context
-      if (context === 'home') {
-        searchFriends(searchTerm);
-      } else if (context === 'friends') {
-        searchFriendRequests(searchTerm);
-      } else if (context === 'users') {
-        searchAllUsers(searchTerm);
-      }
+      const updates = {
+        username: newUsername,
+        email: newEmail
+      };
+      
+      db.ref(`users/${currentUser.uid}`).update(updates)
+        .then(() => {
+          editProfileModal.style.display = 'none';
+          alert('Profile updated successfully');
+        })
+        .catch(error => {
+          alert('Failed to update profile: ' + error.message);
+        })
+        .finally(() => {
+          hideLoading();
+        });
     }
 
     // Search friends
     function searchFriends(searchTerm) {
+      if (!searchTerm) {
+        searchResults.style.display = 'none';
+        return;
+      }
+      
       const results = Object.entries(friendsList)
         .filter(([uid, user]) => 
           user.username.toLowerCase().includes(searchTerm.toLowerCase())
         )
         .map(([uid, user]) => user);
       
-      displaySearchResults(results, 'friends');
+      displaySearchResults(results, 'friends', searchResults);
     }
 
     // Search friend requests
     function searchFriendRequests(searchTerm) {
+      if (!searchTerm) {
+        friendsSearchResults.style.display = 'none';
+        return;
+      }
+      
       const results = Object.values(pendingRequests)
         .filter(request => 
           request.fromUsername.toLowerCase().includes(searchTerm.toLowerCase())
         );
       
-      displaySearchResults(results, 'requests');
+      displaySearchResults(results, 'requests', friendsSearchResults);
     }
 
     // Search all users
     function searchAllUsers(searchTerm) {
+      if (!searchTerm) {
+        usersSearchResults.style.display = 'none';
+        return;
+      }
+      
       const results = Object.entries(allUsers)
         .filter(([uid, user]) => 
           uid !== currentUser.uid && 
@@ -594,65 +946,70 @@
         )
         .map(([uid, user]) => user);
       
-      displaySearchResults(results, 'users');
+      displaySearchResults(results, 'users', usersSearchResults);
     }
 
     // Display search results
-    function displaySearchResults(results, context) {
-      searchResults.innerHTML = '';
+    function displaySearchResults(results, context, container) {
+      container.innerHTML = '';
       
       if (results.length === 0) {
-        searchResults.innerHTML = '<div style="padding:10px;color:#666;">No results found</div>';
-      } else {
-        results.forEach(result => {
-          const item = document.createElement('div');
-          item.className = 'user-item';
-          item.style.padding = '8px 12px';
-          item.style.cursor = 'pointer';
-          
-          if (context === 'requests') {
-            item.innerHTML = `
-              <div class="user-avatar"><i class="fas fa-user"></i></div>
-              <div class="user-info">
-                <div class="user-name">${escapeHtml(result.fromUsername)}</div>
-                <div class="user-status">Friend request</div>
-              </div>
-            `;
-            
-            item.addEventListener('click', () => {
-              showPage('friends');
-              searchResults.style.display = 'none';
-            });
-          } else {
-            item.innerHTML = `
-              <div class="user-avatar"><i class="fas fa-user"></i></div>
-              <div class="user-info">
-                <div class="user-name">${escapeHtml(result.username)}</div>
-                <div class="user-status">${escapeHtml(result.email || '')}</div>
-              </div>
-            `;
-            
-            item.addEventListener('click', () => {
-              if (context === 'friends') {
-                // Open chat with this friend
-                currentChatFriend = { id: result.uid, name: result.username };
-                currentChatName.textContent = result.username;
-                loadChatMessages(result.uid);
-                showPage('chat');
-              } else if (context === 'users') {
-                // Show in users list
-                showPage('requests');
-              }
-              searchResults.style.display = 'none';
-            });
-          }
-          
-          searchResults.appendChild(item);
-        });
+        container.innerHTML = '<div style="padding:10px;color:#666;">No results found</div>';
+        container.style.display = 'block';
+        return;
       }
       
-      searchResults.style.display = 'block';
-      hideLoading();
+      results.forEach(result => {
+        const item = document.createElement('div');
+        item.className = 'user-item';
+        item.style.padding = '8px 12px';
+        item.style.cursor = 'pointer';
+        
+        if (context === 'requests') {
+          item.innerHTML = `
+            <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <div class="user-info">
+              <div class="user-name">${escapeHtml(result.fromUsername)}</div>
+              <div class="user-status">Friend request</div>
+            </div>
+          `;
+          
+          item.addEventListener('click', () => {
+            showPage('friends');
+            container.style.display = 'none';
+          });
+        } else {
+          const isOnline = onlineUsers[result.uid] ? 'Online' : 'Offline';
+          item.innerHTML = `
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+              ${onlineUsers[result.uid] ? '<div class="online-badge"></div>' : ''}
+            </div>
+            <div class="user-info">
+              <div class="user-name">${escapeHtml(result.username)}</div>
+              <div class="user-status">${isOnline}</div>
+            </div>
+          `;
+          
+          item.addEventListener('click', () => {
+            if (context === 'friends') {
+              // Open chat with this friend
+              currentChatFriend = { id: result.uid, name: result.username };
+              currentChatName.textContent = result.username;
+              loadChatMessages(result.uid);
+              showPage('chat');
+            } else if (context === 'users') {
+              // Show in users list
+              showPage('requests');
+            }
+            container.style.display = 'none';
+          });
+        }
+        
+        container.appendChild(item);
+      });
+      
+      container.style.display = 'block';
     }
 
     // Show specific page
@@ -695,6 +1052,8 @@
       
       // Hide search results when changing pages
       searchResults.style.display = 'none';
+      friendsSearchResults.style.display = 'none';
+      usersSearchResults.style.display = 'none';
     }
 
     // Handle authentication state changes
@@ -743,9 +1102,88 @@
         loginPage.style.display = 'none';
         appContainer.style.display = 'flex';
 
+        // Set user as online
+        setUserOnlineStatus(true);
+        
+        // Listen for online users
+        listenForOnlineUsers();
+        
         // Load initial data
         loadFriendsList();
         showPage('home');
+      });
+    }
+
+    // Set user online status
+    function setUserOnlineStatus(isOnline) {
+      if (!currentUser) return;
+      
+      const userStatusRef = db.ref(`status/${currentUser.uid}`);
+      const userRef = db.ref(`users/${currentUser.uid}`);
+      
+      if (isOnline) {
+        // Set user status to online
+        userStatusRef.set({ online: true });
+        
+        // Create a disconnect record
+        userStatusRef.onDisconnect().set({ online: false });
+        
+        // Update last seen
+        userRef.update({ lastSeen: Date.now() });
+      } else {
+        userStatusRef.set({ online: false });
+      }
+    }
+
+    // Listen for online users
+    function listenForOnlineUsers() {
+      db.ref('status').on('value', snapshot => {
+        const statuses = snapshot.val() || {};
+        onlineUsers = {};
+        
+        for (const uid in statuses) {
+          if (statuses[uid].online) {
+            onlineUsers[uid] = true;
+          }
+        }
+        
+        // Update UI for current chat
+        if (currentChatFriend && currentChatFriend.id) {
+          updateChatOnlineStatus(currentChatFriend.id);
+        }
+        
+        // Update friends list with online status
+        updateFriendsListOnlineStatus();
+      });
+    }
+
+    // Update chat online status
+    function updateChatOnlineStatus(friendId) {
+      if (onlineUsers[friendId]) {
+        chatOnlineStatus.style.display = 'block';
+        chatStatus.textContent = 'Online';
+      } else {
+        chatOnlineStatus.style.display = 'none';
+        chatStatus.textContent = 'Offline';
+      }
+    }
+
+    // Update friends list with online status
+    function updateFriendsListOnlineStatus() {
+      const friendItems = document.querySelectorAll('.user-item');
+      friendItems.forEach(item => {
+        const uid = item.getAttribute('data-uid');
+        if (uid && onlineUsers[uid]) {
+          const badge = item.querySelector('.online-badge');
+          if (!badge) {
+            const avatar = item.querySelector('.user-avatar');
+            if (avatar) {
+              const onlineBadge = document.createElement('div');
+              onlineBadge.className = 'online-badge';
+              avatar.appendChild(onlineBadge);
+            }
+          }
+        }
       });
     }
 
@@ -754,6 +1192,13 @@
       if (currentUserData) {
         profileNameDisplay.textContent = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
         profileEmailDisplay.textContent = currentUserData.email || currentUser.email || '';
+        
+        // Update online status
+        if (onlineUsers[currentUser.uid]) {
+          profileOnlineStatus.style.display = 'block';
+        } else {
+          profileOnlineStatus.style.display = 'none';
+        }
       }
     }
 
@@ -819,6 +1264,7 @@
     // Handle logout
     function handleLogout() {
       showLoading();
+      setUserOnlineStatus(false);
       auth.signOut().then(() => {
         currentUser = null;
         currentUserData = null;
@@ -929,12 +1375,20 @@
     function createFriendItem(friendId, friend, container) {
       const item = document.createElement('div');
       item.className = 'user-item clickable';
+      item.setAttribute('data-uid', friendId);
+      
+      // Get last message if available
+      const lastMsg = lastMessages[friendId] ? lastMessages[friendId].text : 'No messages yet';
+      const isOnline = onlineUsers[friendId] ? 'Online' : 'Offline';
       
       item.innerHTML = `
-        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+          ${onlineUsers[friendId] ? '<div class="online-badge"></div>' : ''}
+        </div>
         <div class="user-info">
           <div class="user-name">${escapeHtml(friend.username)}</div>
-          <div class="user-status">Online</div>
+          <div class="last-message">${escapeHtml(lastMsg)}</div>
         </div>
       `;
       
@@ -943,6 +1397,7 @@
       item.addEventListener('click', () => {
         currentChatFriend = { id: friendId, name: friend.username };
         currentChatName.textContent = friend.username;
+        updateChatOnlineStatus(friendId);
         loadChatMessages(friendId);
         showPage('chat');
       });
@@ -952,15 +1407,21 @@
     function createUserItem(uid, user) {
       const item = document.createElement('div');
       item.className = 'user-item';
+      item.setAttribute('data-uid', uid);
 
       const actionDiv = document.createElement('div');
       actionDiv.style.marginLeft = '8px';
 
+      const isOnline = onlineUsers[uid] ? 'Online' : 'Offline';
+      
       item.innerHTML = `
-        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+          ${onlineUsers[uid] ? '<div class="online-badge"></div>' : ''}
+        </div>
         <div class="user-info">
           <div class="user-name">${escapeHtml(user.username || '(no-name)')}</div>
-          <div class="user-status">${escapeHtml(user.email || '')}</div>
+          <div class="user-status">${isOnline}</div>
         </div>
       `;
       
@@ -1226,9 +1687,27 @@
         const message = snap.val();
         addMessageToChat(message);
         hideLoading('chat-messages');
+        
+        // Store last message
+        lastMessages[friendId] = message;
+        updateFriendsListLastMessages();
       }, error => {
         hideLoading('chat-messages');
         console.error("Error loading messages:", error);
+      });
+    }
+
+    // Update last messages in friends list
+    function updateFriendsListLastMessages() {
+      const friendItems = document.querySelectorAll('.user-item');
+      friendItems.forEach(item => {
+        const uid = item.getAttribute('data-uid');
+        if (uid && lastMessages[uid]) {
+          const lastMsgDiv = item.querySelector('.last-message');
+          if (lastMsgDiv) {
+            lastMsgDiv.textContent = lastMessages[uid].text;
+          }
+        }
       });
     }
 
@@ -1238,8 +1717,13 @@
       div.className = 'message ' + 
         (message.sender === currentUser.uid ? 'sent' : 'received');
       
-      div.innerHTML = `
-        <div>${escapeHtml(message.text)}</div>
+      let content = `<div>${escapeHtml(message.text)}</div>`;
+      
+      if (message.imageUrl) {
+        content += `<img src="${message.imageUrl}" class="message-image" alt="Sent image">`;
+      }
+      
+      div.innerHTML = content + `
         <div class="message-time">${formatTime(message.timestamp)}</div>
       `;
       
@@ -1290,6 +1774,10 @@
         
         await db.ref(`chats/${chatId}`).push(message);
         messageInput.value = '';
+        
+        // Update last message
+        lastMessages[currentChatFriend.id] = message;
+        updateFriendsListLastMessages();
       } catch (error) {
         alert('Failed to send message: ' + error.message);
       } finally {
