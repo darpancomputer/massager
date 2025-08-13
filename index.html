@@ -473,12 +473,202 @@
       font-size: 12px;
     }
 
+    /* Video Feed */
+    .video-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 10px;
+    }
+    
+    .video-card {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+      height: 500px;
+    }
+    
+    .video-player {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+    
+    .video-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 15px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      color: white;
+    }
+    
+    .video-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .video-author {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    
+    .video-actions {
+      position: absolute;
+      right: 10px;
+      bottom: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .video-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      font-size: 12px;
+    }
+    
+    .video-action-icon {
+      background: rgba(0,0,0,0.5);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 5px;
+      font-size: 18px;
+    }
+    
+    /* Video upload modal */
+    .video-upload-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .video-upload-content {
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .video-preview {
+      width: 100%;
+      max-height: 300px;
+      background: #000;
+    }
+    
+    .video-preview video {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+    }
+    
+    .video-upload-form {
+      padding: 15px;
+    }
+    
+    .visibility-options {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .visibility-option {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .visibility-option.selected {
+      background: #1877f2;
+      color: white;
+      border-color: #1877f2;
+    }
+    
+    /* Profile videos */
+    .profile-videos {
+      margin-top: 20px;
+    }
+    
+    .profile-videos h3 {
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    
+    .video-thumbnail {
+      position: relative;
+      padding-top: 177.78%; /* 16:9 aspect ratio */
+      background: #000;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .video-thumbnail video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .video-thumbnail-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 5px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 480px) {
       .container { max-width:100%; }
       .chat-header { padding:10px; }
       .chat-header-actions { gap:10px; }
       .search-bar { width: 150px; }
+      
+      .video-card {
+        height: 400px;
+      }
+      
+      .video-actions {
+        bottom: 40px;
+      }
     }
   </style>
 </head>
@@ -526,34 +716,15 @@
               <i class="fas fa-bell header-icon" id="requests-btn"></i>
               <span id="req-count" class="badge" style="display:none;">0</span>
             </div>
+            <i class="fas fa-plus-circle header-icon" id="add-video-btn"></i>
           </div>
         </header>
 
         <div class="content">
-          <div class="scrollable-container">
-            <!-- Stories/Reels Section -->
-            <div class="stories-container">
-              <div class="story-item story-add">
-                <div class="story-add-icon"><i class="fas fa-plus"></i></div>
-                <div class="story-add-text">Add Story</div>
-              </div>
-              <div class="story-item">
-                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Story">
-              </div>
-              <div class="story-item">
-                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Story">
-              </div>
-              <div class="story-item">
-                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Story">
-              </div>
-              <div class="story-item">
-                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Story">
-              </div>
-            </div>
-            
-            <div class="card users-list">
-              <h2>Friends</h2>
-              <div id="friends-list-container"></div>
+          <div class="scrollable-container" id="video-feed-container">
+            <!-- Videos will be loaded here -->
+            <div class="video-feed" id="video-feed">
+              <!-- Videos will be added dynamically -->
             </div>
           </div>
         </div>
@@ -684,6 +855,13 @@
                 <li><a href="#" id="privacy-btn"><i class="fas fa-lock" style="margin-right:10px;"></i> Privacy</a></li>
                 <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt" style="margin-right:10px;"></i> Log Out</a></li>
               </ul>
+              
+              <div class="profile-videos">
+                <h3>My Videos</h3>
+                <div class="videos-grid" id="user-videos-grid">
+                  <!-- Videos will be loaded here -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -701,6 +879,7 @@
           <div class="scrollable-container">
             <button class="admin-btn" id="view-all-chats-btn">View All Chats</button>
             <button class="admin-btn" id="view-all-users-btn">View All Users</button>
+            <button class="admin-btn" id="view-all-videos-btn">View All Videos</button>
             <div id="admin-output" style="margin-top:12px;"></div>
           </div>
         </div>
@@ -744,6 +923,29 @@
         </div>
       </div>
     </div>
+    
+    <!-- Video Upload Modal -->
+    <div class="video-upload-modal" id="video-upload-modal">
+      <div class="video-upload-content">
+        <div class="video-preview" id="video-preview-container">
+          <video id="video-preview" controls></video>
+        </div>
+        <div class="video-upload-form">
+          <input type="text" class="modal-input" id="video-title" placeholder="Video title">
+          
+          <div class="visibility-options">
+            <div class="visibility-option selected" data-visibility="public">Public</div>
+            <div class="visibility-option" data-visibility="friends">Friends</div>
+            <div class="visibility-option" data-visibility="private">Private</div>
+          </div>
+          
+          <div class="modal-actions">
+            <button class="modal-btn modal-btn-secondary" id="cancel-upload-btn">Cancel</button>
+            <button class="modal-btn modal-btn-primary" id="upload-video-btn">Upload</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Firebase SDKs -->
@@ -753,7 +955,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
   <script>
- // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
+  // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
     const firebaseConfig = {
       apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
       authDomain: "massage-8c66f.firebaseapp.com",
@@ -782,6 +984,7 @@
     const adminOutput = document.getElementById('admin-output');
     const viewAllChatsBtn = document.getElementById('view-all-chats-btn');
     const viewAllUsersBtn = document.getElementById('view-all-users-btn');
+    const viewAllVideosBtn = document.getElementById('view-all-videos-btn');
     const backBtn = document.getElementById('back-btn');
     const backBtnHome = document.getElementById('back-btn-home');
     const backBtnFriends = document.getElementById('back-btn-friends');
@@ -821,6 +1024,15 @@
     const cancelEditBtn = document.getElementById('cancel-edit-btn');
     const profilePicInput = document.getElementById('profile-pic-input');
     const profilePicUpload = document.getElementById('profile-pic-upload');
+    const addVideoBtn = document.getElementById('add-video-btn');
+    const videoUploadModal = document.getElementById('video-upload-modal');
+    const videoPreview = document.getElementById('video-preview');
+    const videoTitleInput = document.getElementById('video-title');
+    const uploadVideoBtn = document.getElementById('upload-video-btn');
+    const cancelUploadBtn = document.getElementById('cancel-upload-btn');
+    const visibilityOptions = document.querySelectorAll('.visibility-option');
+    const videoFeed = document.getElementById('video-feed');
+    const userVideosGrid = document.getElementById('user-videos-grid');
 
     // Page elements
     const pages = {
@@ -852,6 +1064,8 @@
     let lastMessages = {};
     let unreadMessages = {};
     let profilePicUrl = null;
+    let selectedVideoFile = null;
+    let selectedVisibility = 'public';
     let notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3');
 
     // Initialize the application
@@ -948,6 +1162,7 @@
       // Admin buttons
       viewAllChatsBtn.addEventListener('click', viewAllChats);
       viewAllUsersBtn.addEventListener('click', viewAllUsers);
+      viewAllVideosBtn.addEventListener('click', viewAllVideos);
 
       // Settings button
       document.getElementById('settings-btn').addEventListener('click', () => {
@@ -986,6 +1201,45 @@
           friendsSearchResults.style.display = 'none';
           usersSearchResults.style.display = 'none';
         }
+      });
+      
+      // Video upload functionality
+      addVideoBtn.addEventListener('click', () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'video/*';
+        fileInput.onchange = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          
+          selectedVideoFile = file;
+          videoPreview.src = URL.createObjectURL(file);
+          videoUploadModal.style.display = 'flex';
+        };
+        fileInput.click();
+      });
+      
+      // Video upload modal
+      cancelUploadBtn.addEventListener('click', () => {
+        videoUploadModal.style.display = 'none';
+        selectedVideoFile = null;
+      });
+      
+      uploadVideoBtn.addEventListener('click', uploadVideo);
+      
+      // Visibility options
+      visibilityOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          visibilityOptions.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          selectedVisibility = option.getAttribute('data-visibility');
+        });
+      });
+      
+      // Privacy button
+      document.getElementById('privacy-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Privacy settings would open here');
       });
     }
 
@@ -1026,6 +1280,206 @@
           });
         }
       );
+    }
+
+    // Upload video
+    function uploadVideo() {
+      const title = videoTitleInput.value.trim();
+      if (!title) {
+        alert('Please enter a video title');
+        return;
+      }
+      
+      if (!selectedVideoFile) {
+        alert('No video selected');
+        return;
+      }
+      
+      showLoading();
+      
+      const videoId = Date.now().toString();
+      const storageRef = storage.ref(`videos/${currentUser.uid}/${videoId}`);
+      const uploadTask = storageRef.put(selectedVideoFile);
+      
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          // Progress monitoring can be added here
+        }, 
+        (error) => {
+          hideLoading();
+          alert('Error uploading video: ' + error.message);
+        }, 
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            const videoData = {
+              id: videoId,
+              title: title,
+              url: downloadURL,
+              ownerId: currentUser.uid,
+              ownerName: currentUserData.username || 'Unknown',
+              visibility: selectedVisibility,
+              timestamp: Date.now(),
+              likes: 0,
+              comments: 0,
+              shares: 0
+            };
+            
+            // Save video metadata to database
+            db.ref(`videos/${videoId}`).set(videoData)
+              .then(() => {
+                // Add to user's videos list
+                db.ref(`users/${currentUser.uid}/videos/${videoId}`).set(true);
+                
+                // Close modal and reset
+                videoUploadModal.style.display = 'none';
+                videoTitleInput.value = '';
+                selectedVideoFile = null;
+                hideLoading();
+                
+                // Show success message
+                alert('Video uploaded successfully!');
+                
+                // Load videos to update UI
+                loadVideos();
+                loadUserVideos();
+              })
+              .catch(error => {
+                hideLoading();
+                alert('Error saving video data: ' + error.message);
+              });
+          });
+        }
+      );
+    }
+
+    // Load videos for home feed
+    function loadVideos() {
+      showLoading('video-feed');
+      
+      // For simplicity, we'll load all videos. In a real app, you'd paginate and filter by visibility
+      db.ref('videos').orderByChild('timestamp').limitToLast(20).once('value')
+        .then(snapshot => {
+          const videos = snapshot.val() || {};
+          videoFeed.innerHTML = '';
+          
+          Object.values(videos).reverse().forEach(video => {
+            // Check visibility
+            if (video.visibility === 'private' && video.ownerId !== currentUser.uid) return;
+            if (video.visibility === 'friends' && !friendsList[video.ownerId] && video.ownerId !== currentUser.uid) return;
+            
+            const videoCard = createVideoCard(video);
+            videoFeed.appendChild(videoCard);
+          });
+          
+          hideLoading('video-feed');
+        })
+        .catch(error => {
+          hideLoading('video-feed');
+          console.error('Error loading videos:', error);
+        });
+    }
+
+    // Create video card for feed
+    function createVideoCard(video) {
+      const card = document.createElement('div');
+      card.className = 'video-card';
+      
+      card.innerHTML = `
+        <video class="video-player" src="${video.url}" controls></video>
+        <div class="video-info">
+          <div class="video-title">${escapeHtml(video.title)}</div>
+          <div class="video-author">
+            <div class="user-avatar" style="width:30px;height:30px;">
+              <i class="fas fa-user"></i>
+            </div>
+            <span>${escapeHtml(video.ownerName)}</span>
+          </div>
+        </div>
+        <div class="video-actions">
+          <div class="video-action">
+            <div class="video-action-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <span>${video.likes || 0}</span>
+          </div>
+          <div class="video-action">
+            <div class="video-action-icon">
+              <i class="fas fa-comment"></i>
+            </div>
+            <span>${video.comments || 0}</span>
+          </div>
+          <div class="video-action">
+            <div class="video-action-icon">
+              <i class="fas fa-share"></i>
+            </div>
+            <span>${video.shares || 0}</span>
+          </div>
+        </div>
+      `;
+      
+      // Add avatar if available
+      if (allUsers[video.ownerId] && allUsers[video.ownerId].profilePic) {
+        const avatar = card.querySelector('.video-author .user-avatar');
+        avatar.innerHTML = `<img src="${allUsers[video.ownerId].profilePic}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+      }
+      
+      return card;
+    }
+
+    // Load user's videos for profile page
+    function loadUserVideos() {
+      if (!currentUser) return;
+      
+      showLoading('user-videos-grid');
+      
+      db.ref(`users/${currentUser.uid}/videos`).once('value')
+        .then(snapshot => {
+          const videoIds = snapshot.val() || {};
+          userVideosGrid.innerHTML = '';
+          
+          if (Object.keys(videoIds).length === 0) {
+            userVideosGrid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px; color:#666;">No videos uploaded yet</div>';
+            hideLoading('user-videos-grid');
+            return;
+          }
+          
+          const promises = Object.keys(videoIds).map(videoId => {
+            return db.ref(`videos/${videoId}`).once('value').then(videoSnap => {
+              const video = videoSnap.val();
+              if (video) {
+                const videoThumb = createVideoThumbnail(video);
+                userVideosGrid.appendChild(videoThumb);
+              }
+            });
+          });
+          
+          Promise.all(promises).then(() => hideLoading('user-videos-grid'));
+        })
+        .catch(error => {
+          hideLoading('user-videos-grid');
+          console.error('Error loading user videos:', error);
+        });
+    }
+
+    // Create video thumbnail for profile page
+    function createVideoThumbnail(video) {
+      const thumb = document.createElement('div');
+      thumb.className = 'video-thumbnail';
+      
+      thumb.innerHTML = `
+        <video src="${video.url}" muted loop></video>
+        <div class="video-thumbnail-title">${escapeHtml(video.title)}</div>
+      `;
+      
+      thumb.addEventListener('click', () => {
+        // Show video in full view
+        const videoCard = createVideoCard(video);
+        videoFeed.innerHTML = '';
+        videoFeed.appendChild(videoCard);
+        showPage('home');
+      });
+      
+      return thumb;
     }
 
     // Update profile picture display
@@ -1226,8 +1680,12 @@
         loadAllUsers();
       } else if (pageName === 'profile') {
         updateProfileDisplay();
+        loadUserVideos();
       } else if (pageName === 'home') {
         loadFriendsList();
+        loadVideos();
+      } else if (pageName === 'admin') {
+        adminOutput.innerHTML = '';
       }
       
       // Hide search results when changing pages
@@ -1263,7 +1721,9 @@
             email: currentUser.email,
             role: 'user',
             friends: {},
-            blocked: false
+            blocked: false,
+            profilePic: '',
+            videos: {}
           });
         }
       }).catch(error => {
@@ -1294,6 +1754,7 @@
         listenForOnlineUsers();
         
         // Load initial data
+        loadAllUsers();
         loadFriendsList();
         showPage('home');
       });
@@ -1437,7 +1898,9 @@
             email: email,
             role: 'user',
             friends: {},
-            blocked: false
+            blocked: false,
+            profilePic: '',
+            videos: {}
           });
         })
         .catch(err => {
@@ -1516,7 +1979,7 @@
             
             // Listen for new messages from this friend
             listenForNewMessages(friendId);
-          }).catch(err => console.error('Error loading friend data', err)));
+          }).catch(err => console.error('Error loading friend data', err));
         }
 
         Promise.all(promises).then(() => hideLoading('friends-list-container')).catch(() => hideLoading('friends-list-container'));
@@ -2090,6 +2553,106 @@
       });
     }
 
+    // Admin: view all videos
+    function viewAllVideos() {
+      if (!currentUserData || currentUserData.role !== 'admin') {
+        alert('Admin access required');
+        return;
+      }
+      
+      showLoading('admin-output');
+      
+      db.ref('videos').once('value').then(snap => {
+        const videos = snap.val() || {};
+        let outputHtml = '';
+        
+        for (const videoId in videos) {
+          const video = videos[videoId];
+          outputHtml += `
+            <div style="padding:8px;border-bottom:1px solid #eee;">
+              <div><strong>${escapeHtml(video.title)}</strong> by ${escapeHtml(video.ownerName)}</div>
+              <div style="margin-top:6px;">
+                Visibility: ${video.visibility} | 
+                Likes: ${video.likes || 0} | 
+                Comments: ${video.comments || 0} | 
+                Shares: ${video.shares || 0}
+              </div>
+              <div style="margin-top:6px;">
+                <button data-video="${videoId}" class="admin-btn" style="padding:5px 10px; font-size:12px;">View</button>
+                <button data-video="${videoId}" class="block-btn" style="padding:5px 10px; font-size:12px;">Delete</button>
+              </div>
+            </div>
+          `;
+        }
+        
+        adminOutput.innerHTML = outputHtml || '<div>No videos yet</div>';
+        
+        // Add event listeners to view buttons
+        adminOutput.querySelectorAll('[data-video]').forEach(button => {
+          if (button.classList.contains('block-btn')) {
+            button.addEventListener('click', (e) => {
+              const videoId = e.target.getAttribute('data-video');
+              deleteVideo(videoId);
+            });
+          } else {
+            button.addEventListener('click', (e) => {
+              const videoId = e.target.getAttribute('data-video');
+              viewVideoDetails(videoId);
+            });
+          }
+        });
+        
+        hideLoading('admin-output');
+      }).catch(error => {
+        hideLoading('admin-output');
+        console.error("Error loading videos:", error);
+      });
+    }
+
+    // Delete video (admin)
+    function deleteVideo(videoId) {
+      if (!confirm('Are you sure you want to delete this video?')) return;
+      
+      showLoading('admin-output');
+      
+      db.ref(`videos/${videoId}`).once('value').then(snap => {
+        const video = snap.val();
+        if (!video) {
+          hideLoading('admin-output');
+          return;
+        }
+        
+        // Delete from storage
+        const videoRef = storage.refFromURL(video.url);
+        return videoRef.delete().then(() => {
+          // Delete from database
+          return db.ref(`videos/${videoId}`).remove();
+        }).then(() => {
+          // Remove from user's videos list
+          return db.ref(`users/${video.ownerId}/videos/${videoId}`).remove();
+        }).then(() => {
+          alert('Video deleted successfully');
+          viewAllVideos();
+        });
+      }).catch(error => {
+        hideLoading('admin-output');
+        alert('Error deleting video: ' + error.message);
+      });
+    }
+
+    // View video details (admin)
+    function viewVideoDetails(videoId) {
+      db.ref(`videos/${videoId}`).once('value').then(snap => {
+        const video = snap.val();
+        if (!video) return;
+        
+        const videoCard = createVideoCard(video);
+        videoFeed.innerHTML = '';
+        videoFeed.appendChild(videoCard);
+        showPage('home');
+      });
+    }
+
     // Toggle chat view in admin panel
     function toggleChatView(chatId) {
       const container = adminOutput.querySelector(`#chat-${cssEscape(chatId)}`);
@@ -2151,16 +2714,80 @@
                 Role: ${escapeHtml(user.role || 'user')}
                 — Blocked: ${user.blocked ? 'yes' : 'no'}
               </div>
+              <div style="margin-top:6px;">
+                <button data-user="${uid}" class="admin-btn" style="padding:5px 10px; font-size:12px;">View</button>
+                ${user.blocked ? 
+                  `<button data-user="${uid}" class="unblock-btn" style="padding:5px 10px; font-size:12px;">Unblock</button>` : 
+                  `<button data-user="${uid}" class="block-btn" style="padding:5px 10px; font-size:12px;">Block</button>`}
+                ${user.role === 'admin' ? 
+                  `<button data-user="${uid}" class="make-admin-btn" style="padding:5px 10px; font-size:12px; display:none;">Make Admin</button>` : 
+                  `<button data-user="${uid}" class="make-admin-btn" style="padding:5px 10px; font-size:12px;">Make Admin</button>`}
+              </div>
             </div>
           `;
         }
         
         adminOutput.innerHTML = outputHtml || '<div>No users</div>';
+        
+        // Add event listeners to buttons
+        adminOutput.querySelectorAll('[data-user]').forEach(button => {
+          if (button.classList.contains('block-btn')) {
+            button.addEventListener('click', (e) => {
+              const userId = e.target.getAttribute('data-user');
+              blockUser(userId, true);
+            });
+          } else if (button.classList.contains('unblock-btn')) {
+            button.addEventListener('click', (e) => {
+              const userId = e.target.getAttribute('data-user');
+              blockUser(userId, false);
+            });
+          } else if (button.classList.contains('make-admin-btn')) {
+            button.addEventListener('click', (e) => {
+              const userId = e.target.getAttribute('data-user');
+              makeAdmin(userId);
+            });
+          }
+        });
+        
         hideLoading('admin-output');
       }).catch(error => {
         hideLoading('admin-output');
         console.error("Error loading users:", error);
       });
+    }
+
+    // Block/unblock user (admin)
+    function blockUser(userId, block) {
+      if (!confirm(`Are you sure you want to ${block ? 'block' : 'unblock'} this user?`)) return;
+      
+      showLoading('admin-output');
+      
+      db.ref(`users/${userId}/blocked`).set(block)
+        .then(() => {
+          alert(`User ${block ? 'blocked' : 'unblocked'} successfully`);
+          viewAllUsers();
+        })
+        .catch(error => {
+          hideLoading('admin-output');
+          alert(`Error ${block ? 'blocking' : 'unblocking'} user: ${error.message}`);
+        });
+    }
+
+    // Make user admin (admin)
+    function makeAdmin(userId) {
+      if (!confirm('Are you sure you want to make this user an admin?')) return;
+      
+      showLoading('admin-output');
+      
+      db.ref(`users/${userId}/role`).set('admin')
+        .then(() => {
+          alert('User is now an admin');
+          viewAllUsers();
+        })
+        .catch(error => {
+          hideLoading('admin-output');
+          alert('Error making user admin: ' + error.message);
+        });
     }
 
     // Show loading indicator
