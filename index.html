@@ -228,6 +228,7 @@
       color: #65676b;
       font-size: 12px;
       padding: 5px 0;
+      position: relative;
     }
     
     .nav-item.active {
@@ -237,6 +238,21 @@
     .nav-icon {
       font-size: 22px;
       margin-bottom: 3px;
+    }
+    
+    .nav-badge {
+      position: absolute;
+      top: -5px;
+      right: 10px;
+      background: #ff3b30;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
     }
 
     /* Badges */
@@ -383,6 +399,79 @@
       background: #e4e6eb;
       color: #1c1e21;
     }
+    
+    /* Profile picture upload */
+    .profile-pic-upload {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 15px;
+    }
+    
+    .profile-pic-upload input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .profile-pic-upload-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: #1877f2;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    
+    /* Stories/Reels */
+    .stories-container {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      overflow-x: auto;
+      margin-bottom: 15px;
+    }
+    
+    .story-item {
+      width: 80px;
+      height: 120px;
+      border-radius: 8px;
+      background: #e4e6eb;
+      position: relative;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    
+    .story-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .story-add {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #1877f2;
+    }
+    
+    .story-add-icon {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    
+    .story-add-text {
+      font-size: 12px;
+    }
 
     /* Responsive adjustments */
     @media (max-width: 480px) {
@@ -442,6 +531,26 @@
 
         <div class="content">
           <div class="scrollable-container">
+            <!-- Stories/Reels Section -->
+            <div class="stories-container">
+              <div class="story-item story-add">
+                <div class="story-add-icon"><i class="fas fa-plus"></i></div>
+                <div class="story-add-text">Add Story</div>
+              </div>
+              <div class="story-item">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Story">
+              </div>
+              <div class="story-item">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Story">
+              </div>
+              <div class="story-item">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Story">
+              </div>
+              <div class="story-item">
+                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Story">
+              </div>
+            </div>
+            
             <div class="card users-list">
               <h2>Friends</h2>
               <div id="friends-list-container"></div>
@@ -555,9 +664,15 @@
           <div class="scrollable-container">
             <div class="profile-page">
               <div class="profile-header">
-                <div class="profile-avatar" id="profile-avatar">
-                  <i class="fas fa-user"></i>
-                  <div id="profile-online-status" class="online-badge"></div>
+                <div class="profile-pic-upload" id="profile-pic-upload">
+                  <div class="profile-avatar" id="profile-avatar">
+                    <i class="fas fa-user"></i>
+                    <div id="profile-online-status" class="online-badge"></div>
+                  </div>
+                  <input type="file" id="profile-pic-input" accept="image/*">
+                  <div class="profile-pic-upload-icon">
+                    <i class="fas fa-camera"></i>
+                  </div>
                 </div>
                 <div class="profile-name" id="profile-name-display"></div>
                 <div class="profile-email" id="profile-email-display"></div>
@@ -600,6 +715,7 @@
         <a href="#" class="nav-item" id="chat-nav">
           <i class="fas fa-comment nav-icon"></i>
           <span>Chats</span>
+          <span id="chat-badge" class="nav-badge" style="display:none;">0</span>
         </a>
         <a href="#" class="nav-item" id="friends-nav">
           <i class="fas fa-user-friends nav-icon"></i>
@@ -634,9 +750,10 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
   <script>
-    // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
+ // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
     const firebaseConfig = {
       apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
       authDomain: "massage-8c66f.firebaseapp.com",
@@ -651,6 +768,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
+    const storage = firebase.storage();
 
     // DOM Elements
     const loginPage = document.getElementById('login-page');
@@ -660,6 +778,7 @@
     const logoutBtn = document.getElementById('logout-btn');
     const requestsBtn = document.getElementById('requests-btn');
     const reqCountBadge = document.getElementById('req-count');
+    const chatBadge = document.getElementById('chat-badge');
     const adminOutput = document.getElementById('admin-output');
     const viewAllChatsBtn = document.getElementById('view-all-chats-btn');
     const viewAllUsersBtn = document.getElementById('view-all-users-btn');
@@ -700,6 +819,8 @@
     const editEmailInput = document.getElementById('edit-email');
     const saveProfileBtn = document.getElementById('save-profile-btn');
     const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const profilePicInput = document.getElementById('profile-pic-input');
+    const profilePicUpload = document.getElementById('profile-pic-upload');
 
     // Page elements
     const pages = {
@@ -729,6 +850,9 @@
     let friendsList = {};
     let onlineUsers = {};
     let lastMessages = {};
+    let unreadMessages = {};
+    let profilePicUrl = null;
+    let notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3');
 
     // Initialize the application
     function init() {
@@ -847,6 +971,9 @@
         editProfileModal.style.display = 'none';
       });
 
+      // Profile picture upload
+      profilePicInput.addEventListener('change', uploadProfilePicture);
+      
       // Search functionality
       searchInput.addEventListener('input', () => searchFriends(searchInput.value));
       friendsSearchInput.addEventListener('input', () => searchFriendRequests(friendsSearchInput.value));
@@ -860,6 +987,54 @@
           usersSearchResults.style.display = 'none';
         }
       });
+    }
+
+    // Upload profile picture
+    function uploadProfilePicture(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      showLoading();
+      
+      const storageRef = storage.ref(`profile_pictures/${currentUser.uid}`);
+      const uploadTask = storageRef.put(file);
+      
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          // Progress monitoring can be added here
+        }, 
+        (error) => {
+          hideLoading();
+          alert('Error uploading profile picture: ' + error.message);
+        }, 
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            profilePicUrl = downloadURL;
+            
+            // Update profile picture in database
+            db.ref(`users/${currentUser.uid}`).update({ profilePic: downloadURL })
+              .then(() => {
+                // Update profile picture display
+                updateProfilePicture(downloadURL);
+                hideLoading();
+                alert('Profile picture updated successfully');
+              })
+              .catch(error => {
+                hideLoading();
+                alert('Error updating profile picture: ' + error.message);
+              });
+          });
+        }
+      );
+    }
+
+    // Update profile picture display
+    function updateProfilePicture(url) {
+      if (url) {
+        profileAvatar.innerHTML = `<img src="${url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+      } else {
+        profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
+      }
     }
 
     // Show edit profile modal
@@ -982,7 +1157,9 @@
           const isOnline = onlineUsers[result.uid] ? 'Online' : 'Offline';
           item.innerHTML = `
             <div class="user-avatar">
-              <i class="fas fa-user"></i>
+              ${result.profilePic ? 
+                `<img src="${result.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : 
+                `<i class="fas fa-user"></i>`}
               ${onlineUsers[result.uid] ? '<div class="online-badge"></div>' : ''}
             </div>
             <div class="user-info">
@@ -998,6 +1175,9 @@
               currentChatName.textContent = result.username;
               loadChatMessages(result.uid);
               showPage('chat');
+              
+              // Mark messages as read
+              markMessagesAsRead(result.uid);
             } else if (context === 'users') {
               // Show in users list
               showPage('requests');
@@ -1094,6 +1274,11 @@
           currentUserData = snap.val();
           if (currentUserData) {
             updateProfileDisplay();
+            
+            // Load profile picture if available
+            if (currentUserData.profilePic) {
+              updateProfilePicture(currentUserData.profilePic);
+            }
           }
           hideLoading();
         });
@@ -1328,6 +1513,9 @@
             const friend = snap.val() || { username: 'Unknown', uid: friendId };
             friendsList[friendId] = friend;
             createFriendItem(friendId, friend, friendsListContainer);
+            
+            // Listen for new messages from this friend
+            listenForNewMessages(friendId);
           }).catch(err => console.error('Error loading friend data', err)));
         }
 
@@ -1336,6 +1524,50 @@
         hideLoading('friends-list-container');
         console.error("Error loading friends list:", error);
       });
+    }
+
+    // Listen for new messages from a friend
+    function listenForNewMessages(friendId) {
+      const chatId = [currentUser.uid, friendId].sort().join('_');
+      const ref = db.ref(`chats/${chatId}`);
+      
+      ref.orderByChild('timestamp').limitToLast(1).on('child_added', snap => {
+        const message = snap.val();
+        if (message.sender !== currentUser.uid) {
+          // This is a new message from the friend
+          lastMessages[friendId] = message;
+          updateFriendsListLastMessages();
+          
+          // Play notification sound if not in chat with this friend
+          if (!currentChatFriend || currentChatFriend.id !== friendId) {
+            notificationSound.play();
+            
+            // Update unread count
+            unreadMessages[friendId] = (unreadMessages[friendId] || 0) + 1;
+            updateUnreadCounts();
+          }
+        }
+      });
+    }
+
+    // Mark messages as read
+    function markMessagesAsRead(friendId) {
+      unreadMessages[friendId] = 0;
+      updateUnreadCounts();
+    }
+
+    // Update unread message counts
+    function updateUnreadCounts() {
+      // Calculate total unread messages
+      const totalUnread = Object.values(unreadMessages).reduce((sum, count) => sum + count, 0);
+      
+      // Update chat badge
+      if (totalUnread > 0) {
+        chatBadge.textContent = totalUnread;
+        chatBadge.style.display = 'flex';
+      } else {
+        chatBadge.style.display = 'none';
+      }
     }
 
     // Load friends list for friends page
@@ -1378,18 +1610,27 @@
       item.setAttribute('data-uid', friendId);
       
       // Get last message if available
-      const lastMsg = lastMessages[friendId] ? lastMessages[friendId].text : 'No messages yet';
+      const lastMsg = lastMessages[friendId] ? 
+        (lastMessages[friendId].text.length > 20 ? 
+          lastMessages[friendId].text.substring(0, 20) + '...' : 
+          lastMessages[friendId].text) : 
+        'No messages yet';
+      
+      const unreadCount = unreadMessages[friendId] || 0;
       const isOnline = onlineUsers[friendId] ? 'Online' : 'Offline';
       
       item.innerHTML = `
         <div class="user-avatar">
-          <i class="fas fa-user"></i>
+          ${friend.profilePic ? 
+            `<img src="${friend.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : 
+            `<i class="fas fa-user"></i>`}
           ${onlineUsers[friendId] ? '<div class="online-badge"></div>' : ''}
         </div>
         <div class="user-info">
           <div class="user-name">${escapeHtml(friend.username)}</div>
           <div class="last-message">${escapeHtml(lastMsg)}</div>
         </div>
+        ${unreadCount > 0 ? `<span class="badge">${unreadCount}</span>` : ''}
       `;
       
       container.appendChild(item);
@@ -1397,9 +1638,21 @@
       item.addEventListener('click', () => {
         currentChatFriend = { id: friendId, name: friend.username };
         currentChatName.textContent = friend.username;
+        
+        // Update chat header avatar
+        chatHeaderAvatar.innerHTML = `
+          ${friend.profilePic ? 
+            `<img src="${friend.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : 
+            `<i class="fas fa-user"></i>`}
+          ${onlineUsers[friendId] ? '<div class="online-badge" id="chat-online-status"></div>' : ''}
+        `;
+        
         updateChatOnlineStatus(friendId);
         loadChatMessages(friendId);
         showPage('chat');
+        
+        // Mark messages as read
+        markMessagesAsRead(friendId);
       });
     }
 
@@ -1416,7 +1669,9 @@
       
       item.innerHTML = `
         <div class="user-avatar">
-          <i class="fas fa-user"></i>
+          ${user.profilePic ? 
+            `<img src="${user.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : 
+            `<i class="fas fa-user"></i>`}
           ${onlineUsers[uid] ? '<div class="online-badge"></div>' : ''}
         </div>
         <div class="user-info">
@@ -1590,7 +1845,11 @@
           const item = document.createElement('div');
           item.className = 'request-item';
           item.innerHTML = `
-            <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <div class="user-avatar">
+              ${sender.profilePic ? 
+                `<img src="${sender.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : 
+                `<i class="fas fa-user"></i>`}
+            </div>
             <div class="user-info">
               <div class="user-name">${escapeHtml(sender.username)}</div>
               <div class="user-status">${escapeHtml(sender.email || request.fromUsername || '')}</div>
@@ -1705,7 +1964,10 @@
         if (uid && lastMessages[uid]) {
           const lastMsgDiv = item.querySelector('.last-message');
           if (lastMsgDiv) {
-            lastMsgDiv.textContent = lastMessages[uid].text;
+            const shortMsg = lastMessages[uid].text.length > 20 ? 
+              lastMessages[uid].text.substring(0, 20) + '...' : 
+              lastMessages[uid].text;
+            lastMsgDiv.textContent = shortMsg;
           }
         }
       });
