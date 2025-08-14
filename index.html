@@ -384,12 +384,355 @@
       color: #1c1e21;
     }
 
+    /* Exam styles */
+    .exam-container {
+      padding: 15px;
+    }
+    
+    .exam-form {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    }
+    
+    .exam-form h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .form-group .photo-upload {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .form-group .photo-preview {
+      width: 50px;
+      height: 50px;
+      border-radius: 4px;
+      border: 1px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .form-group .photo-preview img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    
+    .exam-start-btn {
+      background: #1877f2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    .question-container {
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    }
+    
+    .question-text {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .option {
+      display: block;
+      margin-bottom: 8px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .option.selected {
+      background: #e7f3ff;
+      border-color: #1877f2;
+    }
+    
+    .timer {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px 0;
+      color: #1877f2;
+    }
+    
+    .submit-exam-btn {
+      background: #42b72a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    
+    .result-container {
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .result-header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    .result-header h2 {
+      margin: 0;
+    }
+    
+    .student-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 4px;
+      margin: 10px auto;
+      display: block;
+      object-fit: cover;
+    }
+    
+    .result-details {
+      margin-bottom: 15px;
+    }
+    
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    
+    .result-table th, .result-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    
+    .result-table th {
+      background: #f0f2f5;
+    }
+    
+    .print-btn {
+      background: #1877f2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 15px;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    /* Notice styles */
+    .notice-container {
+      padding: 15px;
+    }
+    
+    .notice-item {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    }
+    
+    .notice-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .notice-message {
+      margin-bottom: 10px;
+    }
+    
+    .notice-image {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    
+    .notice-date {
+      color: #65676b;
+      font-size: 12px;
+      text-align: right;
+    }
+    
+    /* Book styles */
+    .book-container {
+      padding: 15px;
+    }
+    
+    .book-item {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+      cursor: pointer;
+    }
+    
+    .book-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .book-desc {
+      color: #65676b;
+      font-size: 14px;
+    }
+    
+    /* Admin exam management */
+    .exam-management {
+      padding: 15px;
+    }
+    
+    .exam-tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 15px;
+    }
+    
+    .exam-tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .exam-tab.active {
+      border-bottom: 2px solid #1877f2;
+      font-weight: bold;
+    }
+    
+    .exam-content {
+      display: none;
+    }
+    
+    .exam-content.active {
+      display: block;
+    }
+    
+    .course-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .course-item {
+      background: #f0f2f5;
+      border-radius: 6px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    
+    .course-item.active {
+      background: #1877f2;
+      color: white;
+    }
+    
+    .subject-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .subject-item {
+      background: #f0f2f5;
+      border-radius: 6px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    
+    .subject-item.active {
+      background: #1877f2;
+      color: white;
+    }
+    
+    .question-form {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+      margin-bottom: 15px;
+    }
+    
+    .question-list {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    }
+    
+    .question-list-item {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    
+    .question-list-item:last-child {
+      border-bottom: none;
+    }
+    
+    .question-list-item:hover {
+      background: #f0f2f5;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 480px) {
       .container { max-width:100%; }
       .chat-header { padding:10px; }
       .chat-header-actions { gap:10px; }
       .search-bar { width: 150px; }
+    }
+    
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .result-container, .result-container * {
+        visibility: visible;
+      }
+      .result-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .print-btn {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -398,7 +741,7 @@
     <!-- Login Page -->
     <div class="login-page" id="login-page" style="display:flex; flex-direction:column;">
       <header class="login-header">
-        <div class="login-logo">Social Messenger</div>
+        <div class="login-logo">IMS Darpan</div>
       </header>
 
       <div class="main-content">
@@ -424,7 +767,7 @@
       <div class="page active" id="home-page">
         <header>
           <button class="header-icon" id="back-btn-home" style="display: none;"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Social Messenger</div>
+          <div class="logo">IMS Darpan</div>
           <div class="header-icons">
             <div class="search-container">
               <div class="search-bar">
@@ -434,8 +777,8 @@
               <div class="search-results" id="search-results"></div>
             </div>
             <div style="position:relative;">
-              <i class="fas fa-bell header-icon" id="requests-btn"></i>
-              <span id="req-count" class="badge" style="display:none;">0</span>
+              <i class="fas fa-bell header-icon" id="notice-btn"></i>
+              <span id="notice-count" class="badge" style="display:none;">0</span>
             </div>
           </div>
         </header>
@@ -443,99 +786,189 @@
         <div class="content">
           <div class="scrollable-container">
             <div class="card users-list">
-              <h2>Friends</h2>
-              <div id="friends-list-container"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Chat Page -->
-      <div class="page" id="chat-page">
-        <div class="chat-header">
-          <button class="chat-header-action" id="back-btn"><i class="fas fa-arrow-left"></i></button>
-          <div class="chat-header-info">
-            <div class="chat-header-avatar" id="chat-header-avatar">
-              <i class="fas fa-user"></i>
-              <div id="chat-online-status" class="online-badge" style="display: none;"></div>
-            </div>
-            <div>
-              <div class="chat-header-name" id="current-chat-name"></div>
-              <div class="user-status" id="chat-status">Online</div>
-            </div>
-          </div>
-          <div class="chat-header-actions">
-            <i class="fas fa-phone-alt chat-header-action" id="voice-call-btn"></i>
-            <i class="fas fa-video chat-header-action" id="video-call-btn"></i>
-          </div>
-        </div>
-
-        <div class="chat-container">
-          <div class="chat-messages" id="chat-messages">
-            <div style="color:#888; text-align:center; margin-top:20px;">Select a friend to start chat</div>
-          </div>
-
-          <div class="message-input-container">
-            <i class="fas fa-plus-circle message-input-action" id="attach-btn"></i>
-            <div class="message-input">
-              <input type="text" id="message-input" placeholder="Type a message...">
-            </div>
-            <button class="send-btn" id="send-btn"><i class="fas fa-paper-plane"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Friends Page -->
-      <div class="page" id="friends-page">
-        <header>
-          <button class="header-icon" id="back-btn-friends"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Friends</div>
-          <div class="header-icons">
-            <div class="search-container">
-              <div class="search-bar">
-                <i class="fas fa-search" style="color: white; font-size: 14px;"></i>
-                <input type="text" id="friends-search-input" placeholder="Search friends...">
+              <h2>Courses</h2>
+              <div id="courses-list-container">
+                <div class="user-item clickable" id="basic-course-btn">
+                  <div class="user-avatar"><i class="fas fa-book"></i></div>
+                  <div class="user-info">
+                    <div class="user-name">Basic Course</div>
+                    <div class="last-message">Word, Excel, PowerPoint</div>
+                  </div>
+                </div>
+                <div class="user-item clickable" id="diploma-course-btn">
+                  <div class="user-avatar"><i class="fas fa-graduation-cap"></i></div>
+                  <div class="user-info">
+                    <div class="user-name">Diploma Course</div>
+                    <div class="last-message">Pagemaker, Photoshop, HTML</div>
+                  </div>
+                </div>
               </div>
-              <div class="search-results" id="friends-search-results"></div>
-            </div>
-          </div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="card friend-requests" id="friend-requests-card">
-              <h2>Friend Requests</h2>
-              <div id="friend-requests-container"></div>
-            </div>
-            <div class="card users-list">
-              <h2>Friends List</h2>
-              <div id="friends-list-page-container"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Requests Page -->
-      <div class="page" id="requests-page">
+      <!-- Exam Start Page -->
+      <div class="page" id="exam-start-page">
         <header>
-          <button class="header-icon" id="back-btn-requests"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">People</div>
-          <div class="header-icons">
-            <div class="search-container">
-              <div class="search-bar">
-                <i class="fas fa-search" style="color: white; font-size: 14px;"></i>
-                <input type="text" id="users-search-input" placeholder="Search users...">
-              </div>
-              <div class="search-results" id="users-search-results"></div>
-            </div>
-          </div>
+          <button class="header-icon" id="back-btn-exam-start"><i class="fas fa-arrow-left"></i></button>
+          <div class="logo">Exam Registration</div>
+          <div class="header-icons"></div>
         </header>
 
         <div class="content">
           <div class="scrollable-container">
-            <div class="card users-list">
-              <h2>All Users</h2>
-              <div id="users-list-container"></div>
+            <div class="exam-container">
+              <div class="exam-form">
+                <h2>Exam Registration</h2>
+                <div class="form-group">
+                  <label for="student-name">Student Name</label>
+                  <input type="text" id="student-name" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                  <label for="father-name">Father's Name</label>
+                  <input type="text" id="father-name" placeholder="Enter father's name">
+                </div>
+                <div class="form-group">
+                  <label for="dob">Date of Birth</label>
+                  <input type="date" id="dob">
+                </div>
+                <div class="form-group">
+                  <label for="symbol-no">Symbol No.</label>
+                  <input type="text" id="symbol-no" placeholder="Enter symbol number">
+                </div>
+                <div class="form-group">
+                  <label>Course</label>
+                  <input type="text" id="exam-course" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="exam-subject">Subject</label>
+                  <select id="exam-subject">
+                    <option value="">Select subject</option>
+                    <!-- Subjects will be populated by JavaScript -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Photo</label>
+                  <div class="photo-upload">
+                    <div class="photo-preview" id="photo-preview">
+                      <i class="fas fa-camera" style="color:#ccc;"></i>
+                    </div>
+                    <input type="file" id="photo-upload" accept="image/*" style="display:none;">
+                    <button class="modal-btn modal-btn-secondary" onclick="document.getElementById('photo-upload').click()">Choose Photo</button>
+                  </div>
+                </div>
+                <button class="exam-start-btn" id="start-exam-btn">Continue to Exam</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Page -->
+      <div class="page" id="exam-page">
+        <header>
+          <div class="logo">Exam</div>
+          <div class="header-icons">
+            <div class="timer" id="exam-timer">Time: 30:00</div>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="scrollable-container" id="exam-questions-container">
+            <!-- Questions will be loaded here -->
+          </div>
+          
+          <div style="padding:15px;">
+            <button class="submit-exam-btn" id="submit-exam-btn">Submit Exam</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Result Page -->
+      <div class="page" id="exam-result-page">
+        <header>
+          <button class="header-icon" id="back-btn-result"><i class="fas fa-arrow-left"></i></button>
+          <div class="logo">Exam Result</div>
+          <div class="header-icons"></div>
+        </header>
+
+        <div class="content">
+          <div class="scrollable-container">
+            <div class="result-container">
+              <div class="result-header">
+                <h2>IMS Darpan Computer Business Solutions PVT.LTD</h2>
+                <p>Kohalpur-11, Banke</p>
+                <img src="" class="student-photo" id="result-photo">
+              </div>
+              
+              <div class="result-details">
+                <p><strong>Student Name:</strong> <span id="result-name"></span></p>
+                <p><strong>Father's Name:</strong> <span id="result-father"></span></p>
+                <p><strong>Date of Birth:</strong> <span id="result-dob"></span></p>
+                <p><strong>Symbol No:</strong> <span id="result-symbol"></span></p>
+                <p><strong>Course:</strong> <span id="result-course"></span></p>
+                <p><strong>Subject:</strong> <span id="result-subject"></span></p>
+              </div>
+              
+              <table class="result-table">
+                <tr>
+                  <th>Total Questions</th>
+                  <td id="total-questions">0</td>
+                </tr>
+                <tr>
+                  <th>Correct Answers</th>
+                  <td id="correct-answers">0</td>
+                </tr>
+                <tr>
+                  <th>Score</th>
+                  <td id="exam-score">0</td>
+                </tr>
+                <tr>
+                  <th>Percentage</th>
+                  <td id="exam-percentage">0%</td>
+                </tr>
+                <tr>
+                  <th>Remarks</th>
+                  <td id="exam-remarks">-</td>
+                </tr>
+              </table>
+              
+              <button class="print-btn" id="print-result-btn">Print Result</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notice Page -->
+      <div class="page" id="notice-page">
+        <header>
+          <button class="header-icon" id="back-btn-notice"><i class="fas fa-arrow-left"></i></button>
+          <div class="logo">Notices</div>
+          <div class="header-icons"></div>
+        </header>
+
+        <div class="content">
+          <div class="scrollable-container">
+            <div class="notice-container" id="notices-container">
+              <!-- Notices will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Page -->
+      <div class="page" id="book-page">
+        <header>
+          <button class="header-icon" id="back-btn-book"><i class="fas fa-arrow-left"></i></button>
+          <div class="logo">Books</div>
+          <div class="header-icons"></div>
+        </header>
+
+        <div class="content">
+          <div class="scrollable-container">
+            <div class="book-container" id="books-container">
+              <!-- Books will be loaded here -->
             </div>
           </div>
         </div>
@@ -565,10 +998,30 @@
 
               <ul class="profile-menu">
                 <li><a href="#" id="edit-profile-btn"><i class="fas fa-user-edit" style="margin-right:10px;"></i> Edit Profile</a></li>
-                <li><a href="#" id="friends-list-btn"><i class="fas fa-users" style="margin-right:10px;"></i> Friends List</a></li>
-                <li><a href="#" id="privacy-btn"><i class="fas fa-lock" style="margin-right:10px;"></i> Privacy</a></li>
+                <li><a href="#" id="results-btn"><i class="fas fa-poll" style="margin-right:10px;"></i> Exam Results</a></li>
+                <li><a href="#" id="books-btn"><i class="fas fa-book" style="margin-right:10px;"></i> Books</a></li>
                 <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt" style="margin-right:10px;"></i> Log Out</a></li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Page -->
+      <div class="page" id="results-page">
+        <header>
+          <button class="header-icon" id="back-btn-results"><i class="fas fa-arrow-left"></i></button>
+          <div class="logo">Exam Results</div>
+          <div class="header-icons"></div>
+        </header>
+
+        <div class="content">
+          <div class="scrollable-container">
+            <div class="card users-list">
+              <h2>Your Exam Results</h2>
+              <div id="results-list-container">
+                <!-- Results will be loaded here -->
+              </div>
             </div>
           </div>
         </div>
@@ -584,30 +1037,158 @@
 
         <div class="content">
           <div class="scrollable-container">
-            <button class="admin-btn" id="view-all-chats-btn">View All Chats</button>
-            <button class="admin-btn" id="view-all-users-btn">View All Users</button>
-            <div id="admin-output" style="margin-top:12px;"></div>
+            <div class="exam-tabs">
+              <div class="exam-tab active" data-tab="manage-exam">Manage Exams</div>
+              <div class="exam-tab" data-tab="manage-notice">Manage Notices</div>
+              <div class="exam-tab" data-tab="manage-book">Manage Books</div>
+              <div class="exam-tab" data-tab="view-results">View Results</div>
+            </div>
+            
+            <div class="exam-content active" id="manage-exam">
+              <div class="course-list" id="admin-course-list">
+                <div class="course-item active" data-course="basic">Basic Course</div>
+                <div class="course-item" data-course="diploma">Diploma Course</div>
+              </div>
+              
+              <div class="subject-list" id="admin-subject-list">
+                <div class="subject-item active" data-subject="word">Word</div>
+                <div class="subject-item" data-subject="excel">Excel</div>
+                <div class="subject-item" data-subject="powerpoint">PowerPoint</div>
+                <div class="subject-item" data-subject="pagemaker">PageMaker</div>
+                <div class="subject-item" data-subject="photoshop">Photoshop</div>
+                <div class="subject-item" data-subject="html">HTML</div>
+                <div class="subject-item" data-subject="access">Access</div>
+                <div class="subject-item" data-subject="tally">Tally</div>
+              </div>
+              
+              <div class="question-form">
+                <h3>Add New Question</h3>
+                <div class="form-group">
+                  <label for="question-text">Question</label>
+                  <input type="text" id="question-text" placeholder="Enter question">
+                </div>
+                <div class="form-group">
+                  <label for="option1">Option 1</label>
+                  <input type="text" id="option1" placeholder="Enter option 1">
+                </div>
+                <div class="form-group">
+                  <label for="option2">Option 2</label>
+                  <input type="text" id="option2" placeholder="Enter option 2">
+                </div>
+                <div class="form-group">
+                  <label for="option3">Option 3</label>
+                  <input type="text" id="option3" placeholder="Enter option 3">
+                </div>
+                <div class="form-group">
+                  <label for="option4">Option 4</label>
+                  <input type="text" id="option4" placeholder="Enter option 4">
+                </div>
+                <div class="form-group">
+                  <label for="correct-option">Correct Option</label>
+                  <select id="correct-option">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                    <option value="4">Option 4</option>
+                  </select>
+                </div>
+                <button class="admin-btn" id="add-question-btn">Add Question</button>
+              </div>
+              
+              <div class="question-list" id="admin-questions-list">
+                <h3>Questions</h3>
+                <!-- Questions will be listed here -->
+              </div>
+            </div>
+            
+            <div class="exam-content" id="manage-notice">
+              <div class="question-form">
+                <h3>Add New Notice</h3>
+                <div class="form-group">
+                  <label for="notice-title">Title</label>
+                  <input type="text" id="notice-title" placeholder="Enter notice title">
+                </div>
+                <div class="form-group">
+                  <label for="notice-message">Message</label>
+                  <textarea id="notice-message" placeholder="Enter notice message" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Image (Optional)</label>
+                  <div class="photo-upload">
+                    <div class="photo-preview" id="notice-photo-preview">
+                      <i class="fas fa-image" style="color:#ccc;"></i>
+                    </div>
+                    <input type="file" id="notice-photo-upload" accept="image/*" style="display:none;">
+                    <button class="modal-btn modal-btn-secondary" onclick="document.getElementById('notice-photo-upload').click()">Choose Image</button>
+                  </div>
+                </div>
+                <button class="admin-btn" id="add-notice-btn">Add Notice</button>
+              </div>
+              
+              <div class="question-list" id="admin-notices-list">
+                <h3>Existing Notices</h3>
+                <!-- Notices will be listed here -->
+              </div>
+            </div>
+            
+            <div class="exam-content" id="manage-book">
+              <div class="question-form">
+                <h3>Add New Book</h3>
+                <div class="form-group">
+                  <label for="book-title">Title</label>
+                  <input type="text" id="book-title" placeholder="Enter book title">
+                </div>
+                <div class="form-group">
+                  <label for="book-desc">Description</label>
+                  <textarea id="book-desc" placeholder="Enter book description" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="book-course">Course</label>
+                  <select id="book-course">
+                    <option value="basic">Basic</option>
+                    <option value="diploma">Diploma</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>PDF File</label>
+                  <input type="file" id="book-file-upload" accept=".pdf" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
+                </div>
+                <button class="admin-btn" id="add-book-btn">Add Book</button>
+              </div>
+              
+              <div class="question-list" id="admin-books-list">
+                <h3>Existing Books</h3>
+                <!-- Books will be listed here -->
+              </div>
+            </div>
+            
+            <div class="exam-content" id="view-results">
+              <div class="question-list" id="admin-results-list">
+                <h3>Student Results</h3>
+                <!-- Results will be listed here -->
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Bottom Navigation Bar - Hidden in chat page -->
+      <!-- Bottom Navigation Bar -->
       <div class="bottom-nav" id="bottom-nav">
         <a href="#" class="nav-item active" id="home-nav">
           <i class="fas fa-home nav-icon"></i>
           <span>Home</span>
         </a>
-        <a href="#" class="nav-item" id="chat-nav">
-          <i class="fas fa-comment nav-icon"></i>
-          <span>Chats</span>
+        <a href="#" class="nav-item" id="exam-nav">
+          <i class="fas fa-clipboard-list nav-icon"></i>
+          <span>Exam</span>
         </a>
-        <a href="#" class="nav-item" id="friends-nav">
-          <i class="fas fa-user-friends nav-icon"></i>
-          <span>Friends</span>
+        <a href="#" class="nav-item" id="notice-nav">
+          <i class="fas fa-bell nav-icon"></i>
+          <span>Notices</span>
         </a>
-        <a href="#" class="nav-item" id="requests-nav">
-          <i class="fas fa-user-plus nav-icon"></i>
-          <span>People</span>
+        <a href="#" class="nav-item" id="book-nav">
+          <i class="fas fa-book nav-icon"></i>
+          <span>Books</span>
         </a>
         <a href="#" class="nav-item" id="profile-nav">
           <i class="fas fa-user nav-icon"></i>
@@ -634,6 +1215,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
   <script>
     // Firebase configuration
@@ -651,6 +1233,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
+    const storage = firebase.storage();
 
     // DOM Elements
     const loginPage = document.getElementById('login-page');
@@ -658,77 +1241,126 @@
     const loginButton = document.getElementById('login-button');
     const createAccountBtn = document.getElementById('create-account-btn');
     const logoutBtn = document.getElementById('logout-btn');
-    const requestsBtn = document.getElementById('requests-btn');
-    const reqCountBadge = document.getElementById('req-count');
-    const adminOutput = document.getElementById('admin-output');
-    const viewAllChatsBtn = document.getElementById('view-all-chats-btn');
-    const viewAllUsersBtn = document.getElementById('view-all-users-btn');
+    const noticeBtn = document.getElementById('notice-btn');
+    const noticeCountBadge = document.getElementById('notice-count');
     const backBtn = document.getElementById('back-btn');
     const backBtnHome = document.getElementById('back-btn-home');
-    const backBtnFriends = document.getElementById('back-btn-friends');
-    const backBtnRequests = document.getElementById('back-btn-requests');
+    const backBtnExamStart = document.getElementById('back-btn-exam-start');
+    const backBtnResult = document.getElementById('back-btn-result');
+    const backBtnNotice = document.getElementById('back-btn-notice');
+    const backBtnBook = document.getElementById('back-btn-book');
     const backBtnProfile = document.getElementById('back-btn-profile');
+    const backBtnResults = document.getElementById('back-btn-results');
     const backBtnAdmin = document.getElementById('back-btn-admin');
-    const friendsListContainer = document.getElementById('friends-list-container');
-    const friendsListPageContainer = document.getElementById('friends-list-page-container');
-    const friendRequestsContainer = document.getElementById('friend-requests-container');
-    const usersListContainer = document.getElementById('users-list-container');
-    const chatMessages = document.getElementById('chat-messages');
-    const messageInput = document.getElementById('message-input');
-    const sendBtn = document.getElementById('send-btn');
-    const currentChatName = document.getElementById('current-chat-name');
-    const chatHeaderAvatar = document.getElementById('chat-header-avatar');
-    const chatOnlineStatus = document.getElementById('chat-online-status');
-    const chatStatus = document.getElementById('chat-status');
+    const coursesListContainer = document.getElementById('courses-list-container');
+    const examQuestionsContainer = document.getElementById('exam-questions-container');
+    const examTimer = document.getElementById('exam-timer');
+    const submitExamBtn = document.getElementById('submit-exam-btn');
+    const startExamBtn = document.getElementById('start-exam-btn');
+    const resultPhoto = document.getElementById('result-photo');
+    const resultName = document.getElementById('result-name');
+    const resultFather = document.getElementById('result-father');
+    const resultDob = document.getElementById('result-dob');
+    const resultSymbol = document.getElementById('result-symbol');
+    const resultCourse = document.getElementById('result-course');
+    const resultSubject = document.getElementById('result-subject');
+    const totalQuestions = document.getElementById('total-questions');
+    const correctAnswers = document.getElementById('correct-answers');
+    const examScore = document.getElementById('exam-score');
+    const examPercentage = document.getElementById('exam-percentage');
+    const examRemarks = document.getElementById('exam-remarks');
+    const printResultBtn = document.getElementById('print-result-btn');
+    const noticesContainer = document.getElementById('notices-container');
+    const booksContainer = document.getElementById('books-container');
+    const resultsListContainer = document.getElementById('results-list-container');
     const profileNameDisplay = document.getElementById('profile-name-display');
     const profileEmailDisplay = document.getElementById('profile-email-display');
     const profileAvatar = document.getElementById('profile-avatar');
     const profileOnlineStatus = document.getElementById('profile-online-status');
-    const voiceCallBtn = document.getElementById('voice-call-btn');
-    const videoCallBtn = document.getElementById('video-call-btn');
-    const attachBtn = document.getElementById('attach-btn');
-    const searchInput = document.getElementById('search-input');
-    const friendsSearchInput = document.getElementById('friends-search-input');
-    const usersSearchInput = document.getElementById('users-search-input');
-    const searchResults = document.getElementById('search-results');
-    const friendsSearchResults = document.getElementById('friends-search-results');
-    const usersSearchResults = document.getElementById('users-search-results');
-    const friendsListBtn = document.getElementById('friends-list-btn');
-    const bottomNav = document.getElementById('bottom-nav');
+    const basicCourseBtn = document.getElementById('basic-course-btn');
+    const diplomaCourseBtn = document.getElementById('diploma-course-btn');
+    const studentNameInput = document.getElementById('student-name');
+    const fatherNameInput = document.getElementById('father-name');
+    const dobInput = document.getElementById('dob');
+    const symbolNoInput = document.getElementById('symbol-no');
+    const examCourseInput = document.getElementById('exam-course');
+    const examSubjectSelect = document.getElementById('exam-subject');
+    const photoUpload = document.getElementById('photo-upload');
+    const photoPreview = document.getElementById('photo-preview');
+    const resultsBtn = document.getElementById('results-btn');
+    const booksBtn = document.getElementById('books-btn');
     const editProfileModal = document.getElementById('edit-profile-modal');
     const editUsernameInput = document.getElementById('edit-username');
     const editEmailInput = document.getElementById('edit-email');
     const saveProfileBtn = document.getElementById('save-profile-btn');
     const cancelEditBtn = document.getElementById('cancel-edit-btn');
 
+    // Admin elements
+    const adminCourseList = document.getElementById('admin-course-list');
+    const adminSubjectList = document.getElementById('admin-subject-list');
+    const questionTextInput = document.getElementById('question-text');
+    const option1Input = document.getElementById('option1');
+    const option2Input = document.getElementById('option2');
+    const option3Input = document.getElementById('option3');
+    const option4Input = document.getElementById('option4');
+    const correctOptionSelect = document.getElementById('correct-option');
+    const addQuestionBtn = document.getElementById('add-question-btn');
+    const adminQuestionsList = document.getElementById('admin-questions-list');
+    const noticeTitleInput = document.getElementById('notice-title');
+    const noticeMessageInput = document.getElementById('notice-message');
+    const noticePhotoUpload = document.getElementById('notice-photo-upload');
+    const noticePhotoPreview = document.getElementById('notice-photo-preview');
+    const addNoticeBtn = document.getElementById('add-notice-btn');
+    const adminNoticesList = document.getElementById('admin-notices-list');
+    const bookTitleInput = document.getElementById('book-title');
+    const bookDescInput = document.getElementById('book-desc');
+    const bookCourseSelect = document.getElementById('book-course');
+    const bookFileUpload = document.getElementById('book-file-upload');
+    const addBookBtn = document.getElementById('add-book-btn');
+    const adminBooksList = document.getElementById('admin-books-list');
+    const adminResultsList = document.getElementById('admin-results-list');
+    const examTabs = document.querySelectorAll('.exam-tab');
+    const examContents = document.querySelectorAll('.exam-content');
+
     // Page elements
     const pages = {
       home: document.getElementById('home-page'),
-      chat: document.getElementById('chat-page'),
-      friends: document.getElementById('friends-page'),
-      requests: document.getElementById('requests-page'),
+      examStart: document.getElementById('exam-start-page'),
+      exam: document.getElementById('exam-page'),
+      examResult: document.getElementById('exam-result-page'),
+      notice: document.getElementById('notice-page'),
+      book: document.getElementById('book-page'),
       profile: document.getElementById('profile-page'),
+      results: document.getElementById('results-page'),
       admin: document.getElementById('admin-page')
     };
 
     // Navigation elements
     const navItems = {
       home: document.getElementById('home-nav'),
-      chat: document.getElementById('chat-nav'),
-      friends: document.getElementById('friends-nav'),
-      requests: document.getElementById('requests-nav'),
+      exam: document.getElementById('exam-nav'),
+      notice: document.getElementById('notice-nav'),
+      book: document.getElementById('book-nav'),
       profile: document.getElementById('profile-nav')
     };
 
     // State variables
     let currentUser = null;
     let currentUserData = null;
-    let currentChatFriend = null;
-    let pendingRequests = {};
-    let allUsers = {};
-    let friendsList = {};
-    let onlineUsers = {};
-    let lastMessages = {};
+    let currentExam = null;
+    let examTimeLeft = 1800; // 30 minutes in seconds
+    let examTimerInterval = null;
+    let selectedPhoto = null;
+    let selectedNoticePhoto = null;
+    let selectedBookFile = null;
+    let currentAdminCourse = 'basic';
+    let currentAdminSubject = 'word';
+
+    // Subjects for each course
+    const courseSubjects = {
+      basic: ['Word', 'Excel', 'PowerPoint'],
+      diploma: ['Pagemaker', 'Photoshop', 'HTML', 'Access', 'Tally']
+    };
 
     // Initialize the application
     function init() {
@@ -744,19 +1376,19 @@
         showPage('home');
       });
       
-      navItems.chat.addEventListener('click', (e) => {
+      navItems.exam.addEventListener('click', (e) => {
         e.preventDefault();
-        showPage('chat');
+        showPage('examStart');
       });
       
-      navItems.friends.addEventListener('click', (e) => {
+      navItems.notice.addEventListener('click', (e) => {
         e.preventDefault();
-        showPage('friends');
+        showPage('notice');
       });
       
-      navItems.requests.addEventListener('click', (e) => {
+      navItems.book.addEventListener('click', (e) => {
         e.preventDefault();
-        showPage('requests');
+        showPage('book');
       });
       
       navItems.profile.addEventListener('click', (e) => {
@@ -765,20 +1397,12 @@
       });
 
       // Back buttons
-      backBtn.addEventListener('click', () => {
-        if (currentChatFriend) {
-          currentChatFriend = null;
-          currentChatName.textContent = '';
-          messageInput.value = '';
-          chatMessages.innerHTML = '<div style="color:#888; text-align:center; margin-top:20px;">Select a friend to start chat</div>';
-        }
-        showPage('home');
-      });
-
-      backBtnHome.addEventListener('click', () => showPage('home'));
-      backBtnFriends.addEventListener('click', () => showPage('home'));
-      backBtnRequests.addEventListener('click', () => showPage('home'));
+      backBtnExamStart.addEventListener('click', () => showPage('home'));
+      backBtnResult.addEventListener('click', () => showPage('home'));
+      backBtnNotice.addEventListener('click', () => showPage('home'));
+      backBtnBook.addEventListener('click', () => showPage('home'));
       backBtnProfile.addEventListener('click', () => showPage('home'));
+      backBtnResults.addEventListener('click', () => showPage('profile'));
       backBtnAdmin.addEventListener('click', () => showPage('profile'));
 
       // Login
@@ -790,50 +1414,59 @@
       // Logout
       logoutBtn.addEventListener('click', handleLogout);
 
-      // Send message
-      sendBtn.addEventListener('click', sendMessage);
-      messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          sendMessage();
+      // Notice button
+      noticeBtn.addEventListener('click', () => {
+        showPage('notice');
+      });
+
+      // Course buttons
+      basicCourseBtn.addEventListener('click', () => {
+        currentExam = { course: 'Basic Course', courseKey: 'basic' };
+        examCourseInput.value = 'Basic Course';
+        populateSubjectSelect('basic');
+        showPage('examStart');
+      });
+      
+      diplomaCourseBtn.addEventListener('click', () => {
+        currentExam = { course: 'Diploma Course', courseKey: 'diploma' };
+        examCourseInput.value = 'Diploma Course';
+        populateSubjectSelect('diploma');
+        showPage('examStart');
+      });
+
+      // Photo upload
+      photoUpload.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+          selectedPhoto = e.target.files[0];
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            photoPreview.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+          };
+          reader.readAsDataURL(selectedPhoto);
         }
       });
 
-      // Call buttons
-      voiceCallBtn.addEventListener('click', () => {
-        if (currentChatFriend) {
-          alert(`Voice calling ${currentChatFriend.name}`);
-        }
+      // Start exam
+      startExamBtn.addEventListener('click', startExam);
+
+      // Submit exam
+      submitExamBtn.addEventListener('click', submitExam);
+
+      // Print result
+      printResultBtn.addEventListener('click', () => {
+        window.print();
       });
 
-      videoCallBtn.addEventListener('click', () => {
-        if (currentChatFriend) {
-          alert(`Video calling ${currentChatFriend.name}`);
-        }
-      });
-
-      // Attach button
-      attachBtn.addEventListener('click', () => {
-        alert('File attachment feature would go here');
-      });
-
-      // Friend requests button
-      requestsBtn.addEventListener('click', () => {
-        showPage('friends');
-      });
-
-      // Admin buttons
-      viewAllChatsBtn.addEventListener('click', viewAllChats);
-      viewAllUsersBtn.addEventListener('click', viewAllUsers);
-
-      // Settings button
-      document.getElementById('settings-btn').addEventListener('click', () => {
-        alert('Settings would open here');
-      });
-
-      // Friends list button in profile
-      friendsListBtn.addEventListener('click', (e) => {
+      // Results button
+      resultsBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        showPage('friends');
+        showPage('results');
+      });
+
+      // Books button
+      booksBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showPage('book');
       });
 
       // Edit profile
@@ -847,18 +1480,78 @@
         editProfileModal.style.display = 'none';
       });
 
-      // Search functionality
-      searchInput.addEventListener('input', () => searchFriends(searchInput.value));
-      friendsSearchInput.addEventListener('input', () => searchFriendRequests(friendsSearchInput.value));
-      usersSearchInput.addEventListener('input', () => searchAllUsers(usersSearchInput.value));
+      // Admin tabs
+      examTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          examTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          examContents.forEach(content => content.classList.remove('active'));
+          document.getElementById(tab.dataset.tab).classList.add('active');
+        });
+      });
 
-      // Close search results when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.search-container')) {
-          searchResults.style.display = 'none';
-          friendsSearchResults.style.display = 'none';
-          usersSearchResults.style.display = 'none';
+      // Admin course selection
+      adminCourseList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('course-item')) {
+          adminCourseList.querySelectorAll('.course-item').forEach(item => {
+            item.classList.remove('active');
+          });
+          e.target.classList.add('active');
+          currentAdminCourse = e.target.dataset.course;
+          loadQuestions();
         }
+      });
+
+      // Admin subject selection
+      adminSubjectList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('subject-item')) {
+          adminSubjectList.querySelectorAll('.subject-item').forEach(item => {
+            item.classList.remove('active');
+          });
+          e.target.classList.add('active');
+          currentAdminSubject = e.target.dataset.subject;
+          loadQuestions();
+        }
+      });
+
+      // Add question
+      addQuestionBtn.addEventListener('click', addQuestion);
+
+      // Notice photo upload
+      noticePhotoUpload.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+          selectedNoticePhoto = e.target.files[0];
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            noticePhotoPreview.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+          };
+          reader.readAsDataURL(selectedNoticePhoto);
+        }
+      });
+
+      // Add notice
+      addNoticeBtn.addEventListener('click', addNotice);
+
+      // Book file upload
+      bookFileUpload.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+          selectedBookFile = e.target.files[0];
+        }
+      });
+
+      // Add book
+      addBookBtn.addEventListener('click', addBook);
+    }
+
+    // Populate subject select dropdown
+    function populateSubjectSelect(courseKey) {
+      examSubjectSelect.innerHTML = '<option value="">Select subject</option>';
+      courseSubjects[courseKey].forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject.toLowerCase();
+        option.textContent = subject;
+        examSubjectSelect.appendChild(option);
       });
     }
 
@@ -901,117 +1594,6 @@
         });
     }
 
-    // Search friends
-    function searchFriends(searchTerm) {
-      if (!searchTerm) {
-        searchResults.style.display = 'none';
-        return;
-      }
-      
-      const results = Object.entries(friendsList)
-        .filter(([uid, user]) => 
-          user.username.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map(([uid, user]) => user);
-      
-      displaySearchResults(results, 'friends', searchResults);
-    }
-
-    // Search friend requests
-    function searchFriendRequests(searchTerm) {
-      if (!searchTerm) {
-        friendsSearchResults.style.display = 'none';
-        return;
-      }
-      
-      const results = Object.values(pendingRequests)
-        .filter(request => 
-          request.fromUsername.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      
-      displaySearchResults(results, 'requests', friendsSearchResults);
-    }
-
-    // Search all users
-    function searchAllUsers(searchTerm) {
-      if (!searchTerm) {
-        usersSearchResults.style.display = 'none';
-        return;
-      }
-      
-      const results = Object.entries(allUsers)
-        .filter(([uid, user]) => 
-          uid !== currentUser.uid && 
-          user.username.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map(([uid, user]) => user);
-      
-      displaySearchResults(results, 'users', usersSearchResults);
-    }
-
-    // Display search results
-    function displaySearchResults(results, context, container) {
-      container.innerHTML = '';
-      
-      if (results.length === 0) {
-        container.innerHTML = '<div style="padding:10px;color:#666;">No results found</div>';
-        container.style.display = 'block';
-        return;
-      }
-      
-      results.forEach(result => {
-        const item = document.createElement('div');
-        item.className = 'user-item';
-        item.style.padding = '8px 12px';
-        item.style.cursor = 'pointer';
-        
-        if (context === 'requests') {
-          item.innerHTML = `
-            <div class="user-avatar"><i class="fas fa-user"></i></div>
-            <div class="user-info">
-              <div class="user-name">${escapeHtml(result.fromUsername)}</div>
-              <div class="user-status">Friend request</div>
-            </div>
-          `;
-          
-          item.addEventListener('click', () => {
-            showPage('friends');
-            container.style.display = 'none';
-          });
-        } else {
-          const isOnline = onlineUsers[result.uid] ? 'Online' : 'Offline';
-          item.innerHTML = `
-            <div class="user-avatar">
-              <i class="fas fa-user"></i>
-              ${onlineUsers[result.uid] ? '<div class="online-badge"></div>' : ''}
-            </div>
-            <div class="user-info">
-              <div class="user-name">${escapeHtml(result.username)}</div>
-              <div class="user-status">${isOnline}</div>
-            </div>
-          `;
-          
-          item.addEventListener('click', () => {
-            if (context === 'friends') {
-              // Open chat with this friend
-              currentChatFriend = { id: result.uid, name: result.username };
-              currentChatName.textContent = result.username;
-              loadChatMessages(result.uid);
-              showPage('chat');
-            } else if (context === 'users') {
-              // Show in users list
-              showPage('requests');
-            }
-            container.style.display = 'none';
-          });
-        }
-        
-        container.appendChild(item);
-      });
-      
-      container.style.display = 'block';
-    }
-
     // Show specific page
     function showPage(pageName) {
       // Hide all pages
@@ -1027,33 +1609,23 @@
         item.classList.remove('active');
       });
       
-      if (pageName !== 'admin') {
+      if (pageName !== 'admin' && pageName !== 'examStart' && pageName !== 'exam' && 
+          pageName !== 'examResult' && pageName !== 'results') {
         navItems[pageName].classList.add('active');
       }
       
-      // Hide bottom nav in chat page
-      if (pageName === 'chat') {
-        bottomNav.style.display = 'none';
-      } else {
-        bottomNav.style.display = 'flex';
-      }
-      
       // Load data if needed
-      if (pageName === 'friends') {
-        listenFriendRequests();
-        loadFriendsListForPage();
-      } else if (pageName === 'requests') {
-        loadAllUsers();
+      if (pageName === 'notice') {
+        loadNotices();
+      } else if (pageName === 'book') {
+        loadBooks();
       } else if (pageName === 'profile') {
         updateProfileDisplay();
-      } else if (pageName === 'home') {
-        loadFriendsList();
+      } else if (pageName === 'results') {
+        loadUserResults();
+      } else if (pageName === 'admin') {
+        loadAdminData();
       }
-      
-      // Hide search results when changing pages
-      searchResults.style.display = 'none';
-      friendsSearchResults.style.display = 'none';
-      usersSearchResults.style.display = 'none';
     }
 
     // Handle authentication state changes
@@ -1082,7 +1654,6 @@
             username: username,
             email: currentUser.email,
             role: 'user',
-            friends: {},
             blocked: false
           });
         }
@@ -1094,6 +1665,17 @@
           currentUserData = snap.val();
           if (currentUserData) {
             updateProfileDisplay();
+            
+            // Show admin panel if user is admin
+            if (currentUserData.role === 'admin') {
+              document.getElementById('profile-menu').innerHTML += `
+                <li><a href="#" id="admin-btn"><i class="fas fa-user-shield" style="margin-right:10px;"></i> Admin Panel</a></li>
+              `;
+              document.getElementById('admin-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage('admin');
+              });
+            }
           }
           hideLoading();
         });
@@ -1102,88 +1684,9 @@
         loginPage.style.display = 'none';
         appContainer.style.display = 'flex';
 
-        // Set user as online
-        setUserOnlineStatus(true);
-        
-        // Listen for online users
-        listenForOnlineUsers();
-        
         // Load initial data
-        loadFriendsList();
+        loadNotices();
         showPage('home');
-      });
-    }
-
-    // Set user online status
-    function setUserOnlineStatus(isOnline) {
-      if (!currentUser) return;
-      
-      const userStatusRef = db.ref(`status/${currentUser.uid}`);
-      const userRef = db.ref(`users/${currentUser.uid}`);
-      
-      if (isOnline) {
-        // Set user status to online
-        userStatusRef.set({ online: true });
-        
-        // Create a disconnect record
-        userStatusRef.onDisconnect().set({ online: false });
-        
-        // Update last seen
-        userRef.update({ lastSeen: Date.now() });
-      } else {
-        userStatusRef.set({ online: false });
-      }
-    }
-
-    // Listen for online users
-    function listenForOnlineUsers() {
-      db.ref('status').on('value', snapshot => {
-        const statuses = snapshot.val() || {};
-        onlineUsers = {};
-        
-        for (const uid in statuses) {
-          if (statuses[uid].online) {
-            onlineUsers[uid] = true;
-          }
-        }
-        
-        // Update UI for current chat
-        if (currentChatFriend && currentChatFriend.id) {
-          updateChatOnlineStatus(currentChatFriend.id);
-        }
-        
-        // Update friends list with online status
-        updateFriendsListOnlineStatus();
-      });
-    }
-
-    // Update chat online status
-    function updateChatOnlineStatus(friendId) {
-      if (onlineUsers[friendId]) {
-        chatOnlineStatus.style.display = 'block';
-        chatStatus.textContent = 'Online';
-      } else {
-        chatOnlineStatus.style.display = 'none';
-        chatStatus.textContent = 'Offline';
-      }
-    }
-
-    // Update friends list with online status
-    function updateFriendsListOnlineStatus() {
-      const friendItems = document.querySelectorAll('.user-item');
-      friendItems.forEach(item => {
-        const uid = item.getAttribute('data-uid');
-        if (uid && onlineUsers[uid]) {
-          const badge = item.querySelector('.online-badge');
-          if (!badge) {
-            const avatar = item.querySelector('.user-avatar');
-            if (avatar) {
-              const onlineBadge = document.createElement('div');
-              onlineBadge.className = 'online-badge';
-              avatar.appendChild(onlineBadge);
-            }
-          }
-        }
       });
     }
 
@@ -1192,13 +1695,6 @@
       if (currentUserData) {
         profileNameDisplay.textContent = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
         profileEmailDisplay.textContent = currentUserData.email || currentUser.email || '';
-        
-        // Update online status
-        if (onlineUsers[currentUser.uid]) {
-          profileOnlineStatus.style.display = 'block';
-        } else {
-          profileOnlineStatus.style.display = 'none';
-        }
       }
     }
 
@@ -1251,7 +1747,6 @@
             username: username,
             email: email,
             role: 'user',
-            friends: {},
             blocked: false
           });
         })
@@ -1264,7 +1759,6 @@
     // Handle logout
     function handleLogout() {
       showLoading();
-      setUserOnlineStatus(false);
       auth.signOut().then(() => {
         currentUser = null;
         currentUserData = null;
@@ -1282,623 +1776,647 @@
       return db.ref('users/' + uid).update(userData);
     }
 
-    // Load all users for friend requests
-    function loadAllUsers() {
-      showLoading('users-list-container');
-      
-      db.ref('users').on('value', snapshot => {
-        allUsers = snapshot.val() || {};
-        usersListContainer.innerHTML = '';
-
-        for (const uid in allUsers) {
-          if (uid !== currentUser.uid) {
-            const user = allUsers[uid];
-            const userItem = createUserItem(uid, user);
-            usersListContainer.appendChild(userItem);
-          }
-        }
-        
-        hideLoading('users-list-container');
-      }, error => {
-        hideLoading('users-list-container');
-        console.error("Error loading users:", error);
-      });
-    }
-
-    // Load friends list for home page
-    function loadFriendsList() {
-      showLoading('friends-list-container');
-      
-      const ref = db.ref(`users/${currentUser.uid}/friends`);
-      
-      ref.on('value', snapshot => {
-        friendsList = {};
-        const friends = snapshot.val() || {};
-        friendsListContainer.innerHTML = '';
-        
-        if (Object.keys(friends).length === 0) {
-          friendsListContainer.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from the People tab.</div>';
-          hideLoading('friends-list-container');
-          return;
-        }
-        
-        const promises = [];
-        for (const friendId in friends) {
-          promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
-            const friend = snap.val() || { username: 'Unknown', uid: friendId };
-            friendsList[friendId] = friend;
-            createFriendItem(friendId, friend, friendsListContainer);
-          }).catch(err => console.error('Error loading friend data', err)));
-        }
-
-        Promise.all(promises).then(() => hideLoading('friends-list-container')).catch(() => hideLoading('friends-list-container'));
-      }, error => {
-        hideLoading('friends-list-container');
-        console.error("Error loading friends list:", error);
-      });
-    }
-
-    // Load friends list for friends page
-    function loadFriendsListForPage() {
-      showLoading('friends-list-page-container');
-      
-      const ref = db.ref(`users/${currentUser.uid}/friends`);
-      
-      ref.on('value', snapshot => {
-        friendsList = {};
-        const friends = snapshot.val() || {};
-        friendsListPageContainer.innerHTML = '';
-        
-        if (Object.keys(friends).length === 0) {
-          friendsListPageContainer.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from the People tab.</div>';
-          hideLoading('friends-list-page-container');
-          return;
-        }
-        
-        const promises = [];
-        for (const friendId in friends) {
-          promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
-            const friend = snap.val() || { username: 'Unknown', uid: friendId };
-            friendsList[friendId] = friend;
-            createFriendItem(friendId, friend, friendsListPageContainer);
-          }).catch(err => console.error('Error loading friend data', err)));
-        }
-
-        Promise.all(promises).then(() => hideLoading('friends-list-page-container')).catch(() => hideLoading('friends-list-page-container'));
-      }, error => {
-        hideLoading('friends-list-page-container');
-        console.error("Error loading friends list:", error);
-      });
-    }
-
-    // Create friend item for friends list
-    function createFriendItem(friendId, friend, container) {
-      const item = document.createElement('div');
-      item.className = 'user-item clickable';
-      item.setAttribute('data-uid', friendId);
-      
-      // Get last message if available
-      const lastMsg = lastMessages[friendId] ? lastMessages[friendId].text : 'No messages yet';
-      const isOnline = onlineUsers[friendId] ? 'Online' : 'Offline';
-      
-      item.innerHTML = `
-        <div class="user-avatar">
-          <i class="fas fa-user"></i>
-          ${onlineUsers[friendId] ? '<div class="online-badge"></div>' : ''}
-        </div>
-        <div class="user-info">
-          <div class="user-name">${escapeHtml(friend.username)}</div>
-          <div class="last-message">${escapeHtml(lastMsg)}</div>
-        </div>
-      `;
-      
-      container.appendChild(item);
-      
-      item.addEventListener('click', () => {
-        currentChatFriend = { id: friendId, name: friend.username };
-        currentChatName.textContent = friend.username;
-        updateChatOnlineStatus(friendId);
-        loadChatMessages(friendId);
-        showPage('chat');
-      });
-    }
-
-    // Create user item for all users list
-    function createUserItem(uid, user) {
-      const item = document.createElement('div');
-      item.className = 'user-item';
-      item.setAttribute('data-uid', uid);
-
-      const actionDiv = document.createElement('div');
-      actionDiv.style.marginLeft = '8px';
-
-      const isOnline = onlineUsers[uid] ? 'Online' : 'Offline';
-      
-      item.innerHTML = `
-        <div class="user-avatar">
-          <i class="fas fa-user"></i>
-          ${onlineUsers[uid] ? '<div class="online-badge"></div>' : ''}
-        </div>
-        <div class="user-info">
-          <div class="user-name">${escapeHtml(user.username || '(no-name)')}</div>
-          <div class="user-status">${isOnline}</div>
-        </div>
-      `;
-      
-      createFriendActionButton(uid, actionDiv);
-      item.appendChild(actionDiv);
-      
-      return item;
-    }
-
-    // Create friend action button
-    function createFriendActionButton(uid, container) {
-      const btn = document.createElement('button');
-      btn.setAttribute('data-uid', uid);
-
-      Promise.all([
-        db.ref(`users/${currentUser.uid}/friends/${uid}`).once('value'),
-        db.ref(`users/${uid}/friendRequests/${currentUser.uid}`).once('value'),
-        db.ref(`users/${currentUser.uid}/friendRequests/${uid}`).once('value')
-      ]).then(([fsnap, rsnap, incomingSnap]) => {
-        if (fsnap.exists()) {
-          btn.textContent = 'Friends';
-          btn.disabled = true;
-          btn.style.background = '#6c757d';
-          container.appendChild(btn);
-        } else if (rsnap.exists()) {
-          btn.textContent = 'Cancel';
-          btn.className = 'cancel-request-btn';
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            cancelFriendRequest(uid);
-          });
-          container.appendChild(btn);
-        } else if (incomingSnap.exists()) {
-          btn.textContent = 'Respond';
-          btn.className = 'add-friend-btn';
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showPage('friends');
-          });
-          container.appendChild(btn);
-        } else {
-          btn.textContent = 'Add Friend';
-          btn.className = 'add-friend-btn';
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sendFriendRequest(uid);
-          });
-          container.appendChild(btn);
-        }
-      }).catch(err => {
-        console.error('Error creating friend button:', err);
-        btn.textContent = 'Add Friend';
-        btn.className = 'add-friend-btn';
-        btn.addEventListener('click', (e) => { e.stopPropagation(); sendFriendRequest(uid); });
-        container.appendChild(btn);
-      });
-    }
-
-    // Send friend request
-    async function sendFriendRequest(toUid) {
-      if (!currentUserData || !currentUser) return;
-      if (toUid === currentUser.uid) return;
-
-      showLoading();
-
-      try {
-        const fsnap = await db.ref(`users/${currentUser.uid}/friends/${toUid}`).once('value');
-        if (fsnap.exists()) {
-          alert('You are already friends.');
-          hideLoading();
-          return;
-        }
-
-        const alreadySent = await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).once('value');
-        if (alreadySent.exists()) {
-          alert('Friend request already sent.');
-          hideLoading();
-          return;
-        }
-
-        const senderUsername = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'Someone');
-        await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
-          fromUid: currentUser.uid,
-          fromUsername: senderUsername,
-          status: 'pending',
-          timestamp: Date.now()
-        });
-
-        await db.ref(`users/${toUid}/notifications`).push({
-          type: 'friend_request',
-          fromUid: currentUser.uid,
-          message: `${senderUsername} sent you a friend request`,
-          timestamp: Date.now()
-        });
-
-        alert('Friend request sent!');
-      } catch (error) {
-        console.error('Failed to send friend request:', error);
-        alert('Failed to send friend request: ' + (error.message || 'Unknown error'));
-      } finally {
-        hideLoading();
-      }
-    }
-
-    // Cancel friend request
-    function cancelFriendRequest(toUid) {
-      if (!confirm('Are you sure you want to cancel this friend request?')) return;
-      
-      showLoading();
-      
-      db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).remove()
-        .then(() => {
-          alert('Friend request cancelled.');
-        })
-        .catch(err => {
-          alert('Error cancelling request: ' + err.message);
-        })
-        .finally(() => {
-          hideLoading();
-        });
-    }
-
-    // Listen for incoming friend requests
-    function listenFriendRequests() {
-      const ref = db.ref(`users/${currentUser.uid}/friendRequests`);
-      
-      ref.on('value', snapshot => {
-        const requests = snapshot.val() || {};
-        pendingRequests = requests;
-        renderFriendRequests(requests);
-        
-        const pendingCount = Object.keys(requests).filter(
-          k => requests[k].status === 'pending'
-        ).length;
-        
-        if (pendingCount > 0) {
-          reqCountBadge.style.display = 'inline-block';
-          reqCountBadge.textContent = pendingCount;
-        } else {
-          reqCountBadge.style.display = 'none';
-        }
-      }, error => {
-        console.error("Error listening to friend requests:", error);
-      });
-    }
-
-    // Render friend requests UI
-    function renderFriendRequests(requests) {
-      friendRequestsContainer.innerHTML = '';
-      
-      if (Object.keys(requests).length === 0) {
-        friendRequestsContainer.innerHTML = '<div style="padding:12px;color:#666;">No pending friend requests</div>';
+    // Start exam
+    function startExam() {
+      if (!studentNameInput.value || !fatherNameInput.value || !dobInput.value || 
+          !symbolNoInput.value || !examSubjectSelect.value || !selectedPhoto) {
+        alert('Please fill all fields and upload photo');
         return;
       }
       
-      for (const fromUid in requests) {
-        const request = requests[fromUid];
-        if (request.status !== 'pending') continue;
+      showLoading();
+      
+      // Upload photo
+      const storageRef = storage.ref(`student_photos/${currentUser.uid}_${Date.now()}`);
+      storageRef.put(selectedPhoto).then(snapshot => {
+        return snapshot.ref.getDownloadURL();
+      }).then(photoUrl => {
+        currentExam = {
+          ...currentExam,
+          studentName: studentNameInput.value,
+          fatherName: fatherNameInput.value,
+          dob: dobInput.value,
+          symbolNo: symbolNoInput.value,
+          subject: examSubjectSelect.options[examSubjectSelect.selectedIndex].text,
+          subjectKey: examSubjectSelect.value,
+          photoUrl: photoUrl,
+          timestamp: Date.now(),
+          userId: currentUser.uid
+        };
         
-        db.ref(`users/${fromUid}`).once('value').then(snap => {
-          const sender = snap.val() || { 
-            username: request.fromUsername || 'Unknown', 
-            email: '' 
-          };
+        // Load questions for exam
+        loadExamQuestions();
+      }).catch(error => {
+        hideLoading();
+        alert('Failed to upload photo: ' + error.message);
+      });
+    }
+
+    // Load questions for exam
+    function loadExamQuestions() {
+      db.ref(`questions/${currentExam.courseKey}/${currentExam.subjectKey}`).once('value').then(snap => {
+        const questions = snap.val();
+        if (!questions || Object.keys(questions).length === 0) {
+          hideLoading();
+          alert('No questions available for this subject yet');
+          return;
+        }
+        
+        // Convert to array and shuffle
+        const questionsArray = Object.values(questions);
+        shuffleArray(questionsArray);
+        
+        // Select first 10 questions (or all if less than 10)
+        currentExam.questions = questionsArray.slice(0, Math.min(10, questionsArray.length));
+        currentExam.answers = {};
+        currentExam.startTime = Date.now();
+        
+        // Start exam
+        startExamTimer();
+        displayExamQuestions();
+        showPage('exam');
+        hideLoading();
+      }).catch(error => {
+        hideLoading();
+        alert('Failed to load questions: ' + error.message);
+      });
+    }
+
+    // Shuffle array
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Start exam timer
+    function startExamTimer() {
+      examTimeLeft = 1800; // 30 minutes
+      updateTimerDisplay();
+      
+      if (examTimerInterval) clearInterval(examTimerInterval);
+      examTimerInterval = setInterval(() => {
+        examTimeLeft--;
+        updateTimerDisplay();
+        
+        if (examTimeLeft <= 0) {
+          clearInterval(examTimerInterval);
+          submitExam();
+        }
+      }, 1000);
+    }
+
+    // Update timer display
+    function updateTimerDisplay() {
+      const minutes = Math.floor(examTimeLeft / 60);
+      const seconds = examTimeLeft % 60;
+      examTimer.textContent = `Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    // Display exam questions
+    function displayExamQuestions() {
+      examQuestionsContainer.innerHTML = '';
+      
+      currentExam.questions.forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question-container';
+        questionDiv.innerHTML = `
+          <div class="question-text">${index + 1}. ${escapeHtml(question.text)}</div>
+          <div class="option" data-question="${index}" data-option="1">${escapeHtml(question.option1)}</div>
+          <div class="option" data-question="${index}" data-option="2">${escapeHtml(question.option2)}</div>
+          <div class="option" data-question="${index}" data-option="3">${escapeHtml(question.option3)}</div>
+          <div class="option" data-question="${index}" data-option="4">${escapeHtml(question.option4)}</div>
+        `;
+        
+        examQuestionsContainer.appendChild(questionDiv);
+        
+        // Add click handlers for options
+        questionDiv.querySelectorAll('.option').forEach(option => {
+          option.addEventListener('click', (e) => {
+            const questionIndex = parseInt(e.target.dataset.question);
+            const optionIndex = parseInt(e.target.dataset.option);
+            
+            // Deselect all options for this question
+            examQuestionsContainer.querySelectorAll(`.option[data-question="${questionIndex}"]`).forEach(opt => {
+              opt.classList.remove('selected');
+            });
+            
+            // Select clicked option
+            e.target.classList.add('selected');
+            
+            // Save answer
+            currentExam.answers[questionIndex] = optionIndex;
+          });
+        });
+      });
+    }
+
+    // Submit exam
+    function submitExam() {
+      if (examTimerInterval) clearInterval(examTimerInterval);
+      
+      // Calculate score
+      let correctCount = 0;
+      currentExam.questions.forEach((question, index) => {
+        if (currentExam.answers[index] == question.correctOption) {
+          correctCount++;
+        }
+      });
+      
+      const percentage = Math.round((correctCount / currentExam.questions.length) * 100);
+      let remarks = '';
+      
+      if (percentage >= 90) remarks = 'A+';
+      else if (percentage >= 80) remarks = 'A';
+      else if (percentage >= 70) remarks = 'B+';
+      else if (percentage >= 60) remarks = 'B';
+      else if (percentage >= 50) remarks = 'C+';
+      else if (percentage >= 40) remarks = 'C';
+      else if (percentage >= 20) remarks = 'D';
+      else remarks = 'NG';
+      
+      currentExam.score = correctCount;
+      currentExam.totalQuestions = currentExam.questions.length;
+      currentExam.percentage = percentage;
+      currentExam.remarks = remarks;
+      currentExam.endTime = Date.now();
+      
+      // Save result
+      saveExamResult();
+    }
+
+    // Save exam result
+    function saveExamResult() {
+      showLoading();
+      
+      db.ref(`results/${currentUser.uid}`).push().set(currentExam)
+        .then(() => {
+          displayExamResult();
+          showPage('examResult');
+          hideLoading();
+        })
+        .catch(error => {
+          hideLoading();
+          alert('Failed to save result: ' + error.message);
+        });
+    }
+
+    // Display exam result
+    function displayExamResult() {
+      resultPhoto.src = currentExam.photoUrl;
+      resultName.textContent = currentExam.studentName;
+      resultFather.textContent = currentExam.fatherName;
+      resultDob.textContent = currentExam.dob;
+      resultSymbol.textContent = currentExam.symbolNo;
+      resultCourse.textContent = currentExam.course;
+      resultSubject.textContent = currentExam.subject;
+      totalQuestions.textContent = currentExam.totalQuestions;
+      correctAnswers.textContent = currentExam.score;
+      examScore.textContent = currentExam.score;
+      examPercentage.textContent = currentExam.percentage + '%';
+      examRemarks.textContent = currentExam.remarks;
+    }
+
+    // Load notices
+    function loadNotices() {
+      showLoading('notices-container');
+      
+      db.ref('notices').orderByChild('timestamp').limitToLast(20).once('value').then(snap => {
+        const notices = snap.val() || {};
+        noticesContainer.innerHTML = '';
+        
+        Object.entries(notices).reverse().forEach(([id, notice]) => {
+          const noticeDiv = document.createElement('div');
+          noticeDiv.className = 'notice-item';
           
-          const item = document.createElement('div');
-          item.className = 'request-item';
-          item.innerHTML = `
-            <div class="user-avatar"><i class="fas fa-user"></i></div>
+          let imageHtml = '';
+          if (notice.imageUrl) {
+            imageHtml = `<img src="${notice.imageUrl}" class="notice-image" alt="Notice image">`;
+          }
+          
+          noticeDiv.innerHTML = `
+            <div class="notice-title">${escapeHtml(notice.title)}</div>
+            <div class="notice-message">${escapeHtml(notice.message)}</div>
+            ${imageHtml}
+            <div class="notice-date">${formatDate(notice.timestamp)}</div>
+          `;
+          
+          noticesContainer.appendChild(noticeDiv);
+        });
+        
+        hideLoading('notices-container');
+      }).catch(error => {
+        hideLoading('notices-container');
+        console.error("Error loading notices:", error);
+      });
+    }
+
+    // Load books
+    function loadBooks() {
+      showLoading('books-container');
+      
+      db.ref('books').once('value').then(snap => {
+        const books = snap.val() || {};
+        booksContainer.innerHTML = '';
+        
+        Object.entries(books).forEach(([id, book]) => {
+          const bookDiv = document.createElement('div');
+          bookDiv.className = 'book-item';
+          bookDiv.dataset.bookId = id;
+          bookDiv.innerHTML = `
+            <div class="book-title">${escapeHtml(book.title)}</div>
+            <div class="book-desc">${escapeHtml(book.description)}</div>
+          `;
+          
+          bookDiv.addEventListener('click', () => {
+            window.open(book.fileUrl, '_blank');
+          });
+          
+          booksContainer.appendChild(bookDiv);
+        });
+        
+        hideLoading('books-container');
+      }).catch(error => {
+        hideLoading('books-container');
+        console.error("Error loading books:", error);
+      });
+    }
+
+    // Load user results
+    function loadUserResults() {
+      showLoading('results-list-container');
+      
+      db.ref(`results/${currentUser.uid}`).orderByChild('timestamp').once('value').then(snap => {
+        const results = snap.val() || {};
+        resultsListContainer.innerHTML = '';
+        
+        Object.entries(results).reverse().forEach(([id, result]) => {
+          const resultDiv = document.createElement('div');
+          resultDiv.className = 'user-item clickable';
+          resultDiv.innerHTML = `
+            <div class="user-avatar"><i class="fas fa-poll"></i></div>
             <div class="user-info">
-              <div class="user-name">${escapeHtml(sender.username)}</div>
-              <div class="user-status">${escapeHtml(sender.email || request.fromUsername || '')}</div>
-            </div>
-            <div class="request-actions">
-              <button class="accept-btn" data-uid="${fromUid}">Accept</button>
-              <button class="decline-btn" data-uid="${fromUid}">Decline</button>
+              <div class="user-name">${escapeHtml(result.course)} - ${escapeHtml(result.subject)}</div>
+              <div class="user-status">Score: ${result.score}/${result.totalQuestions} (${result.percentage}%) - ${result.remarks}</div>
+              <div class="last-message">${formatDate(result.timestamp)}</div>
             </div>
           `;
           
-          friendRequestsContainer.appendChild(item);
-          
-          item.querySelector('.accept-btn').addEventListener('click', (e) => { 
-            e.stopPropagation(); 
-            acceptFriendRequest(fromUid); 
+          resultDiv.addEventListener('click', () => {
+            currentExam = result;
+            displayExamResult();
+            showPage('examResult');
           });
           
-          item.querySelector('.decline-btn').addEventListener('click', (e) => { 
-            e.stopPropagation(); 
-            declineFriendRequest(fromUid); 
-          });
+          resultsListContainer.appendChild(resultDiv);
         });
-      }
-    }
-
-    // Accept friend request
-    function acceptFriendRequest(friendUid) {
-      if (!confirm('Accept this friend request?')) return;
-      
-      showLoading();
-      
-      const updates = {};
-      updates[`users/${currentUser.uid}/friends/${friendUid}`] = true;
-      updates[`users/${friendUid}/friends/${currentUser.uid}`] = true;
-      updates[`users/${currentUser.uid}/friendRequests/${friendUid}`] = null;
-      updates[`users/${friendUid}/friendRequests/${currentUser.uid}`] = null;
-
-      db.ref().update(updates)
-        .then(() => {
-          alert('Friend request accepted!');
-          loadFriendsList();
-          loadFriendsListForPage();
-          
-          db.ref(`users/${friendUid}/notifications`).push({
-            type: 'request_accepted',
-            fromUid: currentUser.uid,
-            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} accepted your friend request.`,
-            timestamp: Date.now()
-          });
-        })
-        .catch(err => {
-          alert('Error accepting request: ' + err.message);
-        })
-        .finally(() => {
-          hideLoading();
-        });
-    }
-
-    // Decline friend request
-    function declineFriendRequest(friendUid) {
-      if (!confirm('Decline this friend request?')) return;
-      
-      showLoading();
-      
-      db.ref(`users/${currentUser.uid}/friendRequests/${friendUid}`).remove()
-        .then(() => {
-          db.ref(`users/${friendUid}/notifications`).push({
-            type: 'request_rejected',
-            fromUid: currentUser.uid,
-            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} declined your friend request.`,
-            timestamp: Date.now()
-          });
-          alert('Friend request declined!');
-        })
-        .catch(err => {
-          alert('Error declining request: ' + err.message);
-        })
-        .finally(() => {
-          hideLoading();
-        });
-    }
-
-    // Load chat messages
-    function loadChatMessages(friendId) {
-      showLoading('chat-messages');
-      
-      const chatId = [currentUser.uid, friendId].sort().join('_');
-      const ref = db.ref(`chats/${chatId}`);
-      
-      ref.off();
-      chatMessages.innerHTML = '';
-      
-      ref.orderByChild('timestamp').on('child_added', snap => {
-        const message = snap.val();
-        addMessageToChat(message);
-        hideLoading('chat-messages');
         
-        // Store last message
-        lastMessages[friendId] = message;
-        updateFriendsListLastMessages();
-      }, error => {
-        hideLoading('chat-messages');
-        console.error("Error loading messages:", error);
+        hideLoading('results-list-container');
+      }).catch(error => {
+        hideLoading('results-list-container');
+        console.error("Error loading results:", error);
       });
     }
 
-    // Update last messages in friends list
-    function updateFriendsListLastMessages() {
-      const friendItems = document.querySelectorAll('.user-item');
-      friendItems.forEach(item => {
-        const uid = item.getAttribute('data-uid');
-        if (uid && lastMessages[uid]) {
-          const lastMsgDiv = item.querySelector('.last-message');
-          if (lastMsgDiv) {
-            lastMsgDiv.textContent = lastMessages[uid].text;
+    // Load admin data
+    function loadAdminData() {
+      loadQuestions();
+      loadAdminNotices();
+      loadAdminBooks();
+      loadAdminResults();
+    }
+
+    // Load questions for admin
+    function loadQuestions() {
+      showLoading('admin-questions-list');
+      
+      db.ref(`questions/${currentAdminCourse}/${currentAdminSubject}`).once('value').then(snap => {
+        const questions = snap.val() || {};
+        adminQuestionsList.innerHTML = '<h3>Questions</h3>';
+        
+        if (Object.keys(questions).length === 0) {
+          adminQuestionsList.innerHTML += '<div style="padding:12px;color:#666;">No questions yet</div>';
+          hideLoading('admin-questions-list');
+          return;
+        }
+        
+        Object.entries(questions).forEach(([id, question]) => {
+          const questionDiv = document.createElement('div');
+          questionDiv.className = 'question-list-item';
+          questionDiv.innerHTML = `
+            <div><strong>${escapeHtml(question.text)}</strong></div>
+            <div style="margin-top:5px; font-size:14px;">
+              <span style="color:${question.correctOption == 1 ? 'green' : 'inherit'}">1. ${escapeHtml(question.option1)}</span> | 
+              <span style="color:${question.correctOption == 2 ? 'green' : 'inherit'}">2. ${escapeHtml(question.option2)}</span> | 
+              <span style="color:${question.correctOption == 3 ? 'green' : 'inherit'}">3. ${escapeHtml(question.option3)}</span> | 
+              <span style="color:${question.correctOption == 4 ? 'green' : 'inherit'}">4. ${escapeHtml(question.option4)}</span>
+            </div>
+          `;
+          
+          questionDiv.addEventListener('click', () => {
+            if (confirm('Delete this question?')) {
+              db.ref(`questions/${currentAdminCourse}/${currentAdminSubject}/${id}`).remove()
+                .then(() => loadQuestions())
+                .catch(error => alert('Failed to delete question: ' + error.message));
+            }
+          });
+          
+          adminQuestionsList.appendChild(questionDiv);
+        });
+        
+        hideLoading('admin-questions-list');
+      }).catch(error => {
+        hideLoading('admin-questions-list');
+        console.error("Error loading questions:", error);
+      });
+    }
+
+    // Add question
+    function addQuestion() {
+      const text = questionTextInput.value.trim();
+      const option1 = option1Input.value.trim();
+      const option2 = option2Input.value.trim();
+      const option3 = option3Input.value.trim();
+      const option4 = option4Input.value.trim();
+      const correctOption = correctOptionSelect.value;
+      
+      if (!text || !option1 || !option2 || !option3 || !option4) {
+        alert('Please fill all fields');
+        return;
+      }
+      
+      showLoading('admin-questions-list');
+      
+      const question = {
+        text: text,
+        option1: option1,
+        option2: option2,
+        option3: option3,
+        option4: option4,
+        correctOption: parseInt(correctOption),
+        timestamp: Date.now()
+      };
+      
+      db.ref(`questions/${currentAdminCourse}/${currentAdminSubject}`).push(question)
+        .then(() => {
+          questionTextInput.value = '';
+          option1Input.value = '';
+          option2Input.value = '';
+          option3Input.value = '';
+          option4Input.value = '';
+          loadQuestions();
+        })
+        .catch(error => {
+          hideLoading('admin-questions-list');
+          alert('Failed to add question: ' + error.message);
+        });
+    }
+
+    // Load admin notices
+    function loadAdminNotices() {
+      showLoading('admin-notices-list');
+      
+      db.ref('notices').orderByChild('timestamp').limitToLast(20).once('value').then(snap => {
+        const notices = snap.val() || {};
+        adminNoticesList.innerHTML = '<h3>Existing Notices</h3>';
+        
+        if (Object.keys(notices).length === 0) {
+          adminNoticesList.innerHTML += '<div style="padding:12px;color:#666;">No notices yet</div>';
+          hideLoading('admin-notices-list');
+          return;
+        }
+        
+        Object.entries(notices).reverse().forEach(([id, notice]) => {
+          const noticeDiv = document.createElement('div');
+          noticeDiv.className = 'question-list-item';
+          
+          let imageHtml = '';
+          if (notice.imageUrl) {
+            imageHtml = `<img src="${notice.imageUrl}" style="max-width:100%; border-radius:4px; margin-top:5px;">`;
           }
-        }
+          
+          noticeDiv.innerHTML = `
+            <div><strong>${escapeHtml(notice.title)}</strong></div>
+            <div style="margin:5px 0;">${escapeHtml(notice.message)}</div>
+            ${imageHtml}
+            <div style="text-align:right; font-size:12px; color:#666; margin-top:5px;">
+              ${formatDate(notice.timestamp)}
+            </div>
+          `;
+          
+          noticeDiv.addEventListener('click', () => {
+            if (confirm('Delete this notice?')) {
+              db.ref(`notices/${id}`).remove()
+                .then(() => loadAdminNotices())
+                .catch(error => alert('Failed to delete notice: ' + error.message));
+            }
+          });
+          
+          adminNoticesList.appendChild(noticeDiv);
+        });
+        
+        hideLoading('admin-notices-list');
+      }).catch(error => {
+        hideLoading('admin-notices-list');
+        console.error("Error loading notices:", error);
       });
     }
 
-    // Add message to chat UI
-    function addMessageToChat(message) {
-      const div = document.createElement('div');
-      div.className = 'message ' + 
-        (message.sender === currentUser.uid ? 'sent' : 'received');
+    // Add notice
+    function addNotice() {
+      const title = noticeTitleInput.value.trim();
+      const message = noticeMessageInput.value.trim();
       
-      let content = `<div>${escapeHtml(message.text)}</div>`;
-      
-      if (message.imageUrl) {
-        content += `<img src="${message.imageUrl}" class="message-image" alt="Sent image">`;
+      if (!title || !message) {
+        alert('Please fill title and message');
+        return;
       }
       
-      div.innerHTML = content + `
-        <div class="message-time">${formatTime(message.timestamp)}</div>
-      `;
+      showLoading('admin-notices-list');
       
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      if (selectedNoticePhoto) {
+        // Upload image
+        const storageRef = storage.ref(`notice_images/${Date.now()}`);
+        storageRef.put(selectedNoticePhoto).then(snapshot => {
+          return snapshot.ref.getDownloadURL();
+        }).then(imageUrl => {
+          return saveNotice(title, message, imageUrl);
+        }).catch(error => {
+          hideLoading('admin-notices-list');
+          alert('Failed to upload image: ' + error.message);
+        });
+      } else {
+        saveNotice(title, message);
+      }
     }
 
-    // Format time for messages
-    function formatTime(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // Save notice to database
+    function saveNotice(title, message, imageUrl = null) {
+      const notice = {
+        title: title,
+        message: message,
+        timestamp: Date.now()
+      };
+      
+      if (imageUrl) {
+        notice.imageUrl = imageUrl;
+      }
+      
+      db.ref('notices').push(notice)
+        .then(() => {
+          noticeTitleInput.value = '';
+          noticeMessageInput.value = '';
+          noticePhotoPreview.innerHTML = '<i class="fas fa-image" style="color:#ccc;"></i>';
+          selectedNoticePhoto = null;
+          loadAdminNotices();
+        })
+        .catch(error => {
+          hideLoading('admin-notices-list');
+          alert('Failed to add notice: ' + error.message);
+        });
     }
 
-    // Send message
-    async function sendMessage() {
-      const text = messageInput.value.trim();
-      if (!text || !currentChatFriend) return;
+    // Load admin books
+    function loadAdminBooks() {
+      showLoading('admin-books-list');
       
-      showLoading();
-      
-      try {
-        const [meSnap, friendSnap] = await Promise.all([
-          db.ref(`users/${currentUser.uid}/blocked`).once('value'),
-          db.ref(`users/${currentChatFriend.id}/blocked`).once('value')
-        ]);
+      db.ref('books').once('value').then(snap => {
+        const books = snap.val() || {};
+        adminBooksList.innerHTML = '<h3>Existing Books</h3>';
         
-        const meBlocked = meSnap.exists() && meSnap.val() === true;
-        const friendBlocked = friendSnap.exists() && friendSnap.val() === true;
-
-        if (meBlocked) {
-          alert('You are blocked and cannot send messages.');
-          hideLoading();
+        if (Object.keys(books).length === 0) {
+          adminBooksList.innerHTML += '<div style="padding:12px;color:#666;">No books yet</div>';
+          hideLoading('admin-books-list');
           return;
         }
         
-        if (friendBlocked) {
-          alert('This user is blocked. Cannot send messages.');
-          hideLoading();
-          return;
-        }
+        Object.entries(books).forEach(([id, book]) => {
+          const bookDiv = document.createElement('div');
+          bookDiv.className = 'question-list-item';
+          bookDiv.innerHTML = `
+            <div><strong>${escapeHtml(book.title)}</strong> (${book.course})</div>
+            <div style="margin:5px 0;">${escapeHtml(book.description)}</div>
+            <div style="text-align:right; font-size:12px; color:#666;">
+              <a href="${book.fileUrl}" target="_blank">View PDF</a>
+            </div>
+          `;
+          
+          bookDiv.addEventListener('click', () => {
+            if (confirm('Delete this book?')) {
+              db.ref(`books/${id}`).remove()
+                .then(() => loadAdminBooks())
+                .catch(error => alert('Failed to delete book: ' + error.message));
+            }
+          });
+          
+          adminBooksList.appendChild(bookDiv);
+        });
+        
+        hideLoading('admin-books-list');
+      }).catch(error => {
+        hideLoading('admin-books-list');
+        console.error("Error loading books:", error);
+      });
+    }
 
-        const chatId = [currentUser.uid, currentChatFriend.id].sort().join('_');
-        const message = {
-          text: text,
-          sender: currentUser.uid,
+    // Add book
+    function addBook() {
+      const title = bookTitleInput.value.trim();
+      const description = bookDescInput.value.trim();
+      const course = bookCourseSelect.value;
+      
+      if (!title || !description || !selectedBookFile) {
+        alert('Please fill all fields and select PDF file');
+        return;
+      }
+      
+      showLoading('admin-books-list');
+      
+      // Upload PDF
+      const storageRef = storage.ref(`books/${Date.now()}_${selectedBookFile.name}`);
+      storageRef.put(selectedBookFile).then(snapshot => {
+        return snapshot.ref.getDownloadURL();
+      }).then(fileUrl => {
+        const book = {
+          title: title,
+          description: description,
+          course: course,
+          fileUrl: fileUrl,
           timestamp: Date.now()
         };
         
-        await db.ref(`chats/${chatId}`).push(message);
-        messageInput.value = '';
-        
-        // Update last message
-        lastMessages[currentChatFriend.id] = message;
-        updateFriendsListLastMessages();
-      } catch (error) {
-        alert('Failed to send message: ' + error.message);
-      } finally {
-        hideLoading();
-      }
+        return db.ref('books').push(book);
+      }).then(() => {
+        bookTitleInput.value = '';
+        bookDescInput.value = '';
+        bookFileUpload.value = '';
+        selectedBookFile = null;
+        loadAdminBooks();
+      }).catch(error => {
+        hideLoading('admin-books-list');
+        alert('Failed to upload book: ' + error.message);
+      });
     }
 
-    // Admin: view all chats
-    function viewAllChats() {
-      if (!currentUserData || currentUserData.role !== 'admin') {
-        alert('Admin access required');
-        return;
-      }
+    // Load admin results
+    function loadAdminResults() {
+      showLoading('admin-results-list');
       
-      showLoading('admin-output');
-      
-      db.ref('chats').once('value').then(snap => {
-        const chats = snap.val() || {};
-        let outputHtml = '';
+      db.ref('results').orderByChild('timestamp').limitToLast(50).once('value').then(snap => {
+        const results = snap.val() || {};
+        adminResultsList.innerHTML = '<h3>Student Results</h3>';
         
-        for (const chatId in chats) {
-          const messages = chats[chatId] || {};
-          outputHtml += `
-            <div style="padding:6px;border-bottom:1px solid #eee;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <strong>${chatId}</strong>
-                <button data-chat="${chatId}" class="admin-btn" style="padding:5px 10px; font-size:12px;">View</button>
-              </div>
-              <div id="chat-${escapeHtml(chatId)}" style="display:none; margin-top:8px; padding-left:8px;"></div>
-            </div>
-          `;
+        if (Object.keys(results).length === 0) {
+          adminResultsList.innerHTML += '<div style="padding:12px;color:#666;">No results yet</div>';
+          hideLoading('admin-results-list');
+          return;
         }
         
-        adminOutput.innerHTML = outputHtml || '<div>No chats yet</div>';
+        // Group by user
+        const userResults = {};
         
-        const viewButtons = adminOutput.querySelectorAll('[data-chat]');
-        viewButtons.forEach(button => {
-          button.addEventListener('click', (e) => {
-            const chatId = e.target.getAttribute('data-chat');
-            toggleChatView(chatId);
-          });
+        Object.entries(results).forEach(([id, result]) => {
+          if (!userResults[result.userId]) {
+            userResults[result.userId] = {
+              name: result.studentName,
+              results: []
+            };
+          }
+          userResults[result.userId].results.push(result);
         });
         
-        hideLoading('admin-output');
+        // Display results
+        Object.entries(userResults).forEach(([userId, userData]) => {
+          const userDiv = document.createElement('div');
+          userDiv.className = 'question-list-item';
+          userDiv.innerHTML = `
+            <div><strong>${escapeHtml(userData.name)}</strong></div>
+            <div style="margin-top:5px;">
+              ${userData.results.map(result => `
+                <div style="margin-bottom:5px; font-size:14px;">
+                  ${result.course} - ${result.subject}: ${result.score}/${result.totalQuestions} (${result.percentage}%) - ${result.remarks}
+                  <span style="color:#666; font-size:12px;">${formatDate(result.timestamp)}</span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          
+          adminResultsList.appendChild(userDiv);
+        });
+        
+        hideLoading('admin-results-list');
       }).catch(error => {
-        hideLoading('admin-output');
-        console.error("Error loading chats:", error);
+        hideLoading('admin-results-list');
+        console.error("Error loading results:", error);
       });
     }
 
-    // Toggle chat view in admin panel
-    function toggleChatView(chatId) {
-      const container = adminOutput.querySelector(`#chat-${cssEscape(chatId)}`);
-      if (!container) return;
-      
-      if (container.style.display === 'block') {
-        container.style.display = 'none';
-        return;
-      }
-      
-      container.innerHTML = 'Loading messages...';
-      container.style.display = 'block';
-      
-      db.ref(`chats/${chatId}`).once('value').then(snap => {
-        const messages = snap.val() || {};
-        let messagesHtml = '';
-        
-        for (const mid in messages) {
-          const message = messages[mid];
-          messagesHtml += `
-            <div style="padding:8px;border-bottom:1px dashed #eee;">
-              <div style="font-size:13px;">
-                <strong>${escapeHtml(message.sender)}</strong>
-                <span style="color:#888;font-size:12px;">
-                  ${new Date(message.timestamp).toLocaleString()}
-                </span>
-              </div>
-              <div style="margin-top:6px;">${escapeHtml(message.text)}</div>
-            </div>
-          `;
-        }
-        
-        container.innerHTML = messagesHtml || '<div>No messages</div>';
-      });
-    }
-
-    // Admin: view all users
-    function viewAllUsers() {
-      if (!currentUserData || currentUserData.role !== 'admin') {
-        alert('Admin access required');
-        return;
-      }
-      
-      showLoading('admin-output');
-      
-      db.ref('users').once('value').then(snap => {
-        const users = snap.val() || {};
-        let outputHtml = '';
-        
-        for (const uid in users) {
-          const user = users[uid] || {};
-          outputHtml += `
-            <div style="padding:8px;border-bottom:1px solid #eee;">
-              <div>
-                <strong>${escapeHtml(user.username || uid)}</strong>
-                — ${escapeHtml(user.email || '')}
-              </div>
-              <div style="margin-top:6px;">
-                Role: ${escapeHtml(user.role || 'user')}
-                — Blocked: ${user.blocked ? 'yes' : 'no'}
-              </div>
-            </div>
-          `;
-        }
-        
-        adminOutput.innerHTML = outputHtml || '<div>No users</div>';
-        hideLoading('admin-output');
-      }).catch(error => {
-        hideLoading('admin-output');
-        console.error("Error loading users:", error);
-      });
+    // Format date
+    function formatDate(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleString();
     }
 
     // Show loading indicator
@@ -1940,11 +2458,6 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-    }
-
-    // Utility: escape for CSS IDs
-    function cssEscape(str) {
-      return str.replace(/[^a-zA-Z0-9_-]/g, '_');
     }
 
     // Initialize the app
