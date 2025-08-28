@@ -1,3 +1,5 @@
+code fix 
+
 <!DOCTYPE html>
 <html lang="ne">
 <head>
@@ -8,174 +10,43 @@
   <style>
     * { box-sizing: border-box; font-family: Arial, sans-serif; }
     body { margin:0; padding:0; background:#f0f2f5; }
-    .container { display:flex; flex-direction:column; min-height:100vh; max-width:600px; margin:0 auto; background:#fff; position: relative; }
+    .container { display:flex; flex-direction:column; min-height:100vh; }
 
-    /* Login Page Header */
-    .login-header { 
-      background:#1877f2; 
-      padding:15px; 
-      text-align:center; 
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .login-logo { 
-      font-size:24px; 
-      font-weight:bold; 
-      color:#fff; 
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    }
+    header { background:#fff; padding:10px 20px; box-shadow:0 1px 3px rgba(0,0,0,.1); display:flex; justify-content:space-between; align-items:center; }
+    .logo { font-size:24px; font-weight:bold; color:#1877f2; }
 
-    /* Main Login Content */
-    .main-content { 
-      display:flex; 
-      flex:1; 
-      align-items:center; 
-      justify-content:center; 
-      padding:20px; 
-      background: url('https://www.transparenttextures.com/patterns/45-degree-fabric-light.png') #f0f2f5;
-    }
-    .login-container { 
-      background:#fff; 
-      border-radius:8px; 
-      box-shadow:0 2px 4px rgba(0,0,0,.1); 
-      padding:20px; 
-      width:100%; 
-      max-width:400px; 
-      text-align:center; 
-    }
-    .login-container h1 { 
-      font-size:18px; 
-      margin-bottom:20px; 
-      color:#1c1e21; 
-    }
-    .input-field { 
-      margin-bottom:15px; 
-      text-align:center; 
-    }
-    .input-field input { 
-      width:100%; 
-      padding:12px; 
-      border:1px solid #dddfe2; 
-      border-radius:6px; 
-      font-size:16px; 
-      text-align:center;
-    }
-    .login-btn { 
-      background:#1877f2; 
-      color:#fff; 
-      border:none; 
-      border-radius:6px; 
-      padding:12px; 
-      width:100%; 
-      font-size:18px; 
-      font-weight:bold; 
-      cursor:pointer; 
-      margin-bottom:15px; 
-    }
-    .create-account-btn { 
-      background:#42b72a; 
-      color:#fff; 
-      border:none; 
-      border-radius:6px; 
-      padding:12px; 
-      width:100%; 
-      font-size:16px; 
-      cursor:pointer; 
-    }
-    .forgot-password { 
-      color:#1877f2; 
-      text-decoration:none; 
-      display:block; 
-      margin-bottom:10px; 
-      text-align:center;
-    }
-    .divider {
-      height:1px;
-      background:#dadde1;
-      margin:20px 0;
-    }
+    .main-content { display:flex; flex:1; align-items:center; justify-content:center; padding:20px; }
+    .login-container { background:#fff; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,.1); padding:20px; width:400px; text-align:center; }
+    .login-container h1 { font-size:18px; margin-bottom:20px; color:#1c1e21; }
+    .input-field { margin-bottom:15px; text-align:left; }
+    .input-field input { width:100%; padding:12px; border:1px solid #dddfe2; border-radius:6px; font-size:16px; }
+    .login-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:12px; width:100%; font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:15px; }
+    .create-account-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:12px; width:100%; font-size:16px; cursor:pointer; }
+    .forgot-password { color:#1877f2; text-decoration:none; display:block; margin-bottom:10px; }
 
-    /* App Container */
-    .app-container { display:none; flex-direction:column; width:100%; height:100vh; }
+    .app-container { display:none; flex-direction:column; width:100%; max-width:1200px; margin:0 auto; }
 
-    /* Header styles */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 15px;
-      background: #1877f2;
-      color: white;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    
-    .logo {
-      font-weight: bold;
-      font-size: 18px;
-    }
-    
-    .header-icons {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-    
-    .header-icon {
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    
-    .search-container {
-      position: relative;
-    }
-    
-    .search-bar { 
-      display:flex; 
-      align-items:center; 
-      background:rgba(255,255,255,0.2); 
-      border-radius:50px; 
-      padding:5px 10px; 
-      width: 180px;
-    }
-    
-    .search-bar input { 
-      border:none; 
-      background:none; 
-      outline:none; 
-      width:100%; 
-      padding:5px; 
-      color: white;
-      font-size: 14px;
-    }
-    
-    .search-bar input::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-    
+    .search-bar { display:flex; align-items:center; background:#f0f2f5; border-radius:50px; padding:8px 15px; width:100%; max-width:500px; }
+    .search-bar input { border:none; background:none; outline:none; width:100%; padding:5px; }
     .profile-dropdown { position:relative; display:inline-block; }
     .profile-btn { background:#e4e6eb; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
 
-    .dropdown-content { display:none; position:absolute; right:0; bottom:100%; background:#fff; min-width:220px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:6px; z-index:2; margin-bottom:10px; }
-    .dropdown-content a, .dropdown-content button { color:#1c1e21; padding:12px 16px; text-decoration:none; display:block; font-size:14px; background:none; border:none; width:100%; text-align:left; cursor:pointer; border-bottom:1px solid #eee; }
+    .dropdown-content { display:none; position:absolute; right:0; background:#fff; min-width:220px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:6px; z-index:2; }
+    .dropdown-content a, .dropdown-content button { color:#1c1e21; padding:10px 14px; text-decoration:none; display:block; font-size:14px; background:none; border:none; width:100%; text-align:left; cursor:pointer; }
     .dropdown-content a:hover, .dropdown-content button:hover { background:#f0f2f5; }
-    .dropdown-content button:last-child { border-bottom:none; }
 
-    .content { display:flex; flex-direction:column; flex:1; overflow:hidden; position: relative; }
-    .page { display:none; flex-direction:column; flex:1; overflow-y:auto; }
-    .page.active { display:flex; }
+    .content { display:flex; gap:20px; padding:20px; }
+    .left-column { width:34%; }
+    .right-column { flex:1; }
 
-    .card { background:#fff; border-radius:8px; padding:15px; box-shadow:0 1px 2px rgba(0,0,0,.08); margin-bottom:15px; }
-    .users-list h2, .friend-requests h2 { margin:0 0 12px 0; color:#1c1e21; font-size:16px; }
+    .card { background:#fff; border-radius:8px; padding:15px; box-shadow:0 1px 2px rgba(0,0,0,.08); margin-bottom:20px; }
+    .users-list h2, .friend-requests h2 { margin:0 0 12px 0; color:#1c1e21; }
 
     .user-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #eee; cursor:default; }
-    .user-avatar { width:40px; height:40px; border-radius:50%; background:#e4e6eb; display:flex; align-items:center; justify-content:center; color:#1877f2; position: relative; }
+    .user-avatar { width:40px; height:40px; border-radius:50%; background:#e4e6eb; display:flex; align-items:center; justify-content:center; color:#1877f2; }
     .user-info { flex:1; }
-    .user-name { font-weight:bold; font-size:15px; }
+    .user-name { font-weight:bold; }
     .user-status { font-size:12px; color:#65676b; }
-    .last-message { font-size: 13px; color: #65676b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .clickable { cursor: pointer; }
 
     .add-friend-btn, .cancel-request-btn, .make-admin-btn, .block-btn, .unblock-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; }
     .cancel-request-btn { background:#ffb400; }
@@ -188,46 +59,42 @@
     .accept-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
     .decline-btn { background:#e4e6eb; color:#1c1e21; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
 
-    .chat-container { display:flex; flex-direction:column; flex:1; height: 100vh; }
-    .chat-header { display:flex; align-items:center; padding:10px 15px; background:#1877f2; color:#fff; position: sticky; top: 0; z-index: 1; }
-    .chat-header-info { flex:1; display:flex; align-items:center; gap:10px; }
-    .chat-header-avatar { width:40px; height:40px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; color:#1877f2; position: relative; }
-    .chat-header-name { font-weight:bold; }
-    .chat-header-actions { display:flex; gap:15px; }
-    .chat-header-action { color:#fff; font-size:18px; cursor: pointer; }
+    .chat-container { display:flex; height:70vh; border:1px solid #ddd; border-radius:8px; overflow:hidden; }
+    .contacts-list { width:30%; background:#fff; border-right:1px solid #ddd; overflow-y:auto; }
+    .chat-area { width:70%; display:flex; flex-direction:column; background:#f8f9fa; }
 
-    .chat-messages { flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; background:#e5ddd5; }
-    .message { max-width:80%; padding:10px 15px; border-radius:18px; position:relative; }
+    .chat-messages { flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+    .message { max-width:70%; padding:10px 15px; border-radius:18px; }
     .received { background:#fff; align-self:flex-start; border-bottom-left-radius:5px; }
-    .sent { background:#dcf8c6; align-self:flex-end; border-bottom-right-radius:5px; }
+    .sent { background:#1877f2; color:#fff; align-self:flex-end; border-bottom-right-radius:5px; }
     .message-time { font-size:11px; color:#65676b; margin-top:5px; text-align:right; }
-    .message-image { max-width: 100%; border-radius: 8px; margin-top: 5px; }
 
-    .message-input-container { display:flex; padding:10px; background:#f0f2f5; align-items:center; position: sticky; bottom: 0; }
-    .message-input { flex:1; display:flex; background:#fff; border-radius:20px; padding:5px 15px; align-items:center; }
-    .message-input input { flex:1; border:none; outline:none; padding:8px; background:none; }
-    .message-input-action { color:#65676b; font-size:20px; margin:0 5px; cursor:pointer; }
-    .send-btn { background:#1877f2; color:#fff; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+    .message-input { display:flex; padding:15px; border-top:1px solid #ddd; background:#fff; }
+    .message-input input { flex:1; padding:12px; border:1px solid #ddd; border-radius:20px; outline:none; }
+    .message-input button { margin-left:10px; padding:12px 20px; background:#1877f2; color:#fff; border:none; border-radius:20px; cursor:pointer; }
 
     /* Bottom navigation bar */
     .bottom-nav { 
-      display: flex;
-      background: #fff;
-      border-top: 1px solid #eee;
-      padding: 8px 0;
-      position: sticky;
+      position: fixed;
       bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
     }
     
     .nav-item {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-decoration: none;
       color: #65676b;
       font-size: 12px;
-      padding: 5px 0;
+      padding: 5px 10px;
     }
     
     .nav-item.active {
@@ -239,29 +106,13 @@
       margin-bottom: 3px;
     }
 
-    /* Badges */
-    .badge { 
-      background:#ff3b30; 
-      color:#fff; 
-      font-size:10px; 
-      padding:2px 5px; 
-      border-radius:10px; 
-      position:absolute; 
-      top:-5px; 
-      right:-5px;
-    }
-    
-    .online-badge {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 10px;
-      height: 10px;
-      background: #31a24c;
-      border: 2px solid white;
-      border-radius: 50%;
-    }
+    /* admin panel */
+    .admin-panel { display:none; }
+    .badge { background:#ff3b30; color:#fff; font-size:12px; padding:2px 6px; border-radius:12px; margin-left:6px; }
 
+    /* notification list */
+    .noti-list { max-height:200px; overflow:auto; }
+    
     /* Loading spinner */
     .spinner {
       border: 4px solid rgba(0, 0, 0, 0.1);
@@ -278,470 +129,47 @@
       100% { transform: rotate(360deg); }
     }
 
-    .you-badge { 
-      font-size:10px; 
-      color:#fff; 
-      background:#6c757d; 
-      padding:2px 6px; 
-      border-radius:8px; 
-      margin-left:5px;
-    }
+    .you-badge { font-size:12px; color:#fff; background:#6c757d; padding:2px 6px; border-radius:8px; margin-left:8px; }
 
-    /* Profile page */
-    .profile-page { padding:15px; }
-    .profile-header { text-align:center; margin-bottom:20px; }
-    .profile-avatar { width:100px; height:100px; border-radius:50%; background:#e4e6eb; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:40px; color:#1877f2; position: relative; }
-    .profile-name { font-size:20px; font-weight:bold; margin-bottom:5px; }
-    .profile-email { color:#65676b; font-size:14px; }
-    .profile-menu { list-style:none; padding:0; margin:0; }
-    .profile-menu li { padding:12px 0; border-bottom:1px solid #eee; }
-    .profile-menu li:last-child { border-bottom:none; }
-    .profile-menu a { text-decoration:none; color:#1c1e21; display:block; }
-
-    /* Admin panel */
-    .admin-panel { display:none; padding:15px; }
-    .admin-panel h2 { margin-top:0; }
-    .admin-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:10px 15px; margin-right:10px; margin-bottom:10px; cursor:pointer; }
-
-    /* Scrollable containers */
-    .scrollable-container {
-      overflow-y: auto;
-      flex: 1;
-      padding-bottom: 60px;
-    }
-
-    /* Search results */
-    .search-results {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: white;
-      z-index: 10;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      max-height: 300px;
-      overflow-y: auto;
-      display: none;
-      width: 250px;
-      border-radius: 8px;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-    }
+    /* small helper for clickable user */
+    .user-item.clickable { cursor:pointer; }
     
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 400px;
-    }
-    
-    .modal-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-    
-    .modal-input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-    
-    .modal-actions {
+    /* Chat action buttons */
+    .chat-actions {
       display: flex;
-      justify-content: flex-end;
-      gap: 10px;
+      justify-content: space-around;
+      padding: 10px 0;
+      background: #fff;
+      border-top: 1px solid #eee;
     }
     
-    .modal-btn {
-      padding: 8px 15px;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-    }
-    
-    .modal-btn-primary {
-      background: #1877f2;
-      color: white;
-    }
-    
-    .modal-btn-secondary {
-      background: #e4e6eb;
-      color: #1c1e21;
-    }
-
-    /* Exam styles */
-    .exam-container {
-      padding: 15px;
-    }
-    
-    .exam-form {
-      background: white;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    }
-    
-    .exam-form h2 {
-      margin-top: 0;
-      text-align: center;
-    }
-    
-    .form-group {
-      margin-bottom: 15px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-    
-    .form-group .photo-upload {
+    .chat-action-btn {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-    }
-    
-    .form-group .photo-preview {
-      width: 50px;
-      height: 50px;
-      border-radius: 4px;
-      border: 1px dashed #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    
-    .form-group .photo-preview img {
-      max-width: 100%;
-      max-height: 100%;
-    }
-    
-    .exam-start-btn {
-      background: #1877f2;
-      color: white;
+      background: none;
       border: none;
-      border-radius: 6px;
-      padding: 12px;
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    
-    .question-container {
-      padding: 15px;
-      background: white;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    }
-    
-    .question-text {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    
-    .option {
-      display: block;
-      margin-bottom: 8px;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    .option.selected {
-      background: #e7f3ff;
-      border-color: #1877f2;
-    }
-    
-    .timer {
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      margin: 10px 0;
-      color: #1877f2;
-    }
-    
-    .submit-exam-btn {
-      background: #42b72a;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 12px;
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    
-    .result-container {
-      padding: 15px;
-      background: white;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-    
-    .result-header {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    
-    .result-header h2 {
-      margin: 0;
-    }
-    
-    .student-photo {
-      width: 100px;
-      height: 100px;
-      border-radius: 4px;
-      margin: 10px auto;
-      display: block;
-      object-fit: cover;
-    }
-    
-    .result-details {
-      margin-bottom: 15px;
-    }
-    
-    .result-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
-    }
-    
-    .result-table th, .result-table td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    
-    .result-table th {
-      background: #f0f2f5;
-    }
-    
-    .print-btn {
-      background: #1877f2;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 15px;
-      cursor: pointer;
-      display: block;
-      margin: 0 auto;
-    }
-    
-    /* Notice styles */
-    .notice-container {
-      padding: 15px;
-    }
-    
-    .notice-item {
-      background: white;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    }
-    
-    .notice-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    
-    .notice-message {
-      margin-bottom: 10px;
-    }
-    
-    .notice-image {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    
-    .notice-date {
       color: #65676b;
       font-size: 12px;
-      text-align: right;
-    }
-    
-    /* Book styles */
-    .book-container {
-      padding: 15px;
-    }
-    
-    .book-item {
-      background: white;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
       cursor: pointer;
     }
     
-    .book-title {
-      font-weight: bold;
-      margin-bottom: 5px;
+    .chat-action-btn i {
+      font-size: 20px;
+      margin-bottom: 3px;
     }
     
-    .book-desc {
-      color: #65676b;
-      font-size: 14px;
-    }
-    
-    /* Admin exam management */
-    .exam-management {
-      padding: 15px;
-    }
-    
-    .exam-tabs {
-      display: flex;
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 15px;
-    }
-    
-    .exam-tab {
-      padding: 10px 15px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-    }
-    
-    .exam-tab.active {
-      border-bottom: 2px solid #1877f2;
-      font-weight: bold;
-    }
-    
-    .exam-content {
-      display: none;
-    }
-    
-    .exam-content.active {
-      display: block;
-    }
-    
-    .course-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    
-    .course-item {
-      background: #f0f2f5;
-      border-radius: 6px;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-    
-    .course-item.active {
-      background: #1877f2;
-      color: white;
-    }
-    
-    .subject-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    
-    .subject-item {
-      background: #f0f2f5;
-      border-radius: 6px;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-    
-    .subject-item.active {
-      background: #1877f2;
-      color: white;
-    }
-    
-    .question-form {
-      background: white;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-      margin-bottom: 15px;
-    }
-    
-    .question-list {
-      background: white;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    }
-    
-    .question-list-item {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      cursor: pointer;
-    }
-    
-    .question-list-item:last-child {
-      border-bottom: none;
-    }
-    
-    .question-list-item:hover {
-      background: #f0f2f5;
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
-      .container { max-width:100%; }
-      .chat-header { padding:10px; }
-      .chat-header-actions { gap:10px; }
-      .search-bar { width: 150px; }
-    }
-    
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-      .result-container, .result-container * {
-        visibility: visible;
-      }
-      .result-container {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
-      .print-btn {
-        display: none;
-      }
+    .chat-action-btn.active {
+      color: #1877f2;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <!-- Login Page -->
-    <div class="login-page" id="login-page" style="display:flex; flex-direction:column;">
-      <header class="login-header">
-        <div class="login-logo">IMS Darpan</div>
+    <div class="login-page" id="login-page" style="display:flex;">
+      <header>
+        <div class="logo">Social Messenger</div>
       </header>
 
       <div class="main-content">
@@ -763,409 +191,91 @@
 
     <!-- App Container -->
     <div class="app-container" id="app-container">
-      <!-- Home Page -->
-      <div class="page active" id="home-page">
-        <header>
-          <button class="header-icon" id="back-btn-home" style="display: none;"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">IMS Darpan</div>
-          <div class="header-icons">
-            <div class="search-container">
-              <div class="search-bar">
-                <i class="fas fa-search" style="color: white; font-size: 14px;"></i>
-                <input type="text" id="search-input" placeholder="Search...">
-              </div>
-              <div class="search-results" id="search-results"></div>
-            </div>
-            <div style="position:relative;">
-              <i class="fas fa-bell header-icon" id="notice-btn"></i>
-              <span id="notice-count" class="badge" style="display:none;">0</span>
+      <header>
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" placeholder="Search...">
+        </div>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div id="request-notification" style="position:relative;">
+            <button id="requests-btn" class="profile-btn" title="Friend requests">
+              <i class="fas fa-bell"></i>
+            </button>
+            <span id="req-count" class="badge" style="position:absolute; top:-6px; right:-6px; display:none;">0</span>
+          </div>
+
+          <div id="notification-dropdown" style="position:relative;">
+            <button id="noti-btn" class="profile-btn" title="Notifications">
+              <i class="fas fa-envelope"></i>
+            </button>
+            <div class="dropdown-content" id="noti-list" style="right:60px; display:none; width:300px;">
+              <div style="padding:8px; font-weight:bold;">Notifications</div>
+              <div id="noti-items" class="noti-list" style="padding:8px;"></div>
             </div>
           </div>
-        </header>
 
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="card users-list">
-              <h2>Courses</h2>
-              <div id="courses-list-container">
-                <div class="user-item clickable" id="basic-course-btn">
-                  <div class="user-avatar"><i class="fas fa-book"></i></div>
-                  <div class="user-info">
-                    <div class="user-name">Basic Course</div>
-                    <div class="last-message">Word, Excel, PowerPoint</div>
-                  </div>
-                </div>
-                <div class="user-item clickable" id="diploma-course-btn">
-                  <div class="user-avatar"><i class="fas fa-graduation-cap"></i></div>
-                  <div class="user-info">
-                    <div class="user-name">Diploma Course</div>
-                    <div class="last-message">Pagemaker, Photoshop, HTML</div>
-                  </div>
-                </div>
-              </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; margin-right:8px;">
+            <div id="profile-name" style="font-weight:bold;"></div>
+            <div id="current-user-email" style="font-size:12px; color:#666;"></div>
+          </div>
+
+          <div class="profile-dropdown">
+            <button class="profile-btn" id="profile-btn">
+              <i class="fas fa-user"></i>
+            </button>
+            <div class="dropdown-content" id="dropdown-content">
+              <button id="show-profile">Profile</button>
+              <button id="admin-panel-btn" style="display:none;">Admin Panel</button>
+              <button id="logout-btn">Log Out</button>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <!-- Exam Start Page -->
-      <div class="page" id="exam-start-page">
-        <header>
-          <button class="header-icon" id="back-btn-exam-start"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Exam Registration</div>
-          <div class="header-icons"></div>
-        </header>
+      <div class="content">
+        <div class="left-column">
+          <div class="card users-list">
+            <h2>All Users</h2>
+            <div id="users-list-container"></div>
+          </div>
 
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="exam-container">
-              <div class="exam-form">
-                <h2>Exam Registration</h2>
-                <div class="form-group">
-                  <label for="student-name">Student Name</label>
-                  <input type="text" id="student-name" placeholder="Enter your name">
-                </div>
-                <div class="form-group">
-                  <label for="father-name">Father's Name</label>
-                  <input type="text" id="father-name" placeholder="Enter father's name">
-                </div>
-                <div class="form-group">
-                  <label for="dob">Date of Birth</label>
-                  <input type="date" id="dob">
-                </div>
-                <div class="form-group">
-                  <label for="symbol-no">Symbol No.</label>
-                  <input type="text" id="symbol-no" placeholder="Enter symbol number">
-                </div>
-                <div class="form-group">
-                  <label>Course</label>
-                  <input type="text" id="exam-course" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="exam-subject">Subject</label>
-                  <select id="exam-subject">
-                    <option value="">Select subject</option>
-                    <!-- Subjects will be populated by JavaScript -->
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Photo</label>
-                  <div class="photo-upload">
-                    <div class="photo-preview" id="photo-preview">
-                      <i class="fas fa-camera" style="color:#ccc;"></i>
-                    </div>
-                    <input type="file" id="photo-upload" accept="image/*" style="display:none;">
-                    <button class="modal-btn modal-btn-secondary" onclick="document.getElementById('photo-upload').click()">Choose Photo</button>
-                  </div>
-                </div>
-                <button class="exam-start-btn" id="start-exam-btn">Continue to Exam</button>
-              </div>
+          <div class="card friend-requests" id="friend-requests-card">
+            <h2>Friend Requests</h2>
+            <div id="friend-requests-container"></div>
+          </div>
+
+          <div class="card admin-panel" id="admin-panel">
+            <h2>Admin Panel</h2>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button id="view-all-chats-btn">View All Chats</button>
+              <button id="view-all-users-btn">View All Users</button>
             </div>
+            <div id="admin-output" style="margin-top:12px; max-height:420px; overflow:auto;"></div>
           </div>
         </div>
-      </div>
 
-      <!-- Exam Page -->
-      <div class="page" id="exam-page">
-        <header>
-          <div class="logo">Exam</div>
-          <div class="header-icons">
-            <div class="timer" id="exam-timer">Time: 30:00</div>
-          </div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container" id="exam-questions-container">
-            <!-- Questions will be loaded here -->
-          </div>
-          
-          <div style="padding:15px;">
-            <button class="submit-exam-btn" id="submit-exam-btn">Submit Exam</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Exam Result Page -->
-      <div class="page" id="exam-result-page">
-        <header>
-          <button class="header-icon" id="back-btn-result"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Exam Result</div>
-          <div class="header-icons"></div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="result-container">
-              <div class="result-header">
-                <h2>IMS Darpan Computer Business Solutions PVT.LTD</h2>
-                <p>Kohalpur-11, Banke</p>
-                <img src="" class="student-photo" id="result-photo">
-              </div>
-              
-              <div class="result-details">
-                <p><strong>Student Name:</strong> <span id="result-name"></span></p>
-                <p><strong>Father's Name:</strong> <span id="result-father"></span></p>
-                <p><strong>Date of Birth:</strong> <span id="result-dob"></span></p>
-                <p><strong>Symbol No:</strong> <span id="result-symbol"></span></p>
-                <p><strong>Course:</strong> <span id="result-course"></span></p>
-                <p><strong>Subject:</strong> <span id="result-subject"></span></p>
-              </div>
-              
-              <table class="result-table">
-                <tr>
-                  <th>Total Questions</th>
-                  <td id="total-questions">0</td>
-                </tr>
-                <tr>
-                  <th>Correct Answers</th>
-                  <td id="correct-answers">0</td>
-                </tr>
-                <tr>
-                  <th>Score</th>
-                  <td id="exam-score">0</td>
-                </tr>
-                <tr>
-                  <th>Percentage</th>
-                  <td id="exam-percentage">0%</td>
-                </tr>
-                <tr>
-                  <th>Remarks</th>
-                  <td id="exam-remarks">-</td>
-                </tr>
-              </table>
-              
-              <button class="print-btn" id="print-result-btn">Print Result</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Notice Page -->
-      <div class="page" id="notice-page">
-        <header>
-          <button class="header-icon" id="back-btn-notice"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Notices</div>
-          <div class="header-icons"></div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="notice-container" id="notices-container">
-              <!-- Notices will be loaded here -->
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Book Page -->
-      <div class="page" id="book-page">
-        <header>
-          <button class="header-icon" id="back-btn-book"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Books</div>
-          <div class="header-icons"></div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="book-container" id="books-container">
-              <!-- Books will be loaded here -->
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Profile Page -->
-      <div class="page" id="profile-page">
-        <header>
-          <button class="header-icon" id="back-btn-profile"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Profile</div>
-          <div class="header-icons">
-            <i class="fas fa-cog header-icon" id="settings-btn"></i>
-          </div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="profile-page">
-              <div class="profile-header">
-                <div class="profile-avatar" id="profile-avatar">
-                  <i class="fas fa-user"></i>
-                  <div id="profile-online-status" class="online-badge"></div>
-                </div>
-                <div class="profile-name" id="profile-name-display"></div>
-                <div class="profile-email" id="profile-email-display"></div>
-              </div>
-
-              <ul class="profile-menu">
-                <li><a href="#" id="edit-profile-btn"><i class="fas fa-user-edit" style="margin-right:10px;"></i> Edit Profile</a></li>
-                <li><a href="#" id="results-btn"><i class="fas fa-poll" style="margin-right:10px;"></i> Exam Results</a></li>
-                <li><a href="#" id="books-btn"><i class="fas fa-book" style="margin-right:10px;"></i> Books</a></li>
-                <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt" style="margin-right:10px;"></i> Log Out</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Results Page -->
-      <div class="page" id="results-page">
-        <header>
-          <button class="header-icon" id="back-btn-results"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Exam Results</div>
-          <div class="header-icons"></div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="card users-list">
-              <h2>Your Exam Results</h2>
-              <div id="results-list-container">
-                <!-- Results will be loaded here -->
+        <div class="right-column">
+          <div class="chat-page card" id="chat-page" style="display:block;">
+            <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <button class="back-btn" id="back-btn" style="display:none;"><i class="fas fa-arrow-left"></i> Back</button>
+                <span id="current-chat-name" style="font-weight:bold; margin-left:10px;"></span>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Admin Panel -->
-      <div class="page admin-panel" id="admin-page">
-        <header>
-          <button class="header-icon" id="back-btn-admin"><i class="fas fa-arrow-left"></i></button>
-          <div class="logo">Admin Panel</div>
-          <div class="header-icons"></div>
-        </header>
+            <div class="chat-container" style="margin-top:12px;">
+              <div class="contacts-list card" id="contacts-list" style="margin:0; border-radius:0; border-right:none;"></div>
 
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="exam-tabs">
-              <div class="exam-tab active" data-tab="manage-exam">Manage Exams</div>
-              <div class="exam-tab" data-tab="manage-notice">Manage Notices</div>
-              <div class="exam-tab" data-tab="manage-book">Manage Books</div>
-              <div class="exam-tab" data-tab="view-results">View Results</div>
-            </div>
-            
-            <div class="exam-content active" id="manage-exam">
-              <div class="course-list" id="admin-course-list">
-                <div class="course-item active" data-course="basic">Basic Course</div>
-                <div class="course-item" data-course="diploma">Diploma Course</div>
-              </div>
-              
-              <div class="subject-list" id="admin-subject-list">
-                <div class="subject-item active" data-subject="word">Word</div>
-                <div class="subject-item" data-subject="excel">Excel</div>
-                <div class="subject-item" data-subject="powerpoint">PowerPoint</div>
-                <div class="subject-item" data-subject="pagemaker">PageMaker</div>
-                <div class="subject-item" data-subject="photoshop">Photoshop</div>
-                <div class="subject-item" data-subject="html">HTML</div>
-                <div class="subject-item" data-subject="access">Access</div>
-                <div class="subject-item" data-subject="tally">Tally</div>
-              </div>
-              
-              <div class="question-form">
-                <h3>Add New Question</h3>
-                <div class="form-group">
-                  <label for="question-text">Question</label>
-                  <input type="text" id="question-text" placeholder="Enter question">
+              <div class="chat-area" style="margin:0; border-radius:0;">
+                <div class="chat-messages" id="chat-messages">
+                  <div style="color:#888;">Select a friend to start chat</div>
                 </div>
-                <div class="form-group">
-                  <label for="option1">Option 1</label>
-                  <input type="text" id="option1" placeholder="Enter option 1">
+
+                <div class="message-input">
+                  <input type="text" id="message-input" placeholder="Type a message...">
+                  <button id="send-btn">Send</button>
                 </div>
-                <div class="form-group">
-                  <label for="option2">Option 2</label>
-                  <input type="text" id="option2" placeholder="Enter option 2">
-                </div>
-                <div class="form-group">
-                  <label for="option3">Option 3</label>
-                  <input type="text" id="option3" placeholder="Enter option 3">
-                </div>
-                <div class="form-group">
-                  <label for="option4">Option 4</label>
-                  <input type="text" id="option4" placeholder="Enter option 4">
-                </div>
-                <div class="form-group">
-                  <label for="correct-option">Correct Option</label>
-                  <select id="correct-option">
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
-                    <option value="4">Option 4</option>
-                  </select>
-                </div>
-                <button class="admin-btn" id="add-question-btn">Add Question</button>
-              </div>
-              
-              <div class="question-list" id="admin-questions-list">
-                <h3>Questions</h3>
-                <!-- Questions will be listed here -->
-              </div>
-            </div>
-            
-            <div class="exam-content" id="manage-notice">
-              <div class="question-form">
-                <h3>Add New Notice</h3>
-                <div class="form-group">
-                  <label for="notice-title">Title</label>
-                  <input type="text" id="notice-title" placeholder="Enter notice title">
-                </div>
-                <div class="form-group">
-                  <label for="notice-message">Message</label>
-                  <textarea id="notice-message" placeholder="Enter notice message" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;"></textarea>
-                </div>
-                <div class="form-group">
-                  <label>Image (Optional)</label>
-                  <div class="photo-upload">
-                    <div class="photo-preview" id="notice-photo-preview">
-                      <i class="fas fa-image" style="color:#ccc;"></i>
-                    </div>
-                    <input type="file" id="notice-photo-upload" accept="image/*" style="display:none;">
-                    <button class="modal-btn modal-btn-secondary" onclick="document.getElementById('notice-photo-upload').click()">Choose Image</button>
-                  </div>
-                </div>
-                <button class="admin-btn" id="add-notice-btn">Add Notice</button>
-              </div>
-              
-              <div class="question-list" id="admin-notices-list">
-                <h3>Existing Notices</h3>
-                <!-- Notices will be listed here -->
-              </div>
-            </div>
-            
-            <div class="exam-content" id="manage-book">
-              <div class="question-form">
-                <h3>Add New Book</h3>
-                <div class="form-group">
-                  <label for="book-title">Title</label>
-                  <input type="text" id="book-title" placeholder="Enter book title">
-                </div>
-                <div class="form-group">
-                  <label for="book-desc">Description</label>
-                  <textarea id="book-desc" placeholder="Enter book description" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;"></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="book-course">Course</label>
-                  <select id="book-course">
-                    <option value="basic">Basic</option>
-                    <option value="diploma">Diploma</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>PDF File</label>
-                  <input type="file" id="book-file-upload" accept=".pdf" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
-                </div>
-                <button class="admin-btn" id="add-book-btn">Add Book</button>
-              </div>
-              
-              <div class="question-list" id="admin-books-list">
-                <h3>Existing Books</h3>
-                <!-- Books will be listed here -->
-              </div>
-            </div>
-            
-            <div class="exam-content" id="view-results">
-              <div class="question-list" id="admin-results-list">
-                <h3>Student Results</h3>
-                <!-- Results will be listed here -->
               </div>
             </div>
           </div>
@@ -1173,40 +283,47 @@
       </div>
 
       <!-- Bottom Navigation Bar -->
-      <div class="bottom-nav" id="bottom-nav">
+      <div class="bottom-nav">
         <a href="#" class="nav-item active" id="home-nav">
           <i class="fas fa-home nav-icon"></i>
           <span>Home</span>
         </a>
-        <a href="#" class="nav-item" id="exam-nav">
-          <i class="fas fa-clipboard-list nav-icon"></i>
-          <span>Exam</span>
+        <a href="#" class="nav-item" id="friends-nav">
+          <i class="fas fa-user-friends nav-icon"></i>
+          <span>Friends</span>
         </a>
-        <a href="#" class="nav-item" id="notice-nav">
-          <i class="fas fa-bell nav-icon"></i>
-          <span>Notices</span>
+        <a href="#" class="nav-item" id="chat-nav">
+          <i class="fas fa-comment nav-icon"></i>
+          <span>Chats</span>
         </a>
-        <a href="#" class="nav-item" id="book-nav">
-          <i class="fas fa-book nav-icon"></i>
-          <span>Books</span>
+        <a href="#" class="nav-item" id="requests-nav">
+          <i class="fas fa-user-plus nav-icon"></i>
+          <span>Requests</span>
         </a>
         <a href="#" class="nav-item" id="profile-nav">
           <i class="fas fa-user nav-icon"></i>
           <span>Profile</span>
         </a>
       </div>
-    </div>
-    
-    <!-- Edit Profile Modal -->
-    <div class="modal" id="edit-profile-modal">
-      <div class="modal-content">
-        <div class="modal-title">Edit Profile</div>
-        <input type="text" class="modal-input" id="edit-username" placeholder="Username">
-        <input type="email" class="modal-input" id="edit-email" placeholder="Email">
-        <div class="modal-actions">
-          <button class="modal-btn modal-btn-secondary" id="cancel-edit-btn">Cancel</button>
-          <button class="modal-btn modal-btn-primary" id="save-profile-btn">Save</button>
-        </div>
+      
+      <!-- Chat Action Buttons (shown when in chat) -->
+      <div class="chat-actions" id="chat-actions" style="display:none;">
+        <button class="chat-action-btn" id="chat-info-btn">
+          <i class="fas fa-info-circle"></i>
+          <span>Info</span>
+        </button>
+        <button class="chat-action-btn" id="chat-media-btn">
+          <i class="fas fa-images"></i>
+          <span>Media</span>
+        </button>
+        <button class="chat-action-btn" id="chat-files-btn">
+          <i class="fas fa-file-alt"></i>
+          <span>Files</span>
+        </button>
+        <button class="chat-action-btn" id="chat-call-btn">
+          <i class="fas fa-phone-alt"></i>
+          <span>Call</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1215,16 +332,15 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
   <script>
-    // Firebase configuration
+    // Your web app's Firebase configuration (तपाईंको पुरानो config मैले राखेको छ)
     const firebaseConfig = {
       apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
       authDomain: "massage-8c66f.firebaseapp.com",
       databaseURL: "https://massage-8c66f-default-rtdb.firebaseio.com",
       projectId: "massage-8c66f",
-      storageBucket: "massage-8c66f.appspot.com",
+      storageBucket: "massage-8c66f.firebasestorage.app",
       messagingSenderId: "557008720018",
       appId: "1:557008720018:web:22055db26bbfb2bab3d64b"
     };
@@ -1233,7 +349,6 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
-    const storage = firebase.storage();
 
     // DOM Elements
     const loginPage = document.getElementById('login-page');
@@ -1241,126 +356,49 @@
     const loginButton = document.getElementById('login-button');
     const createAccountBtn = document.getElementById('create-account-btn');
     const logoutBtn = document.getElementById('logout-btn');
-    const noticeBtn = document.getElementById('notice-btn');
-    const noticeCountBadge = document.getElementById('notice-count');
+    const profileBtn = document.getElementById('profile-btn');
+    const dropdownContent = document.getElementById('dropdown-content');
+    const usersListContainer = document.getElementById('users-list-container');
+    const friendRequestsContainer = document.getElementById('friend-requests-container');
+    const contactsList = document.getElementById('contacts-list');
+    const chatMessages = document.getElementById('chat-messages');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const currentChatName = document.getElementById('current-chat-name');
+    const currentUserEmailLabel = document.getElementById('current-user-email');
+    const profileNameLabel = document.getElementById('profile-name');
+    const reqCountBadge = document.getElementById('req-count');
+    const requestsBtn = document.getElementById('requests-btn');
+    const adminPanelEl = document.getElementById('admin-panel');
+    const adminPanelBtn = document.getElementById('admin-panel-btn');
+    const adminOutput = document.getElementById('admin-output');
+    const viewAllChatsBtn = document.getElementById('view-all-chats-btn');
+    const viewAllUsersBtn = document.getElementById('view-all-users-btn');
     const backBtn = document.getElementById('back-btn');
-    const backBtnHome = document.getElementById('back-btn-home');
-    const backBtnExamStart = document.getElementById('back-btn-exam-start');
-    const backBtnResult = document.getElementById('back-btn-result');
-    const backBtnNotice = document.getElementById('back-btn-notice');
-    const backBtnBook = document.getElementById('back-btn-book');
-    const backBtnProfile = document.getElementById('back-btn-profile');
-    const backBtnResults = document.getElementById('back-btn-results');
-    const backBtnAdmin = document.getElementById('back-btn-admin');
-    const coursesListContainer = document.getElementById('courses-list-container');
-    const examQuestionsContainer = document.getElementById('exam-questions-container');
-    const examTimer = document.getElementById('exam-timer');
-    const submitExamBtn = document.getElementById('submit-exam-btn');
-    const startExamBtn = document.getElementById('start-exam-btn');
-    const resultPhoto = document.getElementById('result-photo');
-    const resultName = document.getElementById('result-name');
-    const resultFather = document.getElementById('result-father');
-    const resultDob = document.getElementById('result-dob');
-    const resultSymbol = document.getElementById('result-symbol');
-    const resultCourse = document.getElementById('result-course');
-    const resultSubject = document.getElementById('result-subject');
-    const totalQuestions = document.getElementById('total-questions');
-    const correctAnswers = document.getElementById('correct-answers');
-    const examScore = document.getElementById('exam-score');
-    const examPercentage = document.getElementById('exam-percentage');
-    const examRemarks = document.getElementById('exam-remarks');
-    const printResultBtn = document.getElementById('print-result-btn');
-    const noticesContainer = document.getElementById('notices-container');
-    const booksContainer = document.getElementById('books-container');
-    const resultsListContainer = document.getElementById('results-list-container');
-    const profileNameDisplay = document.getElementById('profile-name-display');
-    const profileEmailDisplay = document.getElementById('profile-email-display');
-    const profileAvatar = document.getElementById('profile-avatar');
-    const profileOnlineStatus = document.getElementById('profile-online-status');
-    const basicCourseBtn = document.getElementById('basic-course-btn');
-    const diplomaCourseBtn = document.getElementById('diploma-course-btn');
-    const studentNameInput = document.getElementById('student-name');
-    const fatherNameInput = document.getElementById('father-name');
-    const dobInput = document.getElementById('dob');
-    const symbolNoInput = document.getElementById('symbol-no');
-    const examCourseInput = document.getElementById('exam-course');
-    const examSubjectSelect = document.getElementById('exam-subject');
-    const photoUpload = document.getElementById('photo-upload');
-    const photoPreview = document.getElementById('photo-preview');
-    const resultsBtn = document.getElementById('results-btn');
-    const booksBtn = document.getElementById('books-btn');
-    const editProfileModal = document.getElementById('edit-profile-modal');
-    const editUsernameInput = document.getElementById('edit-username');
-    const editEmailInput = document.getElementById('edit-email');
-    const saveProfileBtn = document.getElementById('save-profile-btn');
-    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const notiBtn = document.getElementById('noti-btn');
+    const notiListEl = document.getElementById('noti-list');
+    const notiItems = document.getElementById('noti-items');
+    const chatActions = document.getElementById('chat-actions');
 
-    // Admin elements
-    const adminCourseList = document.getElementById('admin-course-list');
-    const adminSubjectList = document.getElementById('admin-subject-list');
-    const questionTextInput = document.getElementById('question-text');
-    const option1Input = document.getElementById('option1');
-    const option2Input = document.getElementById('option2');
-    const option3Input = document.getElementById('option3');
-    const option4Input = document.getElementById('option4');
-    const correctOptionSelect = document.getElementById('correct-option');
-    const addQuestionBtn = document.getElementById('add-question-btn');
-    const adminQuestionsList = document.getElementById('admin-questions-list');
-    const noticeTitleInput = document.getElementById('notice-title');
-    const noticeMessageInput = document.getElementById('notice-message');
-    const noticePhotoUpload = document.getElementById('notice-photo-upload');
-    const noticePhotoPreview = document.getElementById('notice-photo-preview');
-    const addNoticeBtn = document.getElementById('add-notice-btn');
-    const adminNoticesList = document.getElementById('admin-notices-list');
-    const bookTitleInput = document.getElementById('book-title');
-    const bookDescInput = document.getElementById('book-desc');
-    const bookCourseSelect = document.getElementById('book-course');
-    const bookFileUpload = document.getElementById('book-file-upload');
-    const addBookBtn = document.getElementById('add-book-btn');
-    const adminBooksList = document.getElementById('admin-books-list');
-    const adminResultsList = document.getElementById('admin-results-list');
-    const examTabs = document.querySelectorAll('.exam-tab');
-    const examContents = document.querySelectorAll('.exam-content');
+    // Bottom nav elements
+    const homeNav = document.getElementById('home-nav');
+    const friendsNav = document.getElementById('friends-nav');
+    const chatNav = document.getElementById('chat-nav');
+    const requestsNav = document.getElementById('requests-nav');
+    const profileNav = document.getElementById('profile-nav');
 
-    // Page elements
-    const pages = {
-      home: document.getElementById('home-page'),
-      examStart: document.getElementById('exam-start-page'),
-      exam: document.getElementById('exam-page'),
-      examResult: document.getElementById('exam-result-page'),
-      notice: document.getElementById('notice-page'),
-      book: document.getElementById('book-page'),
-      profile: document.getElementById('profile-page'),
-      results: document.getElementById('results-page'),
-      admin: document.getElementById('admin-page')
-    };
-
-    // Navigation elements
-    const navItems = {
-      home: document.getElementById('home-nav'),
-      exam: document.getElementById('exam-nav'),
-      notice: document.getElementById('notice-nav'),
-      book: document.getElementById('book-nav'),
-      profile: document.getElementById('profile-nav')
-    };
+    // Chat action buttons
+    const chatInfoBtn = document.getElementById('chat-info-btn');
+    const chatMediaBtn = document.getElementById('chat-media-btn');
+    const chatFilesBtn = document.getElementById('chat-files-btn');
+    const chatCallBtn = document.getElementById('chat-call-btn');
 
     // State variables
     let currentUser = null;
     let currentUserData = null;
-    let currentExam = null;
-    let examTimeLeft = 1800; // 30 minutes in seconds
-    let examTimerInterval = null;
-    let selectedPhoto = null;
-    let selectedNoticePhoto = null;
-    let selectedBookFile = null;
-    let currentAdminCourse = 'basic';
-    let currentAdminSubject = 'word';
-
-    // Subjects for each course
-    const courseSubjects = {
-      basic: ['Word', 'Excel', 'PowerPoint'],
-      diploma: ['Pagemaker', 'Photoshop', 'HTML', 'Access', 'Tally']
-    };
+    let currentChatFriend = null;
+    let pendingRequests = {};
+    let notifications = {};
 
     // Initialize the application
     function init() {
@@ -1370,40 +408,80 @@
 
     // Set up event listeners
     function setupEventListeners() {
-      // Navigation
-      navItems.home.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('home');
+      // Profile dropdown toggle
+      profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
       });
       
-      navItems.exam.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('examStart');
-      });
-      
-      navItems.notice.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('notice');
-      });
-      
-      navItems.book.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('book');
-      });
-      
-      navItems.profile.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('profile');
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', () => { 
+        dropdownContent.style.display = 'none'; 
+        notiListEl.style.display = 'none'; 
       });
 
-      // Back buttons
-      backBtnExamStart.addEventListener('click', () => showPage('home'));
-      backBtnResult.addEventListener('click', () => showPage('home'));
-      backBtnNotice.addEventListener('click', () => showPage('home'));
-      backBtnBook.addEventListener('click', () => showPage('home'));
-      backBtnProfile.addEventListener('click', () => showPage('home'));
-      backBtnResults.addEventListener('click', () => showPage('profile'));
-      backBtnAdmin.addEventListener('click', () => showPage('profile'));
+      // Notification dropdown toggle
+      notiBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notiListEl.style.display = notiListEl.style.display === 'block' ? 'none' : 'block';
+      });
+
+      // Bottom navigation
+      homeNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('home');
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      
+      friendsNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('friends');
+        // Scroll to friends list
+        document.getElementById('users-list-container').scrollIntoView({ behavior: 'smooth' });
+      });
+      
+      chatNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('chat');
+        // Scroll to chat area
+        document.getElementById('chat-page').scrollIntoView({ behavior: 'smooth' });
+      });
+      
+      requestsNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('requests');
+        // Scroll to friend requests
+        document.getElementById('friend-requests-card').scrollIntoView({ behavior: 'smooth' });
+      });
+      
+      profileNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav('profile');
+        // Show profile dropdown
+        dropdownContent.style.display = 'block';
+      });
+
+      // Chat action buttons
+      chatInfoBtn.addEventListener('click', () => {
+        if (currentChatFriend) {
+          alert(`Chat info with ${currentChatFriend.name}`);
+        }
+      });
+      
+      chatMediaBtn.addEventListener('click', () => {
+        alert('Media sharing feature would be implemented here');
+      });
+      
+      chatFilesBtn.addEventListener('click', () => {
+        alert('File sharing feature would be implemented here');
+      });
+      
+      chatCallBtn.addEventListener('click', () => {
+        if (currentChatFriend) {
+          alert(`Calling ${currentChatFriend.name}`);
+        }
+      });
 
       // Login
       loginButton.addEventListener('click', handleLogin);
@@ -1414,217 +492,58 @@
       // Logout
       logoutBtn.addEventListener('click', handleLogout);
 
-      // Notice button
-      noticeBtn.addEventListener('click', () => {
-        showPage('notice');
+      // Send message
+      sendBtn.addEventListener('click', sendMessage);
+      messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
       });
 
-      // Course buttons
-      basicCourseBtn.addEventListener('click', () => {
-        currentExam = { course: 'Basic Course', courseKey: 'basic' };
-        examCourseInput.value = 'Basic Course';
-        populateSubjectSelect('basic');
-        showPage('examStart');
-      });
-      
-      diplomaCourseBtn.addEventListener('click', () => {
-        currentExam = { course: 'Diploma Course', courseKey: 'diploma' };
-        examCourseInput.value = 'Diploma Course';
-        populateSubjectSelect('diploma');
-        showPage('examStart');
+      // Back button in chat
+      backBtn.addEventListener('click', () => {
+        currentChatFriend = null;
+        currentChatName.textContent = '';
+        backBtn.style.display = 'none';
+        chatActions.style.display = 'none';
+        chatMessages.innerHTML = '<div style="color:#888">Select a friend to start chat</div>';
       });
 
-      // Photo upload
-      photoUpload.addEventListener('change', (e) => {
-        if (e.target.files[0]) {
-          selectedPhoto = e.target.files[0];
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            photoPreview.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
-          };
-          reader.readAsDataURL(selectedPhoto);
-        }
-      });
+      // Admin buttons
+      viewAllChatsBtn.addEventListener('click', viewAllChats);
+      viewAllUsersBtn.addEventListener('click', viewAllUsers);
 
-      // Start exam
-      startExamBtn.addEventListener('click', startExam);
-
-      // Submit exam
-      submitExamBtn.addEventListener('click', submitExam);
-
-      // Print result
-      printResultBtn.addEventListener('click', () => {
-        window.print();
-      });
-
-      // Results button
-      resultsBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('results');
-      });
-
-      // Books button
-      booksBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('book');
-      });
-
-      // Edit profile
-      document.getElementById('edit-profile-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        showEditProfileModal();
-      });
-
-      saveProfileBtn.addEventListener('click', saveProfile);
-      cancelEditBtn.addEventListener('click', () => {
-        editProfileModal.style.display = 'none';
-      });
-
-      // Admin tabs
-      examTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          examTabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          
-          examContents.forEach(content => content.classList.remove('active'));
-          document.getElementById(tab.dataset.tab).classList.add('active');
-        });
-      });
-
-      // Admin course selection
-      adminCourseList.addEventListener('click', (e) => {
-        if (e.target.classList.contains('course-item')) {
-          adminCourseList.querySelectorAll('.course-item').forEach(item => {
-            item.classList.remove('active');
-          });
-          e.target.classList.add('active');
-          currentAdminCourse = e.target.dataset.course;
-          loadQuestions();
-        }
-      });
-
-      // Admin subject selection
-      adminSubjectList.addEventListener('click', (e) => {
-        if (e.target.classList.contains('subject-item')) {
-          adminSubjectList.querySelectorAll('.subject-item').forEach(item => {
-            item.classList.remove('active');
-          });
-          e.target.classList.add('active');
-          currentAdminSubject = e.target.dataset.subject;
-          loadQuestions();
-        }
-      });
-
-      // Add question
-      addQuestionBtn.addEventListener('click', addQuestion);
-
-      // Notice photo upload
-      noticePhotoUpload.addEventListener('change', (e) => {
-        if (e.target.files[0]) {
-          selectedNoticePhoto = e.target.files[0];
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            noticePhotoPreview.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
-          };
-          reader.readAsDataURL(selectedNoticePhoto);
-        }
-      });
-
-      // Add notice
-      addNoticeBtn.addEventListener('click', addNotice);
-
-      // Book file upload
-      bookFileUpload.addEventListener('change', (e) => {
-        if (e.target.files[0]) {
-          selectedBookFile = e.target.files[0];
-        }
-      });
-
-      // Add book
-      addBookBtn.addEventListener('click', addBook);
-    }
-
-    // Populate subject select dropdown
-    function populateSubjectSelect(courseKey) {
-      examSubjectSelect.innerHTML = '<option value="">Select subject</option>';
-      courseSubjects[courseKey].forEach(subject => {
-        const option = document.createElement('option');
-        option.value = subject.toLowerCase();
-        option.textContent = subject;
-        examSubjectSelect.appendChild(option);
+      // Friend requests button
+      requestsBtn.addEventListener('click', () => {
+        const card = document.getElementById('friend-requests-card');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     }
 
-    // Show edit profile modal
-    function showEditProfileModal() {
-      if (!currentUserData) return;
+    // Set active navigation item
+    function setActiveNav(activeItem) {
+      // Remove active class from all
+      homeNav.classList.remove('active');
+      friendsNav.classList.remove('active');
+      chatNav.classList.remove('active');
+      requestsNav.classList.remove('active');
+      profileNav.classList.remove('active');
       
-      editUsernameInput.value = currentUserData.username || '';
-      editEmailInput.value = currentUserData.email || '';
-      editProfileModal.style.display = 'flex';
-    }
-
-    // Save profile changes
-    function saveProfile() {
-      const newUsername = editUsernameInput.value.trim();
-      const newEmail = editEmailInput.value.trim();
-      
-      if (!newUsername) {
-        alert('Username is required');
-        return;
-      }
-      
-      showLoading();
-      
-      const updates = {
-        username: newUsername,
-        email: newEmail
-      };
-      
-      db.ref(`users/${currentUser.uid}`).update(updates)
-        .then(() => {
-          editProfileModal.style.display = 'none';
-          alert('Profile updated successfully');
-        })
-        .catch(error => {
-          alert('Failed to update profile: ' + error.message);
-        })
-        .finally(() => {
-          hideLoading();
-        });
-    }
-
-    // Show specific page
-    function showPage(pageName) {
-      // Hide all pages
-      Object.values(pages).forEach(page => {
-        page.classList.remove('active');
-      });
-      
-      // Show selected page
-      pages[pageName].classList.add('active');
-      
-      // Update active nav item
-      Object.values(navItems).forEach(item => {
-        item.classList.remove('active');
-      });
-      
-      if (pageName !== 'admin' && pageName !== 'examStart' && pageName !== 'exam' && 
-          pageName !== 'examResult' && pageName !== 'results') {
-        navItems[pageName].classList.add('active');
-      }
-      
-      // Load data if needed
-      if (pageName === 'notice') {
-        loadNotices();
-      } else if (pageName === 'book') {
-        loadBooks();
-      } else if (pageName === 'profile') {
-        updateProfileDisplay();
-      } else if (pageName === 'results') {
-        loadUserResults();
-      } else if (pageName === 'admin') {
-        loadAdminData();
+      // Add active class to selected
+      switch(activeItem) {
+        case 'home':
+          homeNav.classList.add('active');
+          break;
+        case 'friends':
+          friendsNav.classList.add('active');
+          break;
+        case 'chat':
+          chatNav.classList.add('active');
+          break;
+        case 'requests':
+          requestsNav.classList.add('active');
+          break;
+        case 'profile':
+          profileNav.classList.add('active');
+          break;
       }
     }
 
@@ -1632,8 +551,14 @@
     function handleAuthStateChange(user) {
       if (user) {
         currentUser = user;
+
+        // Immediately set header info so user sees themselves right away
+        profileNameLabel.textContent = currentUser.email ? currentUser.email.split('@')[0] : '';
+        currentUserEmailLabel.textContent = currentUser.email || '';
+
         initializeAppAfterLogin();
       } else {
+        // cleanup listeners if needed
         currentUser = null;
         currentUserData = null;
         loginPage.style.display = 'flex';
@@ -1645,36 +570,36 @@
     function initializeAppAfterLogin() {
       showLoading();
       
-      // Ensure user record exists
+      // Ensure user record exists (use update to avoid overwriting)
       db.ref('users/' + currentUser.uid).once('value').then(snap => {
         if (!snap.exists()) {
+          // Create default user record
           const username = currentUser.email ? currentUser.email.split('@')[0] : 'user';
           return saveUserToDB(currentUser.uid, {
             uid: currentUser.uid,
             username: username,
             email: currentUser.email,
             role: 'user',
+            friends: {},
             blocked: false
           });
         }
       }).catch(error => {
         console.error("Error checking user record:", error);
       }).finally(() => {
-        // Attach listener for user data
+        // After ensuring DB record, attach live listener for this user's data
         db.ref('users/' + currentUser.uid).on('value', snap => {
           currentUserData = snap.val();
           if (currentUserData) {
-            updateProfileDisplay();
-            
-            // Show admin panel if user is admin
+            profileNameLabel.textContent = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : '');
+            currentUserEmailLabel.textContent = currentUserData.email || currentUser.email || '';
+            // Show admin controls if admin
             if (currentUserData.role === 'admin') {
-              document.getElementById('profile-menu').innerHTML += `
-                <li><a href="#" id="admin-btn"><i class="fas fa-user-shield" style="margin-right:10px;"></i> Admin Panel</a></li>
-              `;
-              document.getElementById('admin-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                showPage('admin');
-              });
+              adminPanelEl.style.display = 'block';
+              adminPanelBtn.style.display = 'block';
+            } else {
+              adminPanelEl.style.display = 'none';
+              adminPanelBtn.style.display = 'none';
             }
           }
           hideLoading();
@@ -1682,20 +607,17 @@
 
         // Show app UI
         loginPage.style.display = 'none';
-        appContainer.style.display = 'flex';
+        appContainer.style.display = 'block';
 
-        // Load initial data
-        loadNotices();
-        showPage('home');
+        // Load components (these will attach their own listeners)
+        loadAllUsers();
+        listenFriendRequests();
+        loadFriendsList();
+        listenNotifications();
+        
+        // Set home as active by default
+        setActiveNav('home');
       });
-    }
-
-    // Update profile display
-    function updateProfileDisplay() {
-      if (currentUserData) {
-        profileNameDisplay.textContent = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
-        profileEmailDisplay.textContent = currentUserData.email || currentUser.email || '';
-      }
     }
 
     // Handle login
@@ -1742,11 +664,13 @@
       auth.createUserWithEmailAndPassword(email, password)
         .then((cred) => {
           currentUser = cred.user;
+          // Save user to database
           return saveUserToDB(currentUser.uid, {
             uid: currentUser.uid,
             username: username,
             email: email,
             role: 'user',
+            friends: {},
             blocked: false
           });
         })
@@ -1771,652 +695,710 @@
       });
     }
 
-    // Save user to database
+    // Save user to database (use update to avoid wiping children)
     function saveUserToDB(uid, userData) {
       return db.ref('users/' + uid).update(userData);
     }
 
-    // Start exam
-    function startExam() {
-      if (!studentNameInput.value || !fatherNameInput.value || !dobInput.value || 
-          !symbolNoInput.value || !examSubjectSelect.value || !selectedPhoto) {
-        alert('Please fill all fields and upload photo');
-        return;
-      }
+    // Load all users for friend requests
+    function loadAllUsers() {
+      showLoading('users-list-container');
       
-      showLoading();
-      
-      // Upload photo
-      const storageRef = storage.ref(`student_photos/${currentUser.uid}_${Date.now()}`);
-      storageRef.put(selectedPhoto).then(snapshot => {
-        return snapshot.ref.getDownloadURL();
-      }).then(photoUrl => {
-        currentExam = {
-          ...currentExam,
-          studentName: studentNameInput.value,
-          fatherName: fatherNameInput.value,
-          dob: dobInput.value,
-          symbolNo: symbolNoInput.value,
-          subject: examSubjectSelect.options[examSubjectSelect.selectedIndex].text,
-          subjectKey: examSubjectSelect.value,
-          photoUrl: photoUrl,
-          timestamp: Date.now(),
-          userId: currentUser.uid
-        };
+      db.ref('users').on('value', snapshot => {
+        const allUsers = snapshot.val() || {};
+        usersListContainer.innerHTML = '';
+
+        for (const uid in allUsers) {
+          // Show everyone including current user, but mark current user
+          const user = allUsers[uid];
+          const userItem = createUserItem(uid, user);
+          usersListContainer.appendChild(userItem);
+        }
         
-        // Load questions for exam
-        loadExamQuestions();
-      }).catch(error => {
-        hideLoading();
-        alert('Failed to upload photo: ' + error.message);
+        hideLoading('users-list-container');
+      }, error => {
+        hideLoading('users-list-container');
+        console.error("Error loading users:", error);
       });
     }
 
-    // Load questions for exam
-    function loadExamQuestions() {
-      db.ref(`questions/${currentExam.courseKey}/${currentExam.subjectKey}`).once('value').then(snap => {
-        const questions = snap.val();
-        if (!questions || Object.keys(questions).length === 0) {
-          hideLoading();
-          alert('No questions available for this subject yet');
-          return;
-        }
-        
-        // Convert to array and shuffle
-        const questionsArray = Object.values(questions);
-        shuffleArray(questionsArray);
-        
-        // Select first 10 questions (or all if less than 10)
-        currentExam.questions = questionsArray.slice(0, Math.min(10, questionsArray.length));
-        currentExam.answers = {};
-        currentExam.startTime = Date.now();
-        
-        // Start exam
-        startExamTimer();
-        displayExamQuestions();
-        showPage('exam');
-        hideLoading();
-      }).catch(error => {
-        hideLoading();
-        alert('Failed to load questions: ' + error.message);
-      });
-    }
+    // Create user item element
+    function createUserItem(uid, user) {
+      const item = document.createElement('div');
+      item.className = 'user-item';
 
-    // Shuffle array
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+      // Create action buttons area
+      const actionDiv = document.createElement('div');
+      actionDiv.style.marginLeft = '8px';
+      const adminControls = document.createElement('div');
+      adminControls.style.marginLeft = '8px';
 
-    // Start exam timer
-    function startExamTimer() {
-      examTimeLeft = 1800; // 30 minutes
-      updateTimerDisplay();
-      
-      if (examTimerInterval) clearInterval(examTimerInterval);
-      examTimerInterval = setInterval(() => {
-        examTimeLeft--;
-        updateTimerDisplay();
-        
-        if (examTimeLeft <= 0) {
-          clearInterval(examTimerInterval);
-          submitExam();
-        }
-      }, 1000);
-    }
-
-    // Update timer display
-    function updateTimerDisplay() {
-      const minutes = Math.floor(examTimeLeft / 60);
-      const seconds = examTimeLeft % 60;
-      examTimer.textContent = `Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    }
-
-    // Display exam questions
-    function displayExamQuestions() {
-      examQuestionsContainer.innerHTML = '';
-      
-      currentExam.questions.forEach((question, index) => {
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'question-container';
-        questionDiv.innerHTML = `
-          <div class="question-text">${index + 1}. ${escapeHtml(question.text)}</div>
-          <div class="option" data-question="${index}" data-option="1">${escapeHtml(question.option1)}</div>
-          <div class="option" data-question="${index}" data-option="2">${escapeHtml(question.option2)}</div>
-          <div class="option" data-question="${index}" data-option="3">${escapeHtml(question.option3)}</div>
-          <div class="option" data-question="${index}" data-option="4">${escapeHtml(question.option4)}</div>
+      // If this is the current user, show "You" badge and disable actions
+      if (currentUser && uid === currentUser.uid) {
+        item.innerHTML = `
+          <div class="user-avatar"><i class="fas fa-user"></i></div>
+          <div class="user-info">
+            <div class="user-name">${escapeHtml(user.username || '(no-name)')} <span class="you-badge">You</span></div>
+            <div class="user-status">${escapeHtml(user.email || '')}</div>
+          </div>
         `;
-        
-        examQuestionsContainer.appendChild(questionDiv);
-        
-        // Add click handlers for options
-        questionDiv.querySelectorAll('.option').forEach(option => {
-          option.addEventListener('click', (e) => {
-            const questionIndex = parseInt(e.target.dataset.question);
-            const optionIndex = parseInt(e.target.dataset.option);
-            
-            // Deselect all options for this question
-            examQuestionsContainer.querySelectorAll(`.option[data-question="${questionIndex}"]`).forEach(opt => {
-              opt.classList.remove('selected');
-            });
-            
-            // Select clicked option
-            e.target.classList.add('selected');
-            
-            // Save answer
-            currentExam.answers[questionIndex] = optionIndex;
-          });
+      } else {
+        item.innerHTML = `
+          <div class="user-avatar"><i class="fas fa-user"></i></div>
+          <div class="user-info">
+            <div class="user-name">${escapeHtml(user.username || '(no-name)')}</div>
+            <div class="user-status">${escapeHtml(user.email || '')}</div>
+          </div>
+        `;
+        // Create friend action button for non-self users
+        createFriendActionButton(uid, actionDiv);
+
+        // Make the whole item clickable to send request (but avoid clicks when pressing inner buttons)
+        item.classList.add('clickable');
+        item.addEventListener('click', (e) => {
+          // If the click originated from a button inside the item, ignore here
+          if (e.target.closest('button')) return;
+          // send friend request (will handle duplicates / existing requests in the function)
+          sendFriendRequest(uid);
         });
-      });
+      }
+
+      // If current user is admin, show admin controls
+      if (currentUserData && currentUserData.role === 'admin' && uid !== currentUser.uid) {
+        createAdminControls(uid, adminControls);
+      }
+
+      item.appendChild(actionDiv);
+      item.appendChild(adminControls);
+      return item;
     }
 
-    // Submit exam
-    function submitExam() {
-      if (examTimerInterval) clearInterval(examTimerInterval);
-      
-      // Calculate score
-      let correctCount = 0;
-      currentExam.questions.forEach((question, index) => {
-        if (currentExam.answers[index] == question.correctOption) {
-          correctCount++;
+    // Create friend action button based on relationship status
+    function createFriendActionButton(uid, container) {
+      const btn = document.createElement('button');
+      btn.setAttribute('data-uid', uid);
+
+      // Check friendship status and friendRequests
+      Promise.all([
+        db.ref(`users/${currentUser.uid}/friends/${uid}`).once('value'),
+        db.ref(`users/${uid}/friendRequests/${currentUser.uid}`).once('value'),
+        db.ref(`users/${currentUser.uid}/friendRequests/${uid}`).once('value')
+      ]).then(([fsnap, rsnap, incomingSnap]) => {
+        if (fsnap.exists()) {
+          // Already friends
+          btn.textContent = 'Friends';
+          btn.disabled = true;
+          btn.style.background = '#6c757d';
+          container.appendChild(btn);
+        } else if (rsnap.exists()) {
+          // Request sent by current user to uid
+          btn.textContent = 'Cancel';
+          btn.className = 'cancel-request-btn';
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            cancelFriendRequest(uid);
+          });
+          container.appendChild(btn);
+        } else if (incomingSnap.exists()) {
+          // Incoming request from uid to current user — show "Respond" here too
+          btn.textContent = 'Respond';
+          btn.className = 'add-friend-btn';
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Scroll to friend requests area for convenience
+            document.getElementById('friend-requests-card').scrollIntoView({behavior:'smooth'});
+          });
+          container.appendChild(btn);
+        } else {
+          // No relation - show Add Friend
+          btn.textContent = 'Add Friend';
+          btn.className = 'add-friend-btn';
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sendFriendRequest(uid);
+          });
+          container.appendChild(btn);
         }
+      }).catch(err => {
+        console.error('Error creating friend button:', err);
+        btn.textContent = 'Add Friend';
+        btn.className = 'add-friend-btn';
+        btn.addEventListener('click', (e) => { e.stopPropagation(); sendFriendRequest(uid); });
+        container.appendChild(btn);
       });
-      
-      const percentage = Math.round((correctCount / currentExam.questions.length) * 100);
-      let remarks = '';
-      
-      if (percentage >= 90) remarks = 'A+';
-      else if (percentage >= 80) remarks = 'A';
-      else if (percentage >= 70) remarks = 'B+';
-      else if (percentage >= 60) remarks = 'B';
-      else if (percentage >= 50) remarks = 'C+';
-      else if (percentage >= 40) remarks = 'C';
-      else if (percentage >= 20) remarks = 'D';
-      else remarks = 'NG';
-      
-      currentExam.score = correctCount;
-      currentExam.totalQuestions = currentExam.questions.length;
-      currentExam.percentage = percentage;
-      currentExam.remarks = remarks;
-      currentExam.endTime = Date.now();
-      
-      // Save result
-      saveExamResult();
     }
 
-    // Save exam result
-    function saveExamResult() {
+    // Create admin controls for user management
+    function createAdminControls(uid, container) {
+      // Make admin button
+      const makeAdminBtn = document.createElement('button');
+      makeAdminBtn.className = 'make-admin-btn';
+      makeAdminBtn.textContent = 'Make Admin';
+      makeAdminBtn.addEventListener('click', (e) => { e.stopPropagation(); makeUserAdmin(uid); });
+      container.appendChild(makeAdminBtn);
+
+      // Block/unblock button
+      db.ref(`users/${uid}/blocked`).once('value').then(bsnap => {
+        const isBlocked = bsnap.exists() && bsnap.val() === true;
+        const blockBtn = document.createElement('button');
+        blockBtn.className = isBlocked ? 'unblock-btn' : 'block-btn';
+        blockBtn.textContent = isBlocked ? 'Unblock' : 'Block';
+        blockBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isBlocked) unblockUser(uid);
+          else blockUser(uid);
+        });
+        container.appendChild(blockBtn);
+      });
+    }
+
+    // Send friend request
+    async function sendFriendRequest(toUid) {
+      if (!currentUserData || !currentUser) {
+        alert('User data is still loading, please try again.');
+        return;
+      }
+
+      if (toUid === currentUser.uid) {
+        alert('You cannot send a friend request to yourself.');
+        return;
+      }
+
+      showLoading();
+
+      try {
+        // Check if already friends
+        const fsnap = await db.ref(`users/${currentUser.uid}/friends/${toUid}`).once('value');
+        if (fsnap.exists()) {
+          alert('You are already friends.');
+          hideLoading();
+          return;
+        }
+
+        // Check if request already sent
+        const alreadySent = await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).once('value');
+        if (alreadySent.exists()) {
+          alert('Friend request already sent.');
+          hideLoading();
+          return;
+        }
+
+        const senderUsername = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'Someone');
+        await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
+          fromUid: currentUser.uid,
+          fromUsername: senderUsername,
+          status: 'pending',
+          timestamp: Date.now()
+        });
+
+        // Optional: add a notification
+        await db.ref(`users/${toUid}/notifications`).push({
+          type: 'friend_request',
+          fromUid: currentUser.uid,
+          message: `${senderUsername} sent you a friend request`,
+          timestamp: Date.now()
+        });
+
+        alert('Friend request sent!');
+      } catch (error) {
+        console.error('Failed to send friend request:', error);
+        alert('Failed to send friend request: ' + (error.message || 'Unknown error'));
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // Cancel friend request
+    function cancelFriendRequest(toUid) {
+      if (!confirm('Are you sure you want to cancel this friend request?')) return;
+      
       showLoading();
       
-      db.ref(`results/${currentUser.uid}`).push().set(currentExam)
+      db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).remove()
         .then(() => {
-          displayExamResult();
-          showPage('examResult');
-          hideLoading();
+          alert('Friend request cancelled.');
         })
-        .catch(error => {
+        .catch(err => {
+          alert('Error cancelling request: ' + err.message);
+        })
+        .finally(() => {
           hideLoading();
-          alert('Failed to save result: ' + error.message);
         });
     }
 
-    // Display exam result
-    function displayExamResult() {
-      resultPhoto.src = currentExam.photoUrl;
-      resultName.textContent = currentExam.studentName;
-      resultFather.textContent = currentExam.fatherName;
-      resultDob.textContent = currentExam.dob;
-      resultSymbol.textContent = currentExam.symbolNo;
-      resultCourse.textContent = currentExam.course;
-      resultSubject.textContent = currentExam.subject;
-      totalQuestions.textContent = currentExam.totalQuestions;
-      correctAnswers.textContent = currentExam.score;
-      examScore.textContent = currentExam.score;
-      examPercentage.textContent = currentExam.percentage + '%';
-      examRemarks.textContent = currentExam.remarks;
-    }
-
-    // Load notices
-    function loadNotices() {
-      showLoading('notices-container');
+    // Listen for incoming friend requests
+    function listenFriendRequests() {
+      const ref = db.ref(`users/${currentUser.uid}/friendRequests`);
       
-      db.ref('notices').orderByChild('timestamp').limitToLast(20).once('value').then(snap => {
-        const notices = snap.val() || {};
-        noticesContainer.innerHTML = '';
+      ref.on('value', snapshot => {
+        const requests = snapshot.val() || {};
+        pendingRequests = requests;
+        renderFriendRequests(requests);
         
-        Object.entries(notices).reverse().forEach(([id, notice]) => {
-          const noticeDiv = document.createElement('div');
-          noticeDiv.className = 'notice-item';
-          
-          let imageHtml = '';
-          if (notice.imageUrl) {
-            imageHtml = `<img src="${notice.imageUrl}" class="notice-image" alt="Notice image">`;
-          }
-          
-          noticeDiv.innerHTML = `
-            <div class="notice-title">${escapeHtml(notice.title)}</div>
-            <div class="notice-message">${escapeHtml(notice.message)}</div>
-            ${imageHtml}
-            <div class="notice-date">${formatDate(notice.timestamp)}</div>
-          `;
-          
-          noticesContainer.appendChild(noticeDiv);
-        });
+        // Update badge count
+        const pendingCount = Object.keys(requests).filter(
+          k => requests[k].status === 'pending'
+        ).length;
         
-        hideLoading('notices-container');
-      }).catch(error => {
-        hideLoading('notices-container');
-        console.error("Error loading notices:", error);
+        if (pendingCount > 0) {
+          reqCountBadge.style.display = 'inline-block';
+          reqCountBadge.textContent = pendingCount;
+        } else {
+          reqCountBadge.style.display = 'none';
+        }
+      }, error => {
+        console.error("Error listening to friend requests:", error);
       });
     }
 
-    // Load books
-    function loadBooks() {
-      showLoading('books-container');
+    // Render friend requests UI
+    function renderFriendRequests(requests) {
+      friendRequestsContainer.innerHTML = '';
       
-      db.ref('books').once('value').then(snap => {
-        const books = snap.val() || {};
-        booksContainer.innerHTML = '';
-        
-        Object.entries(books).forEach(([id, book]) => {
-          const bookDiv = document.createElement('div');
-          bookDiv.className = 'book-item';
-          bookDiv.dataset.bookId = id;
-          bookDiv.innerHTML = `
-            <div class="book-title">${escapeHtml(book.title)}</div>
-            <div class="book-desc">${escapeHtml(book.description)}</div>
-          `;
-          
-          bookDiv.addEventListener('click', () => {
-            window.open(book.fileUrl, '_blank');
-          });
-          
-          booksContainer.appendChild(bookDiv);
-        });
-        
-        hideLoading('books-container');
-      }).catch(error => {
-        hideLoading('books-container');
-        console.error("Error loading books:", error);
-      });
-    }
-
-    // Load user results
-    function loadUserResults() {
-      showLoading('results-list-container');
+      if (Object.keys(requests).length === 0) {
+        friendRequestsContainer.innerHTML = '<div style="padding:12px;color:#666;">No pending friend requests</div>';
+        return;
+      }
       
-      db.ref(`results/${currentUser.uid}`).orderByChild('timestamp').once('value').then(snap => {
-        const results = snap.val() || {};
-        resultsListContainer.innerHTML = '';
+      for (const fromUid in requests) {
+        const request = requests[fromUid];
+        if (request.status !== 'pending') continue;
         
-        Object.entries(results).reverse().forEach(([id, result]) => {
-          const resultDiv = document.createElement('div');
-          resultDiv.className = 'user-item clickable';
-          resultDiv.innerHTML = `
-            <div class="user-avatar"><i class="fas fa-poll"></i></div>
+        // Load sender info
+        db.ref(`users/${fromUid}`).once('value').then(snap => {
+          const sender = snap.val() || { 
+            username: request.fromUsername || 'Unknown', 
+            email: '' 
+          };
+          
+          const item = document.createElement('div');
+          item.className = 'request-item';
+          item.innerHTML = `
+            <div class="user-avatar"><i class="fas fa-user"></i></div>
             <div class="user-info">
-              <div class="user-name">${escapeHtml(result.course)} - ${escapeHtml(result.subject)}</div>
-              <div class="user-status">Score: ${result.score}/${result.totalQuestions} (${result.percentage}%) - ${result.remarks}</div>
-              <div class="last-message">${formatDate(result.timestamp)}</div>
+              <div class="user-name">${escapeHtml(sender.username)}</div>
+              <div class="user-status">${escapeHtml(sender.email || request.fromUsername || '')}</div>
+            </div>
+            <div class="request-actions">
+              <button class="accept-btn" data-uid="${fromUid}">Accept</button>
+              <button class="decline-btn" data-uid="${fromUid}">Decline</button>
             </div>
           `;
           
-          resultDiv.addEventListener('click', () => {
-            currentExam = result;
-            displayExamResult();
-            showPage('examResult');
-          });
+          friendRequestsContainer.appendChild(item);
           
-          resultsListContainer.appendChild(resultDiv);
+          // Add event listeners to buttons
+          item.querySelector('.accept-btn').addEventListener('click', (e) => { e.stopPropagation(); acceptFriendRequest(fromUid); });
+          item.querySelector('.decline-btn').addEventListener('click', (e) => { e.stopPropagation(); declineFriendRequest(fromUid); });
         });
-        
-        hideLoading('results-list-container');
-      }).catch(error => {
-        hideLoading('results-list-container');
-        console.error("Error loading results:", error);
-      });
-    }
-
-    // Load admin data
-    function loadAdminData() {
-      loadQuestions();
-      loadAdminNotices();
-      loadAdminBooks();
-      loadAdminResults();
-    }
-
-    // Load questions for admin
-    function loadQuestions() {
-      showLoading('admin-questions-list');
-      
-      db.ref(`questions/${currentAdminCourse}/${currentAdminSubject}`).once('value').then(snap => {
-        const questions = snap.val() || {};
-        adminQuestionsList.innerHTML = '<h3>Questions</h3>';
-        
-        if (Object.keys(questions).length === 0) {
-          adminQuestionsList.innerHTML += '<div style="padding:12px;color:#666;">No questions yet</div>';
-          hideLoading('admin-questions-list');
-          return;
-        }
-        
-        Object.entries(questions).forEach(([id, question]) => {
-          const questionDiv = document.createElement('div');
-          questionDiv.className = 'question-list-item';
-          questionDiv.innerHTML = `
-            <div><strong>${escapeHtml(question.text)}</strong></div>
-            <div style="margin-top:5px; font-size:14px;">
-              <span style="color:${question.correctOption == 1 ? 'green' : 'inherit'}">1. ${escapeHtml(question.option1)}</span> | 
-              <span style="color:${question.correctOption == 2 ? 'green' : 'inherit'}">2. ${escapeHtml(question.option2)}</span> | 
-              <span style="color:${question.correctOption == 3 ? 'green' : 'inherit'}">3. ${escapeHtml(question.option3)}</span> | 
-              <span style="color:${question.correctOption == 4 ? 'green' : 'inherit'}">4. ${escapeHtml(question.option4)}</span>
-            </div>
-          `;
-          
-          questionDiv.addEventListener('click', () => {
-            if (confirm('Delete this question?')) {
-              db.ref(`questions/${currentAdminCourse}/${currentAdminSubject}/${id}`).remove()
-                .then(() => loadQuestions())
-                .catch(error => alert('Failed to delete question: ' + error.message));
-            }
-          });
-          
-          adminQuestionsList.appendChild(questionDiv);
-        });
-        
-        hideLoading('admin-questions-list');
-      }).catch(error => {
-        hideLoading('admin-questions-list');
-        console.error("Error loading questions:", error);
-      });
-    }
-
-    // Add question
-    function addQuestion() {
-      const text = questionTextInput.value.trim();
-      const option1 = option1Input.value.trim();
-      const option2 = option2Input.value.trim();
-      const option3 = option3Input.value.trim();
-      const option4 = option4Input.value.trim();
-      const correctOption = correctOptionSelect.value;
-      
-      if (!text || !option1 || !option2 || !option3 || !option4) {
-        alert('Please fill all fields');
-        return;
       }
+    }
+
+    // Accept friend request
+    function acceptFriendRequest(friendUid) {
+      if (!confirm('Accept this friend request?')) return;
       
-      showLoading('admin-questions-list');
+      showLoading();
       
-      const question = {
-        text: text,
-        option1: option1,
-        option2: option2,
-        option3: option3,
-        option4: option4,
-        correctOption: parseInt(correctOption),
-        timestamp: Date.now()
-      };
-      
-      db.ref(`questions/${currentAdminCourse}/${currentAdminSubject}`).push(question)
+      const updates = {};
+      updates[`users/${currentUser.uid}/friends/${friendUid}`] = true;
+      updates[`users/${friendUid}/friends/${currentUser.uid}`] = true;
+      updates[`users/${currentUser.uid}/friendRequests/${friendUid}`] = null;
+      updates[`users/${friendUid}/friendRequests/${currentUser.uid}`] = null;
+
+      db.ref().update(updates)
         .then(() => {
-          questionTextInput.value = '';
-          option1Input.value = '';
-          option2Input.value = '';
-          option3Input.value = '';
-          option4Input.value = '';
-          loadQuestions();
-        })
-        .catch(error => {
-          hideLoading('admin-questions-list');
-          alert('Failed to add question: ' + error.message);
-        });
-    }
-
-    // Load admin notices
-    function loadAdminNotices() {
-      showLoading('admin-notices-list');
-      
-      db.ref('notices').orderByChild('timestamp').limitToLast(20).once('value').then(snap => {
-        const notices = snap.val() || {};
-        adminNoticesList.innerHTML = '<h3>Existing Notices</h3>';
-        
-        if (Object.keys(notices).length === 0) {
-          adminNoticesList.innerHTML += '<div style="padding:12px;color:#666;">No notices yet</div>';
-          hideLoading('admin-notices-list');
-          return;
-        }
-        
-        Object.entries(notices).reverse().forEach(([id, notice]) => {
-          const noticeDiv = document.createElement('div');
-          noticeDiv.className = 'question-list-item';
+          alert('Friend request accepted!');
+          loadFriendsList();
           
-          let imageHtml = '';
-          if (notice.imageUrl) {
-            imageHtml = `<img src="${notice.imageUrl}" style="max-width:100%; border-radius:4px; margin-top:5px;">`;
-          }
-          
-          noticeDiv.innerHTML = `
-            <div><strong>${escapeHtml(notice.title)}</strong></div>
-            <div style="margin:5px 0;">${escapeHtml(notice.message)}</div>
-            ${imageHtml}
-            <div style="text-align:right; font-size:12px; color:#666; margin-top:5px;">
-              ${formatDate(notice.timestamp)}
-            </div>
-          `;
-          
-          noticeDiv.addEventListener('click', () => {
-            if (confirm('Delete this notice?')) {
-              db.ref(`notices/${id}`).remove()
-                .then(() => loadAdminNotices())
-                .catch(error => alert('Failed to delete notice: ' + error.message));
-            }
+          // Notify the friend that their request was accepted
+          db.ref(`users/${friendUid}/notifications`).push({
+            type: 'request_accepted',
+            fromUid: currentUser.uid,
+            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} accepted your friend request.`,
+            timestamp: Date.now()
           });
-          
-          adminNoticesList.appendChild(noticeDiv);
+        })
+        .catch(err => {
+          alert('Error accepting request: ' + err.message);
+        })
+        .finally(() => {
+          hideLoading();
         });
-        
-        hideLoading('admin-notices-list');
-      }).catch(error => {
-        hideLoading('admin-notices-list');
-        console.error("Error loading notices:", error);
-      });
     }
 
-    // Add notice
-    function addNotice() {
-      const title = noticeTitleInput.value.trim();
-      const message = noticeMessageInput.value.trim();
+    // Decline friend request
+    function declineFriendRequest(friendUid) {
+      if (!confirm('Decline this friend request?')) return;
       
-      if (!title || !message) {
-        alert('Please fill title and message');
-        return;
-      }
+      showLoading();
       
-      showLoading('admin-notices-list');
-      
-      if (selectedNoticePhoto) {
-        // Upload image
-        const storageRef = storage.ref(`notice_images/${Date.now()}`);
-        storageRef.put(selectedNoticePhoto).then(snapshot => {
-          return snapshot.ref.getDownloadURL();
-        }).then(imageUrl => {
-          return saveNotice(title, message, imageUrl);
-        }).catch(error => {
-          hideLoading('admin-notices-list');
-          alert('Failed to upload image: ' + error.message);
-        });
-      } else {
-        saveNotice(title, message);
-      }
-    }
-
-    // Save notice to database
-    function saveNotice(title, message, imageUrl = null) {
-      const notice = {
-        title: title,
-        message: message,
-        timestamp: Date.now()
-      };
-      
-      if (imageUrl) {
-        notice.imageUrl = imageUrl;
-      }
-      
-      db.ref('notices').push(notice)
+      db.ref(`users/${currentUser.uid}/friendRequests/${friendUid}`).remove()
         .then(() => {
-          noticeTitleInput.value = '';
-          noticeMessageInput.value = '';
-          noticePhotoPreview.innerHTML = '<i class="fas fa-image" style="color:#ccc;"></i>';
-          selectedNoticePhoto = null;
-          loadAdminNotices();
+          // Notify the sender that their request was declined
+          db.ref(`users/${friendUid}/notifications`).push({
+            type: 'request_rejected',
+            fromUid: currentUser.uid,
+            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} declined your friend request.`,
+            timestamp: Date.now()
+          });
+          alert('Friend request declined!');
         })
-        .catch(error => {
-          hideLoading('admin-notices-list');
-          alert('Failed to add notice: ' + error.message);
+        .catch(err => {
+          alert('Error declining request: ' + err.message);
+        })
+        .finally(() => {
+          hideLoading();
         });
     }
 
-    // Load admin books
-    function loadAdminBooks() {
-      showLoading('admin-books-list');
+    // Listen to notifications
+    function listenNotifications() {
+      const ref = db.ref(`users/${currentUser.uid}/notifications`);
       
-      db.ref('books').once('value').then(snap => {
-        const books = snap.val() || {};
-        adminBooksList.innerHTML = '<h3>Existing Books</h3>';
-        
-        if (Object.keys(books).length === 0) {
-          adminBooksList.innerHTML += '<div style="padding:12px;color:#666;">No books yet</div>';
-          hideLoading('admin-books-list');
-          return;
-        }
-        
-        Object.entries(books).forEach(([id, book]) => {
-          const bookDiv = document.createElement('div');
-          bookDiv.className = 'question-list-item';
-          bookDiv.innerHTML = `
-            <div><strong>${escapeHtml(book.title)}</strong> (${book.course})</div>
-            <div style="margin:5px 0;">${escapeHtml(book.description)}</div>
-            <div style="text-align:right; font-size:12px; color:#666;">
-              <a href="${book.fileUrl}" target="_blank">View PDF</a>
-            </div>
-          `;
-          
-          bookDiv.addEventListener('click', () => {
-            if (confirm('Delete this book?')) {
-              db.ref(`books/${id}`).remove()
-                .then(() => loadAdminBooks())
-                .catch(error => alert('Failed to delete book: ' + error.message));
-            }
-          });
-          
-          adminBooksList.appendChild(bookDiv);
-        });
-        
-        hideLoading('admin-books-list');
-      }).catch(error => {
-        hideLoading('admin-books-list');
-        console.error("Error loading books:", error);
+      ref.on('value', snap => {
+        const nots = snap.val() || {};
+        notifications = nots;
+        renderNotifications(nots);
+      }, error => {
+        console.error("Error listening to notifications:", error);
       });
     }
 
-    // Add book
-    function addBook() {
-      const title = bookTitleInput.value.trim();
-      const description = bookDescInput.value.trim();
-      const course = bookCourseSelect.value;
+    // Render notifications
+    function renderNotifications(nots) {
+      notiItems.innerHTML = '';
+      const notificationsArray = [];
       
-      if (!title || !description || !selectedBookFile) {
-        alert('Please fill all fields and select PDF file');
+      for (const nid in nots) {
+        notificationsArray.push({ id: nid, ...nots[nid] });
+      }
+      
+      // Sort by timestamp (newest first)
+      notificationsArray.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      
+      if (notificationsArray.length === 0) {
+        notiItems.innerHTML = '<div style="color:#666;padding:12px;">No notifications</div>';
         return;
       }
       
-      showLoading('admin-books-list');
+      notificationsArray.forEach(notification => {
+        const div = document.createElement('div');
+        div.style.padding = '6px';
+        div.style.borderBottom = '1px solid #eee';
+        div.innerHTML = `
+          <div style="font-size:13px;">${escapeHtml(notification.message)}</div>
+          <div style="font-size:11px;color:#888;">${new Date(notification.timestamp).toLocaleString()}</div>
+        `;
+        notiItems.appendChild(div);
+      });
+    }
+
+    // Load friends list
+    function loadFriendsList() {
+      showLoading('contacts-list');
       
-      // Upload PDF
-      const storageRef = storage.ref(`books/${Date.now()}_${selectedBookFile.name}`);
-      storageRef.put(selectedBookFile).then(snapshot => {
-        return snapshot.ref.getDownloadURL();
-      }).then(fileUrl => {
-        const book = {
-          title: title,
-          description: description,
-          course: course,
-          fileUrl: fileUrl,
+      const ref = db.ref(`users/${currentUser.uid}/friends`);
+      
+      ref.on('value', snapshot => {
+        const friends = snapshot.val() || {};
+        contactsList.innerHTML = '';
+        
+        if (Object.keys(friends).length === 0) {
+          contactsList.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from the users list.</div>';
+          hideLoading('contacts-list');
+          return;
+        }
+        
+        const promises = [];
+        for (const friendId in friends) {
+          // fetch each friend data
+          promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
+            const friend = snap.val() || { username: 'Unknown' };
+            createFriendContactItem(friendId, friend);
+          }).catch(err => console.error('Error loading friend data', err)));
+        }
+
+        Promise.all(promises).then(() => hideLoading('contacts-list')).catch(() => hideLoading('contacts-list'));
+      }, error => {
+        hideLoading('contacts-list');
+        console.error("Error loading friends list:", error);
+      });
+    }
+
+    // Create friend contact item
+    function createFriendContactItem(friendId, friend) {
+      const contactItem = document.createElement('div');
+      contactItem.className = 'contact';
+      contactItem.style.display = 'flex';
+      contactItem.style.alignItems = 'center';
+      contactItem.style.padding = '12px';
+      contactItem.style.borderBottom = '1px solid #eee';
+      contactItem.style.cursor = 'pointer';
+      
+      contactItem.innerHTML = `
+        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <div class="user-info" style="flex:1;">
+          <div class="user-name">${escapeHtml(friend.username)}</div>
+          <div class="user-status">Online</div>
+        </div>
+      `;
+      
+      contactsList.appendChild(contactItem);
+      
+      contactItem.addEventListener('click', () => openChat(friendId, friend.username));
+    }
+
+    // Open chat with friend
+    function openChat(friendId, friendName) {
+      currentChatFriend = { id: friendId, name: friendName };
+      currentChatName.textContent = friendName;
+      backBtn.style.display = 'inline-block';
+      currentChatName.style.display = 'inline-block';
+      chatActions.style.display = 'flex';
+      
+      // Load messages
+      loadChatMessages(friendId);
+    }
+
+    // Load chat messages
+    function loadChatMessages(friendId) {
+      showLoading('chat-messages');
+      
+      const chatId = [currentUser.uid, friendId].sort().join('_');
+      const ref = db.ref(`chats/${chatId}`);
+      
+      // Clear previous listeners
+      ref.off();
+      
+      // Clear chat area
+      chatMessages.innerHTML = '';
+      
+      ref.on('child_added', snap => {
+        const message = snap.val();
+        addMessageToChat(message);
+        hideLoading('chat-messages');
+      }, error => {
+        hideLoading('chat-messages');
+        console.error("Error loading messages:", error);
+      });
+    }
+
+    // Add message to chat UI
+    function addMessageToChat(message) {
+      const div = document.createElement('div');
+      div.className = 'message ' + 
+        (message.sender === currentUser.uid ? 'sent' : 'received');
+      
+      div.innerHTML = `
+        <div>${escapeHtml(message.text)}</div>
+        <div class="message-time">${new Date(message.timestamp).toLocaleTimeString()}</div>
+      `;
+      
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Send message
+    async function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      if (!currentChatFriend) {
+        alert('Please select a friend to chat with');
+        return;
+      }
+      
+      showLoading();
+      
+      try {
+        // Check block status
+        const [meSnap, friendSnap] = await Promise.all([
+          db.ref(`users/${currentUser.uid}/blocked`).once('value'),
+          db.ref(`users/${currentChatFriend.id}/blocked`).once('value')
+        ]);
+        
+        const meBlocked = meSnap.exists() && meSnap.val() === true;
+        const friendBlocked = friendSnap.exists() && friendSnap.val() === true;
+
+        if (meBlocked) {
+          alert('You are blocked and cannot send messages.');
+          hideLoading();
+          return;
+        }
+        
+        if (friendBlocked) {
+          alert('This user is blocked. Cannot send messages.');
+          hideLoading();
+          return;
+        }
+
+        const chatId = [currentUser.uid, currentChatFriend.id].sort().join('_');
+        const message = {
+          text: text,
+          sender: currentUser.uid,
           timestamp: Date.now()
         };
         
-        return db.ref('books').push(book);
-      }).then(() => {
-        bookTitleInput.value = '';
-        bookDescInput.value = '';
-        bookFileUpload.value = '';
-        selectedBookFile = null;
-        loadAdminBooks();
-      }).catch(error => {
-        hideLoading('admin-books-list');
-        alert('Failed to upload book: ' + error.message);
-      });
+        await db.ref(`chats/${chatId}`).push(message);
+        messageInput.value = '';
+      } catch (error) {
+        alert('Failed to send message: ' + error.message);
+      } finally {
+        hideLoading();
+      }
     }
 
-    // Load admin results
-    function loadAdminResults() {
-      showLoading('admin-results-list');
+    // Admin: view all chats
+    function viewAllChats() {
+      if (!currentUserData || currentUserData.role !== 'admin') {
+        alert('Admin access required');
+        return;
+      }
       
-      db.ref('results').orderByChild('timestamp').limitToLast(50).once('value').then(snap => {
-        const results = snap.val() || {};
-        adminResultsList.innerHTML = '<h3>Student Results</h3>';
+      showLoading('admin-output');
+      
+      db.ref('chats').once('value').then(snap => {
+        const chats = snap.val() || {};
+        let outputHtml = '';
         
-        if (Object.keys(results).length === 0) {
-          adminResultsList.innerHTML += '<div style="padding:12px;color:#666;">No results yet</div>';
-          hideLoading('admin-results-list');
-          return;
-        }
-        
-        // Group by user
-        const userResults = {};
-        
-        Object.entries(results).forEach(([id, result]) => {
-          if (!userResults[result.userId]) {
-            userResults[result.userId] = {
-              name: result.studentName,
-              results: []
-            };
-          }
-          userResults[result.userId].results.push(result);
-        });
-        
-        // Display results
-        Object.entries(userResults).forEach(([userId, userData]) => {
-          const userDiv = document.createElement('div');
-          userDiv.className = 'question-list-item';
-          userDiv.innerHTML = `
-            <div><strong>${escapeHtml(userData.name)}</strong></div>
-            <div style="margin-top:5px;">
-              ${userData.results.map(result => `
-                <div style="margin-bottom:5px; font-size:14px;">
-                  ${result.course} - ${result.subject}: ${result.score}/${result.totalQuestions} (${result.percentage}%) - ${result.remarks}
-                  <span style="color:#666; font-size:12px;">${formatDate(result.timestamp)}</span>
-                </div>
-              `).join('')}
+        for (const chatId in chats) {
+          const messages = chats[chatId] || {};
+          outputHtml += `
+            <div style="padding:6px;border-bottom:1px solid #eee;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong>${chatId}</strong>
+                <button data-chat="${chatId}" class="view-chat-btn">View</button>
+              </div>
+              <div id="chat-${escapeHtml(chatId)}" style="display:none; margin-top:8px; padding-left:8px;"></div>
             </div>
           `;
-          
-          adminResultsList.appendChild(userDiv);
+        }
+        
+        adminOutput.innerHTML = outputHtml || '<div>No chats yet</div>';
+        
+        // Add event listeners to view buttons
+        const viewButtons = adminOutput.querySelectorAll('.view-chat-btn');
+        viewButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            const chatId = e.target.getAttribute('data-chat');
+            toggleChatView(chatId);
+          });
         });
         
-        hideLoading('admin-results-list');
+        hideLoading('admin-output');
       }).catch(error => {
-        hideLoading('admin-results-list');
-        console.error("Error loading results:", error);
+        hideLoading('admin-output');
+        console.error("Error loading chats:", error);
       });
     }
 
-    // Format date
-    function formatDate(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleString();
+    // Toggle chat view in admin panel
+    function toggleChatView(chatId) {
+      const container = adminOutput.querySelector(`#chat-${cssEscape(chatId)}`);
+      if (!container) return;
+      
+      if (container.style.display === 'block') {
+        container.style.display = 'none';
+        return;
+      }
+      
+      container.innerHTML = 'Loading messages...';
+      container.style.display = 'block';
+      
+      db.ref(`chats/${chatId}`).once('value').then(snap => {
+        const messages = snap.val() || {};
+        let messagesHtml = '';
+        
+        for (const mid in messages) {
+          const message = messages[mid];
+          messagesHtml += `
+            <div style="padding:8px;border-bottom:1px dashed #eee;">
+              <div style="font-size:13px;">
+                <strong>${escapeHtml(message.sender)}</strong>
+                <span style="color:#888;font-size:12px;">
+                  ${new Date(message.timestamp).toLocaleString()}
+                </span>
+              </div>
+              <div style="margin-top:6px;">${escapeHtml(message.text)}</div>
+            </div>
+          `;
+        }
+        
+        container.innerHTML = messagesHtml || '<div>No messages</div>';
+      });
+    }
+
+    // Admin: view all users
+    function viewAllUsers() {
+      if (!currentUserData || currentUserData.role !== 'admin') {
+        alert('Admin access required');
+        return;
+      }
+      
+      showLoading('admin-output');
+      
+      db.ref('users').once('value').then(snap => {
+        const users = snap.val() || {};
+        let outputHtml = '';
+        
+        for (const uid in users) {
+          const user = users[uid] || {};
+          outputHtml += `
+            <div style="padding:8px;border-bottom:1px solid #eee;">
+              <div>
+                <strong>${escapeHtml(user.username || uid)}</strong>
+                — ${escapeHtml(user.email || '')}
+              </div>
+              <div style="margin-top:6px;">
+                Role: ${escapeHtml(user.role || 'user')}
+                — Blocked: ${user.blocked ? 'yes' : 'no'}
+              </div>
+            </div>
+          `;
+        }
+        
+        adminOutput.innerHTML = outputHtml || '<div>No users</div>';
+        hideLoading('admin-output');
+      }).catch(error => {
+        hideLoading('admin-output');
+        console.error("Error loading users:", error);
+      });
+    }
+
+    // Admin: make user admin
+    function makeUserAdmin(uid) {
+      if (!confirm('Make this user an admin?')) return;
+      
+      showLoading();
+      
+      db.ref(`users/${uid}/role`).set('admin')
+        .then(() => alert('User is now admin.'))
+        .catch(error => alert('Error: ' + error.message))
+        .finally(() => hideLoading());
+    }
+
+    // Admin: block user
+    function blockUser(uid) {
+      if (!confirm('Block this user? Blocked users cannot send messages.')) return;
+      
+      showLoading();
+      
+      db.ref(`users/${uid}/blocked`).set(true)
+        .then(() => alert('User blocked.'))
+        .catch(error => alert('Error: ' + error.message))
+        .finally(() => hideLoading());
+    }
+
+    // Admin: unblock user
+    function unblockUser(uid) {
+      if (!confirm('Unblock this user?')) return;
+      
+      showLoading();
+      
+      db.ref(`users/${uid}/blocked`).remove()
+        .then(() => alert('User unblocked.'))
+        .catch(error => alert('Error: ' + error.message))
+        .finally(() => hideLoading());
     }
 
     // Show loading indicator
@@ -2427,9 +1409,19 @@
       spinner.id = 'loading-spinner';
       
       if (containerId) {
-        container.innerHTML = '';
-        container.appendChild(spinner);
+        // don't wipe admin output if showing admin panel
+        if (containerId === 'admin-output') {
+          const wrapper = document.createElement('div');
+          wrapper.style.minHeight = '40px';
+          wrapper.appendChild(spinner);
+          container.innerHTML = '';
+          container.appendChild(wrapper);
+        } else {
+          container.innerHTML = '';
+          container.appendChild(spinner);
+        }
       } else {
+        // avoid adding multiple top-level spinners
         if (!document.getElementById('loading-spinner')) {
           document.body.appendChild(spinner);
         }
@@ -2458,6 +1450,11 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+    }
+
+    // Utility: escape for CSS IDs
+    function cssEscape(str) {
+      return str.replace(/[^a-zA-Z0-9_-]/g, '_');
     }
 
     // Initialize the app
