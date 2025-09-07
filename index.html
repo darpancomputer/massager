@@ -308,11 +308,177 @@
       cursor: pointer;
     }
 
+    /* Call interface styles */
+    .call-interface {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #000;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+    }
+    
+    .call-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    
+    .caller-info {
+      text-align: center;
+      color: white;
+    }
+    
+    .caller-name {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    
+    .call-status {
+      font-size: 16px;
+      color: #ccc;
+    }
+    
+    .call-controls {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px 0;
+    }
+    
+    .call-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .end-call {
+      background: #ff3b30;
+      color: white;
+    }
+    
+    .mute-audio {
+      background: #4a4a4a;
+      color: white;
+    }
+    
+    .mute-audio.active {
+      background: #1877f2;
+    }
+    
+    .speaker {
+      background: #4a4a4a;
+      color: white;
+    }
+    
+    .speaker.active {
+      background: #1877f2;
+    }
+    
+    .video-preview {
+      position: absolute;
+      width: 120px;
+      height: 160px;
+      bottom: 100px;
+      right: 20px;
+      background: #333;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .video-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .remote-video {
+      flex: 1;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .remote-video video {
+      width: 100%;
+      max-height: 100%;
+    }
+    
+    .call-timer {
+      color: white;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* Audio profile panel */
+    .audio-profile {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      padding: 15px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1001;
+    }
+    
+    .audio-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    .audio-option:hover {
+      background: #f0f2f5;
+    }
+    
+    .audio-option.active {
+      background: #1877f2;
+      color: white;
+    }
+    
+    .audio-option i {
+      font-size: 20px;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 480px) {
       .container { max-width:100%; }
       .chat-header { padding:10px; }
       .chat-header-actions { gap:10px; }
+      
+      .call-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+      }
+      
+      .video-preview {
+        width: 100px;
+        height: 140px;
+        bottom: 90px;
+      }
     }
   </style>
 </head>
@@ -515,6 +681,58 @@
         </a>
       </div>
     </div>
+    
+    <!-- Call Interface -->
+    <div class="call-interface" id="call-interface">
+      <div class="call-header">
+        <div></div>
+        <div class="caller-info">
+          <div class="caller-name" id="caller-name">Friend Name</div>
+          <div class="call-status" id="call-status">Calling...</div>
+        </div>
+        <div></div>
+      </div>
+      
+      <div class="remote-video" id="remote-video">
+        <div style="color: white; text-align: center;">
+          <i class="fas fa-user" style="font-size: 80px; margin-bottom: 20px;"></i>
+          <div id="caller-name-text">Friend Name</div>
+        </div>
+      </div>
+      
+      <div class="video-preview" id="video-preview" style="display: none;">
+        <video id="local-video" autoplay muted></video>
+      </div>
+      
+      <div class="call-controls">
+        <button class="call-btn mute-audio" id="mute-audio-btn">
+          <i class="fas fa-microphone"></i>
+        </button>
+        <button class="call-btn speaker" id="speaker-btn">
+          <i class="fas fa-volume-up"></i>
+        </button>
+        <button class="call-btn end-call" id="end-call-btn">
+          <i class="fas fa-phone"></i>
+        </button>
+      </div>
+      
+      <div class="call-timer" id="call-timer">00:00</div>
+      
+      <div class="audio-profile" id="audio-profile">
+        <div class="audio-option" data-device="phone">
+          <i class="fas fa-phone"></i>
+          <span>Phone</span>
+        </div>
+        <div class="audio-option" data-device="speaker">
+          <i class="fas fa-volume-up"></i>
+          <span>Speaker</span>
+        </div>
+        <div class="audio-option" data-device="headphones">
+          <i class="fas fa-headphones"></i>
+          <span>Headphones</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Firebase SDKs -->
@@ -570,6 +788,20 @@
     const usersSearchBtn = document.getElementById('users-search-btn');
     const friendsListBtn = document.getElementById('friends-list-btn');
     const bottomNav = document.getElementById('bottom-nav');
+    
+    // Call interface elements
+    const callInterface = document.getElementById('call-interface');
+    const callerName = document.getElementById('caller-name');
+    const callerNameText = document.getElementById('caller-name-text');
+    const callStatus = document.getElementById('call-status');
+    const muteAudioBtn = document.getElementById('mute-audio-btn');
+    const speakerBtn = document.getElementById('speaker-btn');
+    const endCallBtn = document.getElementById('end-call-btn');
+    const callTimer = document.getElementById('call-timer');
+    const audioProfile = document.getElementById('audio-profile');
+    const localVideo = document.getElementById('local-video');
+    const videoPreview = document.getElementById('video-preview');
+    const remoteVideo = document.getElementById('remote-video');
 
     // Page elements
     const pages = {
@@ -599,6 +831,15 @@
     let friendsList = {};
     let isSearchActive = false;
     let searchHeader = null;
+    
+    // Call state variables
+    let callActive = false;
+    let callStartTime = 0;
+    let callTimerInterval = null;
+    let isAudioMuted = false;
+    let audioOutputDevice = 'phone';
+    let localStream = null;
+    let remoteStream = null;
 
     // Initialize the application
     function init() {
@@ -671,13 +912,49 @@
       // Call buttons
       voiceCallBtn.addEventListener('click', () => {
         if (currentChatFriend) {
-          alert(`Voice calling ${currentChatFriend.name}`);
+          startCall('voice');
         }
       });
 
       videoCallBtn.addEventListener('click', () => {
         if (currentChatFriend) {
-          alert(`Video calling ${currentChatFriend.name}`);
+          startCall('video');
+        }
+      });
+
+      // Call control buttons
+      muteAudioBtn.addEventListener('click', toggleMuteAudio);
+      speakerBtn.addEventListener('click', toggleSpeaker);
+      endCallBtn.addEventListener('click', endCall);
+      
+      // Audio profile options
+      document.querySelectorAll('.audio-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+          const device = e.currentTarget.getAttribute('data-device');
+          changeAudioOutput(device);
+        });
+      });
+      
+      // Show audio profile on long press of speaker button
+      let speakerPressTimer;
+      speakerBtn.addEventListener('mousedown', () => {
+        speakerPressTimer = setTimeout(() => {
+          audioProfile.style.display = 'flex';
+        }, 500);
+      });
+      
+      speakerBtn.addEventListener('mouseup', () => {
+        clearTimeout(speakerPressTimer);
+      });
+      
+      speakerBtn.addEventListener('mouseleave', () => {
+        clearTimeout(speakerPressTimer);
+      });
+      
+      // Hide audio profile when clicking elsewhere
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#speaker-btn') && !e.target.closest('.audio-profile')) {
+          audioProfile.style.display = 'none';
         }
       });
 
@@ -738,6 +1015,167 @@
         e.preventDefault();
         handleForgotPassword();
       });
+    }
+
+    // Start a call (voice or video)
+    function startCall(type) {
+      if (!currentChatFriend) return;
+      
+      callInterface.style.display = 'flex';
+      callerName.textContent = currentChatFriend.name;
+      callerNameText.textContent = currentChatFriend.name;
+      callStatus.textContent = type === 'video' ? 'Starting video call...' : 'Starting voice call...';
+      callActive = true;
+      
+      // Initialize call timer
+      callStartTime = Date.now();
+      updateCallTimer();
+      callTimerInterval = setInterval(updateCallTimer, 1000);
+      
+      // For video calls, show local video preview
+      if (type === 'video') {
+        startVideoPreview();
+        videoPreview.style.display = 'block';
+      } else {
+        videoPreview.style.display = 'none';
+      }
+      
+      // In a real app, you would initiate a WebRTC connection here
+      // This is just a simulation for the UI
+      setTimeout(() => {
+        callStatus.textContent = 'Call connected';
+      }, 2000);
+    }
+    
+    // Start video preview for local camera
+    function startVideoPreview() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+          .then(stream => {
+            localStream = stream;
+            localVideo.srcObject = stream;
+          })
+          .catch(error => {
+            console.error('Error accessing camera:', error);
+            alert('Could not access your camera. Please check permissions.');
+          });
+      }
+    }
+    
+    // Toggle audio mute
+    function toggleMuteAudio() {
+      isAudioMuted = !isAudioMuted;
+      
+      if (isAudioMuted) {
+        muteAudioBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+        muteAudioBtn.classList.add('active');
+        // In a real app, you would mute the audio track here
+        if (localStream) {
+          localStream.getAudioTracks().forEach(track => {
+            track.enabled = false;
+          });
+        }
+      } else {
+        muteAudioBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        muteAudioBtn.classList.remove('active');
+        // In a real app, you would unmute the audio track here
+        if (localStream) {
+          localStream.getAudioTracks().forEach(track => {
+            track.enabled = true;
+          });
+        }
+      }
+    }
+    
+    // Toggle speaker
+    function toggleSpeaker() {
+      // This is a UI-only toggle since actual audio routing requires Web Audio API
+      // or specific device capabilities
+      if (audioOutputDevice === 'phone') {
+        changeAudioOutput('speaker');
+      } else {
+        changeAudioOutput('phone');
+      }
+    }
+    
+    // Change audio output device
+    function changeAudioOutput(device) {
+      audioOutputDevice = device;
+      
+      // Update UI to show active device
+      document.querySelectorAll('.audio-option').forEach(option => {
+        if (option.getAttribute('data-device') === device) {
+          option.classList.add('active');
+        } else {
+          option.classList.remove('active');
+        }
+      });
+      
+      // Update speaker button icon based on selection
+      if (device === 'speaker') {
+        speakerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        speakerBtn.classList.add('active');
+      } else if (device === 'headphones') {
+        speakerBtn.innerHTML = '<i class="fas fa-headphones"></i>';
+        speakerBtn.classList.add('active');
+      } else {
+        speakerBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+        speakerBtn.classList.remove('active');
+      }
+      
+      // In a real app, you would change the audio output device here
+      // This typically requires using the Web Audio API or specific device APIs
+      
+      // Hide the audio profile panel after selection
+      audioProfile.style.display = 'none';
+    }
+    
+    // End the current call
+    function endCall() {
+      callInterface.style.display = 'none';
+      callActive = false;
+      
+      // Stop call timer
+      if (callTimerInterval) {
+        clearInterval(callTimerInterval);
+        callTimerInterval = null;
+      }
+      
+      // Stop local video stream
+      if (localStream) {
+        localStream.getTracks().forEach(track => {
+          track.stop();
+        });
+        localStream = null;
+      }
+      
+      // Reset UI states
+      muteAudioBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+      muteAudioBtn.classList.remove('active');
+      isAudioMuted = false;
+      
+      speakerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+      speakerBtn.classList.remove('active');
+      audioOutputDevice = 'phone';
+      
+      // Reset audio profile options
+      document.querySelectorAll('.audio-option').forEach(option => {
+        option.classList.remove('active');
+        if (option.getAttribute('data-device') === 'phone') {
+          option.classList.add('active');
+        }
+      });
+    }
+    
+    // Update call timer display
+    function updateCallTimer() {
+      if (!callActive) return;
+      
+      const elapsed = Math.floor((Date.now() - callStartTime) / 1000);
+      const minutes = Math.floor(elapsed / 60);
+      const seconds = elapsed % 60;
+      
+      callTimer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
     // Show search box
