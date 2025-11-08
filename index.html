@@ -79,15 +79,10 @@
     .friends-page{background:#000;}
     .friends-header{padding:16px;border-bottom:1px solid #2f2f2f;}
     .friends-title{font-size:20px;font-weight:600;margin-bottom:16px;}
-    .friend-post{background:#111;border-radius:12px;padding:16px;margin-bottom:12px;}
-    .friend-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-    .friend-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff9000);display:flex;align-items:center;justify-content:center;}
-    .friend-info{flex:1;}
-    .friend-name{font-weight:600;font-size:16px;}
-    .friend-time{font-size:12px;color:#b0b0b0;margin-top:2px;}
-    .post-content{font-size:14px;line-height:1.4;margin-bottom:12px;}
-    .post-actions{display:flex;gap:16px;}
-    .post-action{display:flex;align-items:center;gap:6px;color:#b0b0b0;font-size:13px;cursor:pointer;}
+    .friends-videos{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;padding:10px;}
+    .friend-video{position:relative;aspect-ratio:9/16;background:#222;overflow:hidden;}
+    .friend-video video{width:100%;height:100%;object-fit:cover;}
+    .friend-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:8px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:12px;}
 
     /* Inbox Page */
     .inbox-page{background:#000;}
@@ -134,21 +129,49 @@
     .modal-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(45deg,#ff0050,#ff9000);display:flex;align-items:center;justify-content:center;font-size:20px;}
     .modal-label{font-size:12px;text-align:center;}
 
-    /* Live Stream Page */
-    .live-page{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:1000;display:none;flex-direction:column;}
-    .live-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(transparent,rgba(0,0,0,.5));}
-    .live-back{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;}
-    .live-title{font-weight:600;font-size:16px;}
-    .live-views{background:rgba(255,0,0,.8);color:#fff;padding:4px 12px;border-radius:12px;font-size:12px;}
-    .live-video{flex:1;background:#000;display:flex;align-items:center;justify-content:center;}
-    .live-video video{width:100%;height:100%;object-fit:cover;}
-    .live-controls{display:flex;justify-content:space-around;padding:20px;background:rgba(0,0,0,.7);}
-    .live-control{display:flex;flex-direction:column;align-items:center;gap:8px;color:#fff;}
-    .live-icon{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;}
+    /* Gallery Upload Modal */
+    .gallery-modal{background:#000;width:100%;height:100%;display:flex;flex-direction:column;}
+    .gallery-header{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #2f2f2f;}
+    .gallery-title{font-size:18px;font-weight:600;}
+    .gallery-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;}
+    .gallery-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+    .upload-area{width:100%;max-width:400px;border:2px dashed #555;border-radius:12px;padding:40px;text-align:center;cursor:pointer;}
+    .upload-icon{font-size:48px;color:#555;margin-bottom:16px;}
+    .upload-text{font-size:16px;color:#b0b0b0;margin-bottom:8px;}
+    .upload-subtext{font-size:14px;color:#777;}
+    .upload-preview{width:100%;max-width:300px;max-height:300px;object-fit:contain;margin:20px 0;border-radius:8px;display:none;}
+    .caption-input{width:100%;max-width:400px;padding:12px 16px;background:#2f2f2f;border:none;border-radius:8px;color:#fff;font-size:14px;margin:10px 0;outline:none;}
+    .upload-actions{display:flex;gap:12px;width:100%;max-width:400px;margin-top:20px;}
+    .upload-action{flex:1;padding:12px;border:none;border-radius:8px;font-size:14px;cursor:pointer;}
+    .upload-cancel{background:#2f2f2f;color:#fff;}
+    .upload-post{background:#ff0050;color:#fff;}
+
+    /* Comment Modal */
+    .comment-modal{background:#000;width:100%;height:70%;position:fixed;bottom:0;border-radius:20px 20px 0 0;display:none;flex-direction:column;z-index:2000;}
+    .comment-header{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #2f2f2f;}
+    .comment-title{font-size:18px;font-weight:600;}
+    .comment-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;}
+    .comment-list{flex:1;overflow-y:auto;padding:16px;}
+    .comment-item{padding:12px 0;border-bottom:1px solid #2f2f2f;}
+    .comment-user{font-weight:600;font-size:14px;margin-bottom:4px;}
+    .comment-text{font-size:14px;color:#e0e0e0;}
+    .comment-input-area{display:flex;padding:16px;gap:12px;border-top:1px solid #2f2f2f;}
+    .comment-input{flex:1;padding:12px 16px;background:#2f2f2f;border:none;border-radius:20px;color:#fff;font-size:14px;outline:none;}
+    .comment-send{background:#ff0050;color:#fff;border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 
     /* Loading */
     .spinner{border:3px solid #2f2f2f;border-left:3px solid #ff0050;border-radius:50%;width:24px;height:24px;animation:spin 1s linear infinite;margin:20px auto;}
     @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Share Modal */
+    .share-modal{background:#000;width:100%;height:50%;position:fixed;bottom:0;border-radius:20px 20px 0 0;display:none;flex-direction:column;z-index:2000;}
+    .share-header{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #2f2f2f;}
+    .share-title{font-size:18px;font-weight:600;}
+    .share-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;}
+    .share-options{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:20px;}
+    .share-option{display:flex;flex-direction:column;align-items:center;gap:8px;}
+    .share-icon{width:60px;height:60px;border-radius:50%;background:#2f2f2f;display:flex;align-items:center;justify-content:center;font-size:24px;}
+    .share-label{font-size:12px;text-align:center;}
   </style>
 </head>
 <body>
@@ -189,10 +212,10 @@
     <!-- ==== FRIENDS ==== -->
     <div id="friends-page" class="page friends-page">
       <div class="friends-header">
-        <div class="friends-title">Friends</div>
-        <div id="friends-content">
-          <div class="spinner"></div>
-        </div>
+        <div class="friends-title">Friends Videos</div>
+      </div>
+      <div class="friends-videos" id="friends-videos">
+        <div class="spinner"></div>
       </div>
     </div>
 
@@ -330,42 +353,6 @@
     </div>
   </div>
 
-  <!-- ==== LIVE STREAM PAGE ==== -->
-  <div id="live-page" class="live-page">
-    <div class="live-header">
-      <button class="live-back" onclick="closeLive()">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-      <div class="live-title">Live Stream</div>
-      <div class="live-views">
-        <i class="fas fa-eye"></i> <span id="live-viewers">0</span>
-      </div>
-    </div>
-    <div class="live-video">
-      <video id="live-video" autoplay muted></video>
-    </div>
-    <div class="live-controls">
-      <div class="live-control">
-        <div class="live-icon">
-          <i class="fas fa-microphone"></i>
-        </div>
-        <div>Mic</div>
-      </div>
-      <div class="live-control">
-        <div class="live-icon" style="background:#ff0050;">
-          <i class="fas fa-stop"></i>
-        </div>
-        <div>End</div>
-      </div>
-      <div class="live-control">
-        <div class="live-icon">
-          <i class="fas fa-video"></i>
-        </div>
-        <div>Camera</div>
-      </div>
-    </div>
-  </div>
-
   <!-- Upload Modal -->
   <div id="upload-modal" class="modal">
     <div class="modal-content">
@@ -373,11 +360,11 @@
         <div class="modal-title">Create</div>
       </div>
       <div class="modal-options">
-        <div class="modal-option" onclick="uploadVideo()">
+        <div class="modal-option" onclick="openGalleryUpload()">
           <div class="modal-icon">
             <i class="fas fa-photo-video"></i>
           </div>
-          <div class="modal-label">Upload</div>
+          <div class="modal-label">Gallery</div>
         </div>
         <div class="modal-option" onclick="startCamera()">
           <div class="modal-icon">
@@ -414,6 +401,113 @@
     </div>
   </div>
 
+  <!-- Gallery Upload Modal -->
+  <div id="gallery-modal" class="modal">
+    <div class="gallery-modal">
+      <div class="gallery-header">
+        <div class="gallery-title">Upload from Gallery</div>
+        <button class="gallery-close" onclick="hideModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="gallery-content">
+        <input type="file" id="file-input" accept="image/*,video/*" style="display:none;">
+        <div class="upload-area" onclick="document.getElementById('file-input').click()">
+          <div class="upload-icon">
+            <i class="fas fa-cloud-upload-alt"></i>
+          </div>
+          <div class="upload-text">Select photo or video</div>
+          <div class="upload-subtext">Supported formats: MP4, MOV, JPG, PNG</div>
+        </div>
+        <img id="upload-preview" class="upload-preview" alt="Preview">
+        <input type="text" id="caption-input" class="caption-input" placeholder="Write a caption...">
+        <div class="upload-actions">
+          <button class="upload-action upload-cancel" onclick="hideModal()">Cancel</button>
+          <button class="upload-action upload-post" onclick="uploadMedia()">Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comment Modal -->
+  <div id="comment-modal" class="comment-modal">
+    <div class="comment-header">
+      <div class="comment-title">Comments</div>
+      <button class="comment-close" onclick="closeCommentModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="comment-list" id="comment-list">
+      <div class="spinner"></div>
+    </div>
+    <div class="comment-input-area">
+      <input type="text" id="comment-input" class="comment-input" placeholder="Add a comment...">
+      <button class="comment-send" onclick="addComment()">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div id="share-modal" class="share-modal">
+    <div class="share-header">
+      <div class="share-title">Share</div>
+      <button class="share-close" onclick="closeShareModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="share-options">
+      <div class="share-option" onclick="shareTo('facebook')">
+        <div class="share-icon" style="background:#1877f2;">
+          <i class="fab fa-facebook-f"></i>
+        </div>
+        <div class="share-label">Facebook</div>
+      </div>
+      <div class="share-option" onclick="shareTo('whatsapp')">
+        <div class="share-icon" style="background:#25d366;">
+          <i class="fab fa-whatsapp"></i>
+        </div>
+        <div class="share-label">WhatsApp</div>
+      </div>
+      <div class="share-option" onclick="shareTo('instagram')">
+        <div class="share-icon" style="background:#e4405f;">
+          <i class="fab fa-instagram"></i>
+        </div>
+        <div class="share-label">Instagram</div>
+      </div>
+      <div class="share-option" onclick="shareTo('twitter')">
+        <div class="share-icon" style="background:#1da1f2;">
+          <i class="fab fa-twitter"></i>
+        </div>
+        <div class="share-label">Twitter</div>
+      </div>
+      <div class="share-option" onclick="copyLink()">
+        <div class="share-icon">
+          <i class="fas fa-link"></i>
+        </div>
+        <div class="share-label">Copy Link</div>
+      </div>
+      <div class="share-option" onclick="saveVideo()">
+        <div class="share-icon">
+          <i class="fas fa-download"></i>
+        </div>
+        <div class="share-label">Save Video</div>
+      </div>
+      <div class="share-option" onclick="shareTo('message')">
+        <div class="share-icon">
+          <i class="fas fa-comment"></i>
+        </div>
+        <div class="share-label">Message</div>
+      </div>
+      <div class="share-option" onclick="shareTo('email')">
+        <div class="share-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="share-label">Email</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ==== Firebase ==== -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -438,7 +532,8 @@
     let currentUser = null;
     let currentChatUser = null;
     let currentProfileUser = null;
-    let stream = null;
+    let currentVideoId = null;
+    let selectedFile = null;
     const pages = {
       auth: document.getElementById('auth-page'),
       home: document.getElementById('home-page'),
@@ -513,7 +608,7 @@
           following: {},
           followers: { [currentUser.uid]: true },
           likes: 7656,
-          friends: {},
+          friends: { [currentUser.uid]: true },
           createdAt: Date.now()
         },
         {
@@ -533,26 +628,6 @@
           following: {},
           followers: {},
           likes: 8900,
-          friends: {},
-          createdAt: Date.now()
-        },
-        {
-          uid: 'demo_user_4',
-          username: 'tech_guru',
-          email: 'tech@demo.com',
-          following: {},
-          followers: {},
-          likes: 15600,
-          friends: {},
-          createdAt: Date.now()
-        },
-        {
-          uid: 'demo_user_5',
-          username: 'creative_arts',
-          email: 'arts@demo.com',
-          following: {},
-          followers: {},
-          likes: 7200,
           friends: {},
           createdAt: Date.now()
         }
@@ -609,6 +684,70 @@
       document.querySelectorAll('.modal').forEach(modal => {
         modal.style.display = 'none';
       });
+      // Reset file input
+      document.getElementById('file-input').value = '';
+      document.getElementById('upload-preview').style.display = 'none';
+      document.getElementById('caption-input').value = '';
+      selectedFile = null;
+    }
+
+    function openGalleryUpload() {
+      hideModal();
+      showModal('gallery-modal');
+    }
+
+    // ---------- File Upload Handling ----------
+    document.getElementById('file-input').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        selectedFile = file;
+        const preview = document.getElementById('upload-preview');
+        
+        if (file.type.startsWith('image/')) {
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = 'block';
+        } else if (file.type.startsWith('video/')) {
+          // For videos, we'll show a thumbnail or just the file name
+          preview.src = 'https://cdn-icons-png.flaticon.com/512/1256/1256650.png';
+          preview.style.display = 'block';
+        }
+      }
+    });
+
+    function uploadMedia() {
+      if (!selectedFile) {
+        alert('Please select a file first');
+        return;
+      }
+
+      const caption = document.getElementById('caption-input').value.trim();
+      
+      // In a real app, you would upload to Firebase Storage
+      // For demo purposes, we'll use a placeholder URL
+      let fileUrl;
+      if (selectedFile.type.startsWith('video/')) {
+        fileUrl = 'https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-partying-happily-4640-large.mp4';
+      } else {
+        fileUrl = 'https://picsum.photos/400/700';
+      }
+      
+      // Upload to Firebase Database
+      db.ref('videos').push({
+        uid: currentUser.uid,
+        username: currentUser.displayName || currentUser.email.split('@')[0],
+        url: fileUrl,
+        caption: caption,
+        likedBy: {},
+        comments: {},
+        shares: 0,
+        timestamp: Date.now(),
+        isDraft: false,
+        type: selectedFile.type.startsWith('video/') ? 'video' : 'image'
+      }).then(() => {
+        alert('Media uploaded successfully!');
+        hideModal();
+        loadGlobalFeed();
+      });
     }
 
     // ---------- Video Feed ----------
@@ -654,13 +793,17 @@
               <i class="fas fa-heart"></i>
               <div class="action-count">${Object.keys(video.likedBy || {}).length}</div>
             </div>
-            <div class="action-btn" onclick="openChat('${video.uid}', '${video.username}')">
+            <div class="action-btn" onclick="openComments('${videoId}')">
               <i class="fas fa-comment"></i>
-              <div class="action-count">${video.comments || 0}</div>
+              <div class="action-count">${Object.keys(video.comments || {}).length}</div>
             </div>
-            <div class="action-btn">
+            <div class="action-btn" onclick="toggleFavorite('${videoId}', this)">
+              <i class="fas fa-star"></i>
+              <div class="action-count">Favorite</div>
+            </div>
+            <div class="action-btn" onclick="openShare('${videoId}')">
               <i class="fas fa-share"></i>
-              <div class="action-count">Share</div>
+              <div class="action-count">${video.shares || 0}</div>
             </div>
           </div>
         `;
@@ -705,6 +848,99 @@
       });
     }
 
+    // ---------- Comment System ----------
+    function openComments(videoId) {
+      currentVideoId = videoId;
+      document.getElementById('comment-modal').style.display = 'flex';
+      loadComments(videoId);
+    }
+
+    function closeCommentModal() {
+      document.getElementById('comment-modal').style.display = 'none';
+    }
+
+    function loadComments(videoId) {
+      const commentList = document.getElementById('comment-list');
+      commentList.innerHTML = '<div class="spinner"></div>';
+      
+      db.ref('videos/' + videoId + '/comments').orderByChild('timestamp').on('value', (snapshot) => {
+        const comments = snapshot.val() || {};
+        commentList.innerHTML = '';
+        
+        if (Object.keys(comments).length === 0) {
+          commentList.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No comments yet</div>';
+          return;
+        }
+        
+        Object.entries(comments).reverse().forEach(([commentId, comment]) => {
+          const commentEl = document.createElement('div');
+          commentEl.className = 'comment-item';
+          commentEl.innerHTML = `
+            <div class="comment-user">@${comment.username}</div>
+            <div class="comment-text">${comment.text}</div>
+          `;
+          commentList.appendChild(commentEl);
+        });
+      });
+    }
+
+    function addComment() {
+      const commentInput = document.getElementById('comment-input');
+      const text = commentInput.value.trim();
+      
+      if (text && currentVideoId) {
+        db.ref('videos/' + currentVideoId + '/comments').push({
+          uid: currentUser.uid,
+          username: currentUser.displayName || currentUser.email.split('@')[0],
+          text: text,
+          timestamp: Date.now()
+        });
+        
+        commentInput.value = '';
+      }
+    }
+
+    // ---------- Share System ----------
+    function openShare(videoId) {
+      currentVideoId = videoId;
+      document.getElementById('share-modal').style.display = 'flex';
+    }
+
+    function closeShareModal() {
+      document.getElementById('share-modal').style.display = 'none';
+    }
+
+    function shareTo(platform) {
+      // Increment share count
+      db.ref('videos/' + currentVideoId + '/shares').transaction(currentShares => {
+        return (currentShares || 0) + 1;
+      });
+      
+      alert(`Shared to ${platform}!`);
+      closeShareModal();
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+      closeShareModal();
+    }
+
+    function saveVideo() {
+      alert('Video saved to your device!');
+      closeShareModal();
+    }
+
+    // ---------- Favorite System ----------
+    function toggleFavorite(videoId, favoriteBtn) {
+      favoriteBtn.classList.toggle('liked');
+      if (favoriteBtn.classList.contains('liked')) {
+        alert('Added to favorites!');
+      } else {
+        alert('Removed from favorites!');
+      }
+    }
+
     // ---------- Follow System ----------
     function toggleFollow(targetUid, followBtn) {
       const updates = {};
@@ -742,6 +978,51 @@
           }
         });
       });
+    }
+
+    // ---------- Friends Videos ----------
+    function loadFriendsPage() {
+      const friendsVideos = document.getElementById('friends-videos');
+      friendsVideos.innerHTML = '<div class="spinner"></div>';
+      
+      // Get friends list
+      db.ref('users/' + currentUser.uid + '/friends').once('value').then(snapshot => {
+        const friends = snapshot.val() || {};
+        const friendIds = Object.keys(friends);
+        
+        if (friendIds.length === 0) {
+          friendsVideos.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;grid-column:1/-1;">No friends yet. Follow people to see their videos here.</div>';
+          return;
+        }
+        
+        // Load videos from friends
+        db.ref('videos').orderByChild('timestamp').limitToLast(50).on('value', (snapshot) => {
+          const allVideos = snapshot.val() || {};
+          friendsVideos.innerHTML = '';
+          
+          Object.entries(allVideos).reverse().forEach(([videoId, video]) => {
+            if (friendIds.includes(video.uid) && !video.isDraft) {
+              const videoEl = document.createElement('div');
+              videoEl.className = 'friend-video';
+              videoEl.innerHTML = `
+                <video loop muted>
+                  <source src="${video.url}" type="video/mp4">
+                </video>
+                <div class="friend-video-overlay">
+                  <i class="fas fa-heart"></i> ${Object.keys(video.likedBy || {}).length}
+                </div>
+              `;
+              videoEl.onclick = () => playFriendVideo(video);
+              friendsVideos.appendChild(videoEl);
+            }
+          });
+        });
+      });
+    }
+
+    function playFriendVideo(video) {
+      // In a real app, this would open the video in full screen
+      alert(`Playing video from @${video.username}`);
     }
 
     // ---------- Inbox Users ----------
@@ -950,103 +1231,6 @@
       }
     }
 
-    // ---------- Live Stream ----------
-    function goLive() {
-      hideModal();
-      document.getElementById('live-page').style.display = 'flex';
-      document.getElementById('app').style.display = 'none';
-      
-      startLiveStream();
-    }
-
-    function closeLive() {
-      document.getElementById('live-page').style.display = 'none';
-      document.getElementById('app').style.display = 'flex';
-      
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-    }
-
-    async function startLiveStream() {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ 
-          video: true, 
-          audio: true 
-        });
-        const liveVideo = document.getElementById('live-video');
-        liveVideo.srcObject = stream;
-        
-        // Create live stream in database
-        const liveId = 'live_' + Date.now();
-        db.ref('lives/' + liveId).set({
-          uid: currentUser.uid,
-          username: currentUser.displayName || currentUser.email.split('@')[0],
-          viewers: 0,
-          startedAt: Date.now(),
-          isLive: true
-        });
-        
-        // Simulate viewers
-        let viewers = 125;
-        setInterval(() => {
-          viewers += Math.floor(Math.random() * 10) - 3;
-          if (viewers < 100) viewers = 100;
-          document.getElementById('live-viewers').textContent = viewers;
-          db.ref('lives/' + liveId + '/viewers').set(viewers);
-        }, 3000);
-      } catch (err) {
-        alert('Error accessing camera: ' + err.message);
-      }
-    }
-
-    // ---------- Upload System ----------
-    function uploadVideo() {
-      hideModal();
-      const url = prompt('Enter video URL:');
-      const caption = prompt('Enter caption:');
-      
-      if (url) {
-        db.ref('videos').push({
-          uid: currentUser.uid,
-          username: currentUser.displayName || currentUser.email.split('@')[0],
-          url: url,
-          caption: caption,
-          likedBy: {},
-          timestamp: Date.now(),
-          isDraft: false
-        }).then(() => {
-          alert('Video uploaded successfully!');
-        });
-      }
-    }
-
-    function startCamera() {
-      hideModal();
-      alert('Camera started! In a real app, this would open the camera.');
-    }
-
-    function createDraft() {
-      hideModal();
-      const url = prompt('Enter video URL for draft:');
-      const caption = prompt('Enter caption (optional):');
-      
-      if (url) {
-        db.ref('videos').push({
-          uid: currentUser.uid,
-          username: currentUser.displayName || currentUser.email.split('@')[0],
-          url: url,
-          caption: caption || '',
-          likedBy: {},
-          timestamp: Date.now(),
-          isDraft: true
-        }).then(() => {
-          alert('Draft saved successfully!');
-          loadProfile(currentUser.uid);
-        });
-      }
-    }
-
     // ---------- Profile System ----------
     function loadProfile(userId) {
       currentProfileUser = userId;
@@ -1163,72 +1347,6 @@
       showPage('profile');
     }
 
-    // ---------- Friends Page ----------
-    function loadFriendsPage() {
-      const friendsContent = document.getElementById('friends-content');
-      friendsContent.innerHTML = '<div class="spinner"></div>';
-      
-      db.ref('users/' + currentUser.uid + '/friends').once('value').then((snapshot) => {
-        const friends = snapshot.val() || {};
-        const friendIds = Object.keys(friends);
-        
-        if (friendIds.length === 0) {
-          friendsContent.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No friends yet. Follow people to see their posts here.</div>';
-          return;
-        }
-        
-        // Load posts from friends
-        db.ref('videos').orderByChild('timestamp').limitToLast(20).once('value').then((snapshot) => {
-          const allVideos = snapshot.val() || {};
-          const friendVideos = {};
-          
-          Object.entries(allVideos).forEach(([videoId, video]) => {
-            if (friendIds.includes(video.uid) && !video.isDraft) {
-              friendVideos[videoId] = video;
-            }
-          });
-          
-          renderFriendVideos(friendVideos, friendsContent);
-        });
-      });
-    }
-
-    function renderFriendVideos(videos, container) {
-      container.innerHTML = '';
-      
-      Object.entries(videos).reverse().forEach(([videoId, video]) => {
-        const videoEl = document.createElement('div');
-        videoEl.className = 'friend-post';
-        videoEl.innerHTML = `
-          <div class="friend-header">
-            <div class="friend-avatar">
-              <i class="fas fa-user"></i>
-            </div>
-            <div class="friend-info">
-              <div class="friend-name">@${video.username}</div>
-              <div class="friend-time">${new Date(video.timestamp).toLocaleDateString()}</div>
-            </div>
-          </div>
-          <div class="post-content">${video.caption || ''}</div>
-          <div class="post-actions">
-            <div class="post-action">
-              <i class="far fa-heart"></i>
-              <span>${Object.keys(video.likedBy || {}).length}</span>
-            </div>
-            <div class="post-action">
-              <i class="far fa-comment"></i>
-              <span>Comment</span>
-            </div>
-            <div class="post-action">
-              <i class="far fa-share-square"></i>
-              <span>Share</span>
-            </div>
-          </div>
-        `;
-        container.appendChild(videoEl);
-      });
-    }
-
     // ---------- Demo Videos Creation ----------
     function createDemoVideos() {
       const demoVideos = [
@@ -1238,6 +1356,8 @@
           url: 'https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-partying-happily-4640-large.mp4',
           caption: 'Amazing dance moves! 💃 #dance #foryou',
           likedBy: {},
+          comments: {},
+          shares: 5,
           timestamp: Date.now() - 3600000,
           isDraft: false
         },
@@ -1247,6 +1367,8 @@
           url: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-woman-typing-on-a-computer-3980-large.mp4',
           caption: 'New phone unboxing 📱 #tech #gadgets',
           likedBy: {},
+          comments: {},
+          shares: 3,
           timestamp: Date.now() - 7200000,
           isDraft: false
         },
@@ -1256,6 +1378,8 @@
           url: 'https://assets.mixkit.co/videos/preview/mixkit-person-cooking-a-meal-1679-large.mp4',
           caption: 'Quick and easy recipe! 🍳 #cooking #food',
           likedBy: {},
+          comments: {},
+          shares: 8,
           timestamp: Date.now() - 10800000,
           isDraft: false
         }
@@ -1281,6 +1405,22 @@
       });
     }
 
+    // ---------- Other Upload Functions ----------
+    function startCamera() {
+      hideModal();
+      alert('Camera started! In a real app, this would open the camera.');
+    }
+
+    function goLive() {
+      hideModal();
+      alert('Live streaming started!');
+    }
+
+    function createDraft() {
+      hideModal();
+      alert('Draft created!');
+    }
+
     // ---------- Inbox Tabs ----------
     document.querySelectorAll('.inbox-tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -1290,10 +1430,16 @@
       });
     });
 
-    // Enter key for chat
+    // Enter key for chat and comments
     document.getElementById('chat-input').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         sendMessage();
+      }
+    });
+
+    document.getElementById('comment-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        addComment();
       }
     });
 
