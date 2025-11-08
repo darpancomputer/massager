@@ -1,747 +1,305 @@
 <!DOCTYPE html>
-<html lang="ne">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Social Messenger</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TikTok-Style Social</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { margin:0; padding:0; background:#f0f2f5; }
-    .container { display:flex; flex-direction:column; min-height:100vh; max-width:600px; margin:0 auto; background:#fff; position: relative; }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+    body{background:#000;color:#fff;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+    header{display:flex;justify-content:space-between;align-items:center;padding:10px 15px;background:#111;position:sticky;top:0;z-index:100;}
+    .logo{font-size:20px;font-weight:bold;}
+    .header-icons{display:flex;gap:15px;}
+    .header-icon{font-size:18px;cursor:pointer;}
+    .badge{background:#ff0050;color:#fff;font-size:10px;padding:2px 6px;border-radius:12px;position:absolute;top:-5px;right:-5px;}
 
-    /* Header styles for app */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 15px;
-      background: #1877f2;
-      color: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-    }
-    
-    .header-icons {
-      display: flex;
-      gap: 15px;
-    }
-    
-    .header-icon {
-      font-size: 18px;
-      color: #fff;
-      cursor: pointer;
-    }
+    /* Bottom navigation */
+    .bottom-nav{display:flex;background:#111;border-top:1px solid #333;position:fixed;bottom:0;width:100%;z-index:100;}
+    .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0;color:#888;cursor:pointer;}
+    .nav-item.active{color:#ff0050;}
+    .nav-icon{font-size:22px;margin-bottom:4px;}
 
-    /* Login Page Header */
-    .login-header { 
-      background:#1877f2; 
-      padding:15px; 
-      text-align:center; 
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .login-logo { 
-      font-size:24px; 
-      font-weight:bold; 
-      color:#fff; 
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    }
+    /* Pages */
+    .page{display:none;flex-direction:column;height:100%;overflow:hidden;}
+    .page.active{display:flex;}
 
-    .login-container { 
-      background:#fff; 
-      border-radius:8px; 
-      box-shadow:0 2px 4px rgba(0,0,0,.1); 
-      padding:20px; 
-      width:100%; 
-      max-width:400px; 
-      text-align:center; 
-      margin: 20px auto;
-    }
-    .login-container h1 { 
-      font-size:18px; 
-      margin-bottom:20px; 
-      color:#1c1e21; 
-    }
-    .input-field { 
-      margin-bottom:15px; 
-      text-align:center; 
-    }
-    .input-field input { 
-      width:100%; 
-      padding:12px; 
-      border:1px solid #dddfe2; 
-      border-radius:6px; 
-      font-size:16px; 
-      text-align:center;
-    }
-    .login-btn { 
-      background:#1877f2; 
-      color:#fff; 
-      border:none; 
-      border-radius:6px; 
-      padding:12px; 
-      width:100%; 
-      font-size:18px; 
-      font-weight:bold; 
-      cursor:pointer; 
-      margin-bottom:15px; 
-    }
-    .create-account-btn { 
-      background:#42b72a; 
-      color:#fff; 
-      border:none; 
-      border-radius:6px; 
-      padding:12px; 
-      width:100%; 
-      font-size:16px; 
-      cursor:pointer; 
-    }
-    .forgot-password { 
-      color:#1877f2; 
-      text-decoration:none; 
-      display:block; 
-      margin-bottom:10px; 
-      text-align:center;
-    }
-    .divider {
-      height:1px;
-      background:#dadde1;
-      margin:20px 0;
-    }
+    /* Video feed */
+    .feed{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:y mandatory;}
+    .video-card{position:relative;width:100%;height:100vh;background:#000;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;}
+    video{width:100%;height:100%;object-fit:contain;background:#000;}
+    .video-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px 15px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.7));}
+    .user-info{display:flex;align-items:center;gap:10px;color:#fff;cursor:pointer;}
+    .username{font-weight:bold;}
+    .caption{margin-top:5px;font-size:14px;}
+    .actions{position:absolute;right:15px;bottom:80px;display:flex;flex-direction:column;gap:15px;align-items:center;}
+    .action-btn{background:rgba(255,255,255,.1);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;}
+    .action-btn.liked{color:#ff0050;}
+    .action-count{font-size:12px;margin-top:4px;}
 
-    /* App Container */
-    .app-container { display:none; flex-direction:column; width:100%; height:100vh; }
+    /* Profile */
+    .profile-header{text-align:center;padding:20px;}
+    .avatar{width:90px;height:90px;border-radius:50%;background:#333;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:40px;}
+    .stats{display:flex;justify-content:center;gap:30px;margin:15px 0;}
+    .stat-value{font-weight:bold;font-size:18px;}
+    .stat-label{font-size:12px;color:#aaa;}
+    .follow-btn{background:#ff0050;color:#fff;border:none;border-radius:4px;padding:8px 20px;cursor:pointer;}
+    .follow-btn.following{background:#333;}
 
-    .search-bar { display:flex; align-items:center; background:#f0f2f5; border-radius:50px; padding:8px 15px; width:100%; }
-    .search-bar input { border:none; background:none; outline:none; width:100%; padding:5px; }
-    
-    .profile-dropdown { position:relative; display:inline-block; }
-    .profile-btn { background:#e4e6eb; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+    /* Login / Register */
+    .auth-page{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#111;}
+    .auth-card{background:#222;padding:30px;border-radius:12px;width:90%;max-width:380px;text-align:center;}
+    .auth-card input{width:100%;padding:12px;margin:10px 0;border-radius:6px;border:none;outline:none;}
+    .auth-card button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:6px;background:#ff0050;color:#fff;font-weight:bold;cursor:pointer;}
 
-    .dropdown-content { display:none; position:absolute; right:0; bottom:100%; background:#fff; min-width:220px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:6px; z-index:2; margin-bottom:10px; }
-    .dropdown-content a, .dropdown-content button { color:#1c1e21; padding:12px 16px; text-decoration:none; display:block; font-size:14px; background:none; border:none; width:100%; text-align:left; cursor:pointer; border-bottom:1px solid #eee; }
-    .dropdown-content a:hover, .dropdown-content button:hover { background:#f0f2f5; }
-    .dropdown-content button:last-child { border-bottom:none; }
+    /* Loading */
+    .spinner{border:4px solid #333;border-left:4px solid #ff0050;border-radius:50%;width:36px;height:36px;animation:s 1s linear infinite;margin:20px auto;}
+    @keyframes s{to{transform:rotate(360deg)}}
 
-    .content { display:flex; flex-direction:column; flex:1; overflow:hidden; position: relative; }
-    .page { display:none; flex-direction:column; flex:1; overflow-y:auto; }
-    .page.active { display:flex; }
+    /* Friends Page */
+    .friends-page{background:#111;}
+    .friends-tabs{display:flex;background:#111;border-bottom:1px solid #333;}
+    .friends-tab{flex:1;text-align:center;padding:15px;cursor:pointer;border-bottom:2px solid transparent;}
+    .friends-tab.active{color:#ff0050;border-bottom-color:#ff0050;}
+    .friends-content{flex:1;overflow-y:auto;}
+    .user-item{display:flex;align-items:center;padding:15px;border-bottom:1px solid #333;cursor:pointer;}
+    .user-info{flex:1;margin-left:15px;}
+    .user-actions{display:flex;gap:10px;}
 
-    .card { background:#fff; border-radius:8px; padding:15px; box-shadow:0 1px 2px rgba(0,0,0,.08); margin-bottom:15px; }
-    .users-list h2, .friend-requests h2 { margin:0 0 12px 0; color:#1c1e21; font-size:16px; }
+    /* Stories Section */
+    .stories-container{padding:15px;border-bottom:1px solid #333;background:#111;}
+    .stories-scroll{display:flex;gap:15px;overflow-x:auto;}
+    .story-item{display:flex;flex-direction:column;align-items:center;min-width:70px;}
+    .story-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff9000);padding:3px;}
+    .story-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #000;}
+    .story-username{font-size:12px;margin-top:5px;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-    .user-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #eee; cursor:default; }
-    .user-avatar { width:40px; height:40px; border-radius:50%; background:#e4e6eb; display:flex; align-items:center; justify-content:center; color:#1877f2; }
-    .user-info { flex:1; }
-    .user-name { font-weight:bold; font-size:15px; }
-    .user-status { font-size:12px; color:#65676b; }
+    /* Friends Videos Grid */
+    .friends-videos{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;padding:10px;}
+    .friend-video{position:relative;aspect-ratio:9/16;background:#222;overflow:hidden;}
+    .friend-video video{width:100%;height:100%;object-fit:cover;}
+    .friend-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:5px;background:rgba(0,0,0,.5);font-size:12px;}
 
-    .add-friend-btn, .cancel-request-btn, .make-admin-btn, .block-btn, .unblock-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; }
-    .cancel-request-btn { background:#ffb400; }
-    .make-admin-btn { background:#6f42c1; }
-    .block-btn { background:#ff3b30; }
-    .unblock-btn { background:#28a745; }
+    /* Inbox */
+    .inbox-page{background:#111;}
+    .inbox-tabs{display:flex;background:#111;border-bottom:1px solid #333;}
+    .inbox-tab{flex:1;text-align:center;padding:15px;cursor:pointer;border-bottom:2px solid transparent;}
+    .inbox-tab.active{color:#ff0050;border-bottom-color:#ff0050;}
+    .inbox-content{flex:1;overflow-y:auto;}
+    .request-item, .message-item{display:flex;align-items:center;padding:15px;border-bottom:1px solid #333;}
+    .request-info, .message-info{flex:1;margin-left:15px;}
+    .request-actions{display:flex;gap:10px;}
+    .request-btn{background:#ff0050;color:#fff;border:none;border-radius:4px;padding:6px 12px;cursor:pointer;}
+    .request-btn.decline{background:#333;}
+    .message-item{flex-direction:column;align-items:flex-start;cursor:pointer;}
+    .message-header{display:flex;justify-content:space-between;width:100%;margin-bottom:5px;}
+    .message-preview{color:#aaa;font-size:14px;}
 
-    .friend-requests .request-item { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid #eee; }
-    .request-actions { margin-left:auto; display:flex; gap:6px; }
-    .accept-btn { background:#42b72a; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
-    .decline-btn { background:#e4e6eb; color:#1c1e21; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; }
+    /* Chat Page - Full Screen */
+    .chat-page{background:#111;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;}
+    .chat-header{display:flex;align-items:center;padding:15px;background:#111;border-bottom:1px solid #333;}
+    .chat-header .avatar{width:40px;height:40px;font-size:18px;margin:0 10px 0 0;}
+    .chat-messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;}
+    .message{max-width:80%;padding:10px 15px;border-radius:18px;margin:5px 0;word-break:break-word;}
+    .sent{background:#ff0050;align-self:flex-end;}
+    .received{background:#333;align-self:flex-start;}
+    .chat-input{display:flex;padding:10px;background:#111;gap:8px;border-top:1px solid #333;}
+    .chat-input input{flex:1;padding:10px;border-radius:20px;background:#222;color:#fff;outline:none;border:none;}
 
-    .chat-container { display:flex; flex-direction:column; flex:1; height: 100vh; }
-    .chat-header { display:flex; align-items:center; padding:10px 15px; background:#1877f2; color:#fff; position: sticky; top: 0; z-index: 1; }
-    .chat-header-info { flex:1; display:flex; align-items:center; gap:10px; }
-    .chat-header-avatar { width:40px; height:40px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; color:#1877f2; }
-    .chat-header-name { font-weight:bold; }
-    .chat-header-actions { display:flex; gap:15px; }
-    .chat-header-action { color:#fff; font-size:18px; }
+    /* Profile Videos Grid */
+    .profile-videos{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+    .profile-video{position:relative;aspect-ratio:9/16;background:#222;overflow:hidden;}
+    .profile-video video{width:100%;height:100%;object-fit:cover;}
+    .profile-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:5px;background:rgba(0,0,0,.5);font-size:12px;display:flex;align-items:center;gap:5px;}
 
-    .chat-messages { flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; background:#e5ddd5; }
-    .message { max-width:80%; padding:10px 15px; border-radius:18px; position:relative; }
-    .received { background:#fff; align-self:flex-start; border-bottom-left-radius:5px; }
-    .sent { background:#dcf8c6; align-self:flex-end; border-bottom-right-radius:5px; }
-    .message-time { font-size:11px; color:#65676b; margin-top:5px; text-align:right; }
+    /* Upload Modal */
+    .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;z-index:2000;}
+    .modal-content{background:#222;padding:20px;border-radius:12px;width:90%;max-width:400px;}
+    .modal-options{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px;}
+    .modal-option{background:#333;padding:20px;border-radius:8px;text-align:center;cursor:pointer;}
+    .modal-option:hover{background:#444;}
+    .modal-option i{font-size:24px;margin-bottom:10px;}
 
-    .message-input-container { display:flex; padding:10px; background:#f0f2f5; align-items:center; position: sticky; bottom: 0; }
-    .message-input { flex:1; display:flex; background:#fff; border-radius:20px; padding:5px 15px; align-items:center; }
-    .message-input input { flex:1; border:none; outline:none; padding:8px; background:none; }
-    .message-input-action { color:#65676b; font-size:20px; margin:0 5px; cursor:pointer; }
-    .send-btn { background:#1877f2; color:#fff; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+    /* Gallery Upload */
+    .gallery-upload{background:#222;padding:20px;border-radius:12px;width:90%;max-width:500px;}
+    .upload-preview{width:100%;max-height:300px;object-fit:contain;margin:10px 0;border-radius:8px;}
+    .upload-options{display:flex;gap:10px;margin-top:15px;}
+    .upload-option{flex:1;padding:10px;text-align:center;background:#333;border-radius:6px;cursor:pointer;}
 
-    /* Bottom navigation bar */
-    .bottom-nav { 
-      display: flex;
-      background: #fff;
-      border-top: 1px solid #eee;
-      padding: 8px 0;
-      position: sticky;
-      bottom: 0;
-      z-index: 100;
-    }
-    
-    .nav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      color: #65676b;
-      font-size: 12px;
-      padding: 5px 0;
-      cursor: pointer;
-    }
-    
-    .nav-item.active {
-      color: #1877f2;
-    }
-    
-    .nav-icon {
-      font-size: 22px;
-      margin-bottom: 3px;
-    }
+    /* Draft Videos */
+    .drafts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:15px;}
+    .draft-item{position:relative;aspect-ratio:9/16;background:#222;border-radius:8px;overflow:hidden;}
+    .draft-item video{width:100%;height:100%;object-fit:cover;}
+    .draft-actions{position:absolute;bottom:0;left:0;right:0;padding:10px;background:rgba(0,0,0,.7);display:flex;justify-content:space-between;}
 
-    /* Badges */
-    .badge { 
-      background:#ff3b30; 
-      color:#fff; 
-      font-size:10px; 
-      padding:2px 5px; 
-      border-radius:10px; 
-      position:absolute; 
-      top:-5px; 
-      right:-5px;
-    }
-
-    /* Loading spinner */
-    .spinner {
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border-left-color: #1877f2;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .you-badge { 
-      font-size:10px; 
-      color:#fff; 
-      background:#6c757d; 
-      padding:2px 6px; 
-      border-radius:8px; 
-      margin-left:5px;
-    }
-
-    /* Profile page */
-    .profile-page { padding:15px; }
-    .profile-header { text-align:center; margin-bottom:20px; }
-    .profile-avatar { width:100px; height:100px; border-radius:50%; background:#e4e6eb; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:40px; color:#1877f2; }
-    .profile-name { font-size:20px; font-weight:bold; margin-bottom:5px; }
-    .profile-email { color:#65676b; font-size:14px; }
-    .profile-menu { list-style:none; padding:0; margin:0; }
-    .profile-menu li { padding:12px 0; border-bottom:1px solid #eee; }
-    .profile-menu li:last-child { border-bottom:none; }
-    .profile-menu a { text-decoration:none; color:#1c1e21; display:block; }
-
-    /* Admin panel */
-    .admin-panel { display:none; padding:15px; }
-    .admin-panel h2 { margin-top:0; }
-    .admin-btn { background:#1877f2; color:#fff; border:none; border-radius:6px; padding:10px 15px; margin-right:10px; margin-bottom:10px; cursor:pointer; }
-
-    /* Scrollable containers */
-    .scrollable-container {
-      overflow-y: auto;
-      flex: 1;
-      padding-bottom: 60px;
-    }
-
-    /* Search results */
-    .search-results {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      z-index: 10;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      max-height: 300px;
-      overflow-y: auto;
-      display: none;
-    }
-    
-    .clickable {
-      cursor: pointer;
-    }
-    
-    .search-header {
-      display: flex;
-      padding: 10px 15px;
-      background: #f0f2f5;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    
-    .search-header input {
-      flex: 1;
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      outline: none;
-    }
-    
-    .search-header button {
-      margin-left: 10px;
-      background: none;
-      border: none;
-      color: #1877f2;
-      cursor: pointer;
-    }
-
-    /* Call interface styles */
-    .call-interface {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #000;
-      z-index: 1000;
-      display: none;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 20px;
-    }
-    
-    .call-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: white;
-    }
-    
-    .caller-info {
-      text-align: center;
-      color: white;
-    }
-    
-    .caller-name {
-      font-size: 24px;
-      margin-bottom: 5px;
-    }
-    
-    .call-status {
-      font-size: 16px;
-      color: #ccc;
-    }
-    
-    .call-controls {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px 0;
-    }
-    
-    .call-btn {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      border: none;
-      cursor: pointer;
-    }
-    
-    .end-call {
-      background: #ff3b30;
-      color: white;
-    }
-    
-    .mute-audio {
-      background: #4a4a4a;
-      color: white;
-    }
-    
-    .mute-audio.active {
-      background: #1877f2;
-    }
-    
-    .speaker {
-      background: #4a4a4a;
-      color: white;
-    }
-    
-    .speaker.active {
-      background: #1877f2;
-    }
-    
-    .video-preview {
-      position: absolute;
-      width: 120px;
-      height: 160px;
-      bottom: 100px;
-      right: 20px;
-      background: #333;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    .video-preview video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .remote-video {
-      flex: 1;
-      background: #222;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    
-    .remote-video video {
-      width: 100%;
-      max-height: 100%;
-    }
-    
-    .call-timer {
-      color: white;
-      font-size: 16px;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    /* Audio profile panel */
-    .audio-profile {
-      position: absolute;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
-      padding: 15px;
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 1001;
-    }
-    
-    .audio-option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    
-    .audio-option:hover {
-      background: #f0f2f5;
-    }
-    
-    .audio-option.active {
-      background: #1877f2;
-      color: white;
-    }
-    
-    .audio-option i {
-      font-size: 20px;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
-      .container { max-width:100%; }
-      .chat-header { padding:10px; }
-      .chat-header-actions { gap:10px; }
-      
-      .call-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 18px;
-      }
-      
-      .video-preview {
-        width: 100px;
-        height: 140px;
-        bottom: 90px;
-      }
-    }
+    /* Live Streaming */
+    .live-indicator{background:#ff0050;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:10px;}
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Login Page -->
-    <div class="login-page" id="login-page" style="display:flex; flex-direction:column;">
-      <header class="login-header">
-        <div class="login-logo">Social Messenger</div>
-      </header>
 
-      <div class="main-content">
-        <div class="login-container">
-          <h1>Log in to your account</h1>
-          <div class="input-field">
-            <input type="text" id="login-email" placeholder="Email address">
-          </div>
-          <div class="input-field">
-            <input type="password" id="login-password" placeholder="Password">
-          </div>
-          <button class="login-btn" id="login-button">Log In</button>
-          <a href="#" class="forgot-password" id="forgot-password">Forgot password?</a>
-          <div class="divider"></div>
-          <button class="create-account-btn" id="create-account-btn">Create new account</button>
-        </div>
+  <!-- ==== AUTH ==== -->
+  <div id="auth-page" class="page active">
+    <div class="auth-card">
+      <h2 style="margin-bottom:20px;">TikTok Social</h2>
+      <input type="email" id="auth-email" placeholder="Email">
+      <input type="password" id="auth-pass" placeholder="Password">
+      <button id="login-btn">Log In</button>
+      <button id="signup-btn" style="background:#333;">Create Account</button>
+    </div>
+  </div>
+
+  <!-- ==== MAIN APP ==== -->
+  <div id="app" class="page" style="display:none;">
+
+    <!-- Header -->
+    <header>
+      <div class="logo">TikTok Social</div>
+      <div class="header-icons">
+        <i class="fas fa-search header-icon"></i>
+        <i class="fas fa-inbox header-icon" id="inbox-btn"></i>
+        <span id="msg-badge" class="badge" style="display:none;">0</span>
       </div>
+    </header>
+
+    <!-- ==== HOME / FEED ==== -->
+    <div id="home-page" class="page active">
+      <div class="feed" id="feed"></div>
     </div>
 
-    <!-- App Container -->
-    <div class="app-container" id="app-container">
-      <!-- Home Page -->
-      <div class="page active" id="home-page">
-        <header>
-          <div class="logo">Social Messenger</div>
-          <div class="header-icons">
-            <div class="search-container" style="position:relative;">
-              <i class="fas fa-search header-icon" id="search-btn"></i>
-              <div class="search-results" id="search-results"></div>
-            </div>
-            <div style="position:relative;">
-              <i class="fas fa-bell header-icon" id="requests-btn"></i>
-              <span id="req-count" class="badge" style="display:none;">0</span>
-            </div>
-          </div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="card users-list">
-              <h2>Friends</h2>
-              <div id="friends-list-container"></div>
-            </div>
-          </div>
+    <!-- ==== FRIENDS ==== -->
+    <div id="friends-page" class="page friends-page">
+      <div class="stories-container">
+        <div class="stories-scroll" id="stories-scroll">
+          <!-- Stories will be loaded here -->
         </div>
       </div>
-
-      <!-- Chat Page -->
-      <div class="page" id="chat-page">
-        <div class="chat-header">
-          <button class="chat-header-action" id="back-btn"><i class="fas fa-arrow-left"></i></button>
-          <div class="chat-header-info">
-            <div class="chat-header-avatar">
-              <i class="fas fa-user"></i>
-            </div>
-            <div class="chat-header-name" id="current-chat-name"></div>
-          </div>
-          <div class="chat-header-actions">
-            <i class="fas fa-phone-alt chat-header-action" id="voice-call-btn"></i>
-            <i class="fas fa-video chat-header-action" id="video-call-btn"></i>
-          </div>
-        </div>
-
-        <div class="chat-container">
-          <div class="chat-messages" id="chat-messages">
-            <div style="color:#888; text-align:center; margin-top:20px;">Select a friend to start chat</div>
-          </div>
-
-          <div class="message-input-container">
-            <div class="message-input">
-              <i class="fas fa-paperclip message-input-action" id="attach-btn"></i>
-              <input type="text" id="message-input" placeholder="Type a message...">
-            </div>
-            <button class="send-btn" id="send-btn"><i class="fas fa-paper-plane"></i></button>
-          </div>
-        </div>
+      <div class="friends-tabs">
+        <div class="friends-tab active" data-tab="videos">Friends Videos</div>
+        <div class="friends-tab" data-tab="all">All Users</div>
       </div>
-
-      <!-- Friends Page -->
-      <div class="page" id="friends-page">
-        <header>
-          <div class="logo">Friends</div>
-          <div class="header-icons">
-            <i class="fas fa-search header-icon" id="friends-search-btn"></i>
-          </div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="card friend-requests" id="friend-requests-card">
-              <h2>Friend Requests</h2>
-              <div id="friend-requests-container"></div>
-            </div>
-            <div class="card users-list">
-              <h2>Friends List</h2>
-              <div id="friends-list-page-container"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Requests Page -->
-      <div class="page" id="requests-page">
-        <header>
-          <div class="logo">People</div>
-          <div class="header-icons">
-            <i class="fas fa-search header-icon" id="users-search-btn"></i>
-          </div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="card users-list">
-              <h2>All Users</h2>
-              <div id="users-list-container"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Profile Page -->
-      <div class="page" id="profile-page">
-        <header>
-          <div class="logo">Profile</div>
-          <div class="header-icons">
-            <i class="fas fa-cog header-icon" id="settings-btn"></i>
-          </div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <div class="profile-page">
-              <div class="profile-header">
-                <div class="profile-avatar">
-                  <i class="fas fa-user"></i>
-                </div>
-                <div class="profile-name" id="profile-name-display"></div>
-                <div class="profile-email" id="profile-email-display"></div>
-              </div>
-
-              <ul class="profile-menu">
-                <li><a href="#" id="edit-profile-btn"><i class="fas fa-user-edit" style="margin-right:10px;"></i> Edit Profile</a></li>
-                <li><a href="#" id="friends-list-btn"><i class="fas fa-users" style="margin-right:10px;"></i> Friends List</a></li>
-                <li><a href="#" id="privacy-btn"><i class="fas fa-lock" style="margin-right:10px;"></i> Privacy</a></li>
-                <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt" style="margin-right:10px;"></i> Log Out</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Admin Panel -->
-      <div class="page admin-panel" id="admin-page">
-        <header>
-          <div class="logo">Admin Panel</div>
-          <div class="header-icons">
-            <i class="fas fa-arrow-left header-icon" id="admin-back-btn"></i>
-          </div>
-        </header>
-
-        <div class="content">
-          <div class="scrollable-container">
-            <button class="admin-btn" id="view-all-chats-btn">View All Chats</button>
-            <button class="admin-btn" id="view-all-users-btn">View All Users</button>
-            <div id="admin-output" style="margin-top:12px;"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Navigation Bar - Hidden in chat page -->
-      <div class="bottom-nav" id="bottom-nav">
-        <a href="#" class="nav-item active" id="home-nav">
-          <i class="fas fa-home nav-icon"></i>
-          <span>Home</span>
-        </a>
-        <a href="#" class="nav-item" id="chat-nav">
-          <i class="fas fa-comment nav-icon"></i>
-          <span>Chats</span>
-        </a>
-        <a href="#" class="nav-item" id="friends-nav">
-          <i class="fas fa-user-friends nav-icon"></i>
-          <span>Friends</span>
-        </a>
-        <a href="#" class="nav-item" id="requests-nav">
-          <i class="fas fa-user-plus nav-icon"></i>
-          <span>People</span>
-        </a>
-        <a href="#" class="nav-item" id="profile-nav">
-          <i class="fas fa-user nav-icon"></i>
-          <span>Profile</span>
-        </a>
-      </div>
+      <div class="friends-content" id="friends-content"></div>
     </div>
-    
-    <!-- Call Interface -->
-    <div class="call-interface" id="call-interface">
-      <div class="call-header">
-        <div></div>
-        <div class="caller-info">
-          <div class="caller-name" id="caller-name">Friend Name</div>
-          <div class="call-status" id="call-status">Calling...</div>
+
+    <!-- ==== PROFILE ==== -->
+    <div id="profile-page" class="page">
+      <div class="profile-header">
+        <div class="avatar"><i class="fas fa-user"></i></div>
+        <div id="profile-username" class="username"></div>
+        <div class="stats">
+          <div><div id="following-count" class="stat-value">0</div><div class="stat-label">Following</div></div>
+          <div><div id="followers-count" class="stat-value">0</div><div class="stat-label">Followers</div></div>
+          <div><div id="likes-count" class="stat-value">0</div><div class="stat-label">Likes</div></div>
         </div>
-        <div></div>
+        <button id="edit-profile-btn" class="follow-btn">Edit Profile</button>
       </div>
-      
-      <div class="remote-video" id="remote-video">
-        <div style="color: white; text-align: center;">
-          <i class="fas fa-user" style="font-size: 80px; margin-bottom: 20px;"></i>
-          <div id="caller-name-text">Friend Name</div>
+      <div class="profile-videos" id="profile-videos"></div>
+    </div>
+
+    <!-- ==== INBOX ==== -->
+    <div id="inbox-page" class="page inbox-page">
+      <div class="inbox-tabs">
+        <div class="inbox-tab active" data-tab="requests">Friend Requests</div>
+        <div class="inbox-tab" data-tab="messages">Messages</div>
+      </div>
+      <div class="inbox-content" id="inbox-content"></div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <div class="nav-item active" data-page="home"><i class="fas fa-home nav-icon"></i><span>Home</span></div>
+      <div class="nav-item" data-page="friends"><i class="fas fa-user-friends nav-icon"></i><span>Friends</span></div>
+      <div class="nav-item" id="upload-nav" style="position:relative;top:-10px;">
+        <div style="background:#ff0050;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+          <i class="fas fa-plus nav-icon" style="color:#fff;margin:0;"></i>
         </div>
       </div>
-      
-      <div class="video-preview" id="video-preview" style="display: none;">
-        <video id="local-video" autoplay muted></video>
+      <div class="nav-item" data-page="inbox"><i class="fas fa-inbox nav-icon"></i><span>Inbox</span></div>
+      <div class="nav-item" data-page="profile"><i class="fas fa-user nav-icon"></i><span>Profile</span></div>
+    </div>
+  </div>
+
+  <!-- ==== CHAT PAGE (Full Screen) ==== -->
+  <div id="chat-page" class="page chat-page" style="display:none;">
+    <div class="chat-header">
+      <button id="back-from-chat" style="background:none;border:none;color:#ff0050;font-size:18px;margin-right:10px;">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="avatar"><i class="fas fa-user"></i></div>
+      <div id="chat-username" class="username"></div>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input">
+      <input id="msg-input" placeholder="Type a message...">
+      <button id="send-msg" style="background:#ff0050;border:none;border-radius:50%;width:40px;height:40px;color:#fff;">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Upload Modal -->
+  <div id="upload-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3 style="text-align:center;margin-bottom:20px;">Create New Post</h3>
+      <div class="modal-options">
+        <div class="modal-option" id="gallery-upload-btn">
+          <i class="fas fa-images"></i>
+          <div>Gallery</div>
+        </div>
+        <div class="modal-option" id="video-upload-btn">
+          <i class="fas fa-video"></i>
+          <div>Video</div>
+        </div>
+        <div class="modal-option" id="create-draft-btn">
+          <i class="fas fa-edit"></i>
+          <div>Draft</div>
+        </div>
+        <div class="modal-option" id="view-drafts-btn">
+          <i class="fas fa-folder"></i>
+          <div>My Drafts</div>
+        </div>
       </div>
-      
-      <div class="call-controls">
-        <button class="call-btn mute-audio" id="mute-audio-btn">
-          <i class="fas fa-microphone"></i>
-        </button>
-        <button class="call-btn speaker" id="speaker-btn">
-          <i class="fas fa-volume-up"></i>
-        </button>
-        <button class="call-btn end-call" id="end-call-btn">
-          <i class="fas fa-phone"></i>
-        </button>
+      <button style="width:100%;padding:12px;margin-top:20px;background:#333;color:#fff;border:none;border-radius:6px;" onclick="hideModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Gallery Upload Modal -->
+  <div id="gallery-modal" class="modal" style="display:none;">
+    <div class="gallery-upload">
+      <h3 style="text-align:center;margin-bottom:15px;">Upload from Gallery</h3>
+      <input type="file" id="media-file" accept="image/*,video/*" style="display:none;">
+      <div style="border:2px dashed #555;padding:40px;text-align:center;border-radius:8px;cursor:pointer;" onclick="document.getElementById('media-file').click()">
+        <i class="fas fa-cloud-upload-alt" style="font-size:48px;color:#555;margin-bottom:10px;"></i>
+        <div>Click to select photo or video</div>
       </div>
-      
-      <div class="call-timer" id="call-timer">00:00</div>
-      
-      <div class="audio-profile" id="audio-profile">
-        <div class="audio-option" data-device="phone">
-          <i class="fas fa-phone"></i>
-          <span>Phone</span>
-        </div>
-        <div class="audio-option" data-device="speaker">
-          <i class="fas fa-volume-up"></i>
-          <span>Speaker</span>
-        </div>
-        <div class="audio-option" data-device="headphones">
-          <i class="fas fa-headphones"></i>
-          <span>Headphones</span>
-        </div>
+      <img id="upload-preview" class="upload-preview" style="display:none;">
+      <div id="video-preview" style="display:none;"></div>
+      <input type="text" id="upload-caption" placeholder="Add caption..." style="width:100%;padding:10px;margin:10px 0;background:#333;border:none;border-radius:6px;color:#fff;">
+      <div class="upload-options">
+        <div class="upload-option" onclick="uploadMedia()" style="background:#ff0050;">Upload</div>
+        <div class="upload-option" onclick="hideModal()">Cancel</div>
       </div>
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <!-- Drafts Modal -->
+  <div id="drafts-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:500px;">
+      <h3 style="text-align:center;margin-bottom:20px;">My Drafts</h3>
+      <div class="drafts-grid" id="drafts-container">
+        <!-- Drafts will be loaded here -->
+      </div>
+      <button style="width:100%;padding:12px;margin-top:20px;background:#333;color:#fff;border:none;border-radius:6px;" onclick="hideModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- ==== Firebase ==== -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
   <script>
-    // Firebase configuration
+    // ---------- Firebase Config ----------
     const firebaseConfig = {
       apiKey: "AIzaSyDYwtq05q9qXhrNVJ4I-I-LuD1dpp2Suk8",
       authDomain: "massage-8c66f.firebaseapp.com",
@@ -751,1427 +309,908 @@
       messagingSenderId: "557008720018",
       appId: "1:557008720018:web:22055db26bbfb2bab3d64b"
     };
-
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
 
-    // DOM Elements
-    const loginPage = document.getElementById('login-page');
-    const appContainer = document.getElementById('app-container');
-    const loginButton = document.getElementById('login-button');
-    const createAccountBtn = document.getElementById('create-account-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const requestsBtn = document.getElementById('requests-btn');
-    const reqCountBadge = document.getElementById('req-count');
-    const adminOutput = document.getElementById('admin-output');
-    const viewAllChatsBtn = document.getElementById('view-all-chats-btn');
-    const viewAllUsersBtn = document.getElementById('view-all-users-btn');
-    const backBtn = document.getElementById('back-btn');
-    const friendsListContainer = document.getElementById('friends-list-container');
-    const friendsListPageContainer = document.getElementById('friends-list-page-container');
-    const friendRequestsContainer = document.getElementById('friend-requests-container');
-    const usersListContainer = document.getElementById('users-list-container');
-    const chatMessages = document.getElementById('chat-messages');
-    const messageInput = document.getElementById('message-input');
-    const sendBtn = document.getElementById('send-btn');
-    const currentChatName = document.getElementById('current-chat-name');
-    const profileNameDisplay = document.getElementById('profile-name-display');
-    const profileEmailDisplay = document.getElementById('profile-email-display');
-    const voiceCallBtn = document.getElementById('voice-call-btn');
-    const videoCallBtn = document.getElementById('video-call-btn');
-    const attachBtn = document.getElementById('attach-btn');
-    const searchResults = document.getElementById('search-results');
-    const searchBtn = document.getElementById('search-btn');
-    const friendsSearchBtn = document.getElementById('friends-search-btn');
-    const usersSearchBtn = document.getElementById('users-search-btn');
-    const friendsListBtn = document.getElementById('friends-list-btn');
-    const bottomNav = document.getElementById('bottom-nav');
-    
-    // Call interface elements
-    const callInterface = document.getElementById('call-interface');
-    const callerName = document.getElementById('caller-name');
-    const callerNameText = document.getElementById('caller-name-text');
-    const callStatus = document.getElementById('call-status');
-    const muteAudioBtn = document.getElementById('mute-audio-btn');
-    const speakerBtn = document.getElementById('speaker-btn');
-    const endCallBtn = document.getElementById('end-call-btn');
-    const callTimer = document.getElementById('call-timer');
-    const audioProfile = document.getElementById('audio-profile');
-    const localVideo = document.getElementById('local-video');
-    const videoPreview = document.getElementById('video-preview');
-    const remoteVideo = document.getElementById('remote-video');
-
-    // Page elements
-    const pages = {
-      home: document.getElementById('home-page'),
-      chat: document.getElementById('chat-page'),
-      friends: document.getElementById('friends-page'),
-      requests: document.getElementById('requests-page'),
-      profile: document.getElementById('profile-page'),
-      admin: document.getElementById('admin-page')
-    };
-
-    // Navigation elements
-    const navItems = {
-      home: document.getElementById('home-nav'),
-      chat: document.getElementById('chat-nav'),
-      friends: document.getElementById('friends-nav'),
-      requests: document.getElementById('requests-nav'),
-      profile: document.getElementById('profile-nav')
-    };
-
-    // State variables
+    // ---------- Global ----------
     let currentUser = null;
-    let currentUserData = null;
-    let currentChatFriend = null;
-    let pendingRequests = {};
-    let allUsers = {};
-    let friendsList = {};
-    let isSearchActive = false;
-    let searchHeader = null;
-    
-    // Call state variables
-    let callActive = false;
-    let callStartTime = 0;
-    let callTimerInterval = null;
-    let isAudioMuted = false;
-    let audioOutputDevice = 'phone';
-    let localStream = null;
-    let remoteStream = null;
+    let currentChatUid = null;
+    let selectedMediaFile = null;
+    const pages = {
+      auth: document.getElementById('auth-page'),
+      home: document.getElementById('home-page'),
+      friends: document.getElementById('friends-page'),
+      profile: document.getElementById('profile-page'),
+      inbox: document.getElementById('inbox-page'),
+      chat: document.getElementById('chat-page')
+    };
 
-    // Initialize the application
-    function init() {
-      setupEventListeners();
-      auth.onAuthStateChanged(handleAuthStateChange);
-    }
+    // ---------- Auth ----------
+    document.getElementById('login-btn').onclick = () => login();
+    document.getElementById('signup-btn').onclick = () => signup();
 
-    // Set up event listeners
-    function setupEventListeners() {
-      // Navigation
-      navItems.home.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('home');
-      });
-      
-      navItems.chat.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('chat');
-      });
-      
-      navItems.friends.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('friends');
-      });
-      
-      navItems.requests.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('requests');
-      });
-      
-      navItems.profile.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('profile');
-      });
-
-      // Back buttons
-      backBtn.addEventListener('click', () => {
-        if (currentChatFriend) {
-          currentChatFriend = null;
-          currentChatName.textContent = '';
-          messageInput.value = '';
-          chatMessages.innerHTML = '<div style="color:#888; text-align:center; margin-top:20px;">Select a friend to start chat</div>';
-        }
-        showPage('home');
-      });
-
-      document.getElementById('admin-back-btn').addEventListener('click', () => {
-        showPage('home');
-      });
-
-      // Login
-      loginButton.addEventListener('click', handleLogin);
-
-      // Create account
-      createAccountBtn.addEventListener('click', handleCreateAccount);
-
-      // Logout
-      logoutBtn.addEventListener('click', handleLogout);
-
-      // Send message
-      sendBtn.addEventListener('click', sendMessage);
-      messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          sendMessage();
-          // Hide keyboard after sending
-          messageInput.blur();
-        }
-      });
-
-      // Call buttons
-      voiceCallBtn.addEventListener('click', () => {
-        if (currentChatFriend) {
-          startCall('voice');
-        }
-      });
-
-      videoCallBtn.addEventListener('click', () => {
-        if (currentChatFriend) {
-          startCall('video');
-        }
-      });
-
-      // Call control buttons
-      muteAudioBtn.addEventListener('click', toggleMuteAudio);
-      speakerBtn.addEventListener('click', toggleSpeaker);
-      endCallBtn.addEventListener('click', endCall);
-      
-      // Audio profile options
-      document.querySelectorAll('.audio-option').forEach(option => {
-        option.addEventListener('click', (e) => {
-          const device = e.currentTarget.getAttribute('data-device');
-          changeAudioOutput(device);
-        });
-      });
-      
-      // Show audio profile on long press of speaker button
-      let speakerPressTimer;
-      speakerBtn.addEventListener('mousedown', () => {
-        speakerPressTimer = setTimeout(() => {
-          audioProfile.style.display = 'flex';
-        }, 500);
-      });
-      
-      speakerBtn.addEventListener('mouseup', () => {
-        clearTimeout(speakerPressTimer);
-      });
-      
-      speakerBtn.addEventListener('mouseleave', () => {
-        clearTimeout(speakerPressTimer);
-      });
-      
-      // Hide audio profile when clicking elsewhere
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('#speaker-btn') && !e.target.closest('.audio-profile')) {
-          audioProfile.style.display = 'none';
-        }
-      });
-
-      // Attach button
-      attachBtn.addEventListener('click', () => {
-        alert('File attachment feature would go here');
-      });
-
-      // Friend requests button
-      requestsBtn.addEventListener('click', () => {
-        showPage('friends');
-      });
-
-      // Admin buttons
-      viewAllChatsBtn.addEventListener('click', viewAllChats);
-      viewAllUsersBtn.addEventListener('click', viewAllUsers);
-
-      // Settings button
-      document.getElementById('settings-btn').addEventListener('click', () => {
-        alert('Settings would open here');
-      });
-
-      // Friends list button in profile
-      friendsListBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage('friends');
-      });
-
-      // Search functionality
-      searchBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showSearchBox('home');
-      });
-
-      friendsSearchBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showSearchBox('friends');
-      });
-
-      usersSearchBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showSearchBox('users');
-      });
-
-      // Close search results when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.search-container') && !e.target.closest('.search-results')) {
-          searchResults.style.display = 'none';
-          if (searchHeader) {
-            searchHeader.style.display = 'none';
-          }
-          isSearchActive = false;
-        }
-      });
-      
-      // Forgot password
-      document.getElementById('forgot-password').addEventListener('click', (e) => {
-        e.preventDefault();
-        handleForgotPassword();
-      });
-    }
-
-    // Start a call (voice or video)
-    function startCall(type) {
-      if (!currentChatFriend) return;
-      
-      callInterface.style.display = 'flex';
-      callerName.textContent = currentChatFriend.name;
-      callerNameText.textContent = currentChatFriend.name;
-      callStatus.textContent = type === 'video' ? 'Starting video call...' : 'Starting voice call...';
-      callActive = true;
-      
-      // Initialize call timer
-      callStartTime = Date.now();
-      updateCallTimer();
-      callTimerInterval = setInterval(updateCallTimer, 1000);
-      
-      // For video calls, show local video preview
-      if (type === 'video') {
-        startVideoPreview();
-        videoPreview.style.display = 'block';
-      } else {
-        videoPreview.style.display = 'none';
-      }
-      
-      // In a real app, you would initiate a WebRTC connection here
-      // This is just a simulation for the UI
-      setTimeout(() => {
-        callStatus.textContent = 'Call connected';
-      }, 2000);
+    function login() {
+      const email = document.getElementById('auth-email').value.trim();
+      const pass  = document.getElementById('auth-pass').value;
+      if (!email || !pass) return alert('Fill all fields');
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(cred => afterAuth(cred.user))
+        .catch(err => alert(err.message));
     }
     
-    // Start video preview for local camera
-    function startVideoPreview() {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-          .then(stream => {
-            localStream = stream;
-            localVideo.srcObject = stream;
-          })
-          .catch(error => {
-            console.error('Error accessing camera:', error);
-            alert('Could not access your camera. Please check permissions.');
-          });
-      }
-    }
-    
-    // Toggle audio mute
-    function toggleMuteAudio() {
-      isAudioMuted = !isAudioMuted;
-      
-      if (isAudioMuted) {
-        muteAudioBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-        muteAudioBtn.classList.add('active');
-        // In a real app, you would mute the audio track here
-        if (localStream) {
-          localStream.getAudioTracks().forEach(track => {
-            track.enabled = false;
-          });
-        }
-      } else {
-        muteAudioBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-        muteAudioBtn.classList.remove('active');
-        // In a real app, you would unmute the audio track here
-        if (localStream) {
-          localStream.getAudioTracks().forEach(track => {
-            track.enabled = true;
-          });
-        }
-      }
-    }
-    
-    // Toggle speaker
-    function toggleSpeaker() {
-      // This is a UI-only toggle since actual audio routing requires Web Audio API
-      // or specific device capabilities
-      if (audioOutputDevice === 'phone') {
-        changeAudioOutput('speaker');
-      } else {
-        changeAudioOutput('phone');
-      }
-    }
-    
-    // Change audio output device
-    function changeAudioOutput(device) {
-      audioOutputDevice = device;
-      
-      // Update UI to show active device
-      document.querySelectorAll('.audio-option').forEach(option => {
-        if (option.getAttribute('data-device') === device) {
-          option.classList.add('active');
-        } else {
-          option.classList.remove('active');
-        }
-      });
-      
-      // Update speaker button icon based on selection
-      if (device === 'speaker') {
-        speakerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-        speakerBtn.classList.add('active');
-      } else if (device === 'headphones') {
-        speakerBtn.innerHTML = '<i class="fas fa-headphones"></i>';
-        speakerBtn.classList.add('active');
-      } else {
-        speakerBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
-        speakerBtn.classList.remove('active');
-      }
-      
-      // In a real app, you would change the audio output device here
-      // This typically requires using the Web Audio API or specific device APIs
-      
-      // Hide the audio profile panel after selection
-      audioProfile.style.display = 'none';
-    }
-    
-    // End the current call
-    function endCall() {
-      callInterface.style.display = 'none';
-      callActive = false;
-      
-      // Stop call timer
-      if (callTimerInterval) {
-        clearInterval(callTimerInterval);
-        callTimerInterval = null;
-      }
-      
-      // Stop local video stream
-      if (localStream) {
-        localStream.getTracks().forEach(track => {
-          track.stop();
-        });
-        localStream = null;
-      }
-      
-      // Reset UI states
-      muteAudioBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-      muteAudioBtn.classList.remove('active');
-      isAudioMuted = false;
-      
-      speakerBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-      speakerBtn.classList.remove('active');
-      audioOutputDevice = 'phone';
-      
-      // Reset audio profile options
-      document.querySelectorAll('.audio-option').forEach(option => {
-        option.classList.remove('active');
-        if (option.getAttribute('data-device') === 'phone') {
-          option.classList.add('active');
-        }
-      });
-    }
-    
-    // Update call timer display
-    function updateCallTimer() {
-      if (!callActive) return;
-      
-      const elapsed = Math.floor((Date.now() - callStartTime) / 1000);
-      const minutes = Math.floor(elapsed / 60);
-      const seconds = elapsed % 60;
-      
-      callTimer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-
-    // Show search box
-    function showSearchBox(context) {
-      if (isSearchActive) {
-        searchResults.style.display = 'none';
-        if (searchHeader) {
-          searchHeader.style.display = 'none';
-        }
-        isSearchActive = false;
-        return;
-      }
-      
-      // Create search header if it doesn't exist
-      if (!searchHeader) {
-        searchHeader = document.createElement('div');
-        searchHeader.className = 'search-header';
-        searchHeader.innerHTML = `
-          <input type="text" id="search-input" placeholder="Search...">
-          <button id="close-search"><i class="fas fa-times"></i></button>
-        `;
-        document.querySelector('header').appendChild(searchHeader);
-        
-        // Add event listeners for search input
-        document.getElementById('search-input').addEventListener('input', (e) => {
-          const searchTerm = e.target.value.trim();
-          if (searchTerm.length > 0) {
-            performSearch(searchTerm, context);
-          } else {
-            searchResults.innerHTML = '';
-            searchResults.style.display = 'none';
-          }
-        });
-        
-        document.getElementById('close-search').addEventListener('click', () => {
-          searchHeader.style.display = 'none';
-          searchResults.style.display = 'none';
-          isSearchActive = false;
-        });
-      }
-      
-      searchHeader.style.display = 'flex';
-      document.getElementById('search-input').focus();
-      isSearchActive = true;
-    }
-
-    // Perform search
-    function performSearch(searchTerm, context) {
-      showLoading();
-      
-      // Search in appropriate context
-      if (context === 'home') {
-        searchFriends(searchTerm);
-      } else if (context === 'friends') {
-        searchFriendRequests(searchTerm);
-      } else if (context === 'users') {
-        searchAllUsers(searchTerm);
-      }
-    }
-
-    // Search friends
-    function searchFriends(searchTerm) {
-      const results = Object.entries(friendsList)
-        .filter(([uid, user]) => 
-          user.username.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map(([uid, user]) => user);
-      
-      displaySearchResults(results, 'friends');
-    }
-
-    // Search friend requests
-    function searchFriendRequests(searchTerm) {
-      const results = Object.values(pendingRequests)
-        .filter(request => 
-          request.fromUsername.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      
-      displaySearchResults(results, 'requests');
-    }
-
-    // Search all users
-    function searchAllUsers(searchTerm) {
-      const results = Object.entries(allUsers)
-        .filter(([uid, user]) => 
-          uid !== currentUser.uid && 
-          user.username.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map(([uid, user]) => user);
-      
-      displaySearchResults(results, 'users');
-    }
-
-    // Display search results
-    function displaySearchResults(results, context) {
-      searchResults.innerHTML = '';
-      
-      if (results.length === 0) {
-        searchResults.innerHTML = '<div style="padding:10px;color:#666;">No results found</div>';
-      } else {
-        results.forEach(result => {
-          const item = document.createElement('div');
-          item.className = 'user-item';
-          item.style.padding = '8px 12px';
-          item.style.cursor = 'pointer';
-          
-          if (context === 'requests') {
-            item.innerHTML = `
-              <div class="user-avatar"><i class="fas fa-user"></i></div>
-              <div class="user-info">
-                <div class="user-name">${escapeHtml(result.fromUsername)}</div>
-                <div class="user-status">Friend request</div>
-              </div>
-            `;
-            
-            item.addEventListener('click', () => {
-              showPage('friends');
-              searchResults.style.display = 'none';
-              if (searchHeader) {
-                searchHeader.style.display = 'none';
-              }
-              isSearchActive = false;
-            });
-          } else {
-            item.innerHTML = `
-              <div class="user-avatar"><i class="fas fa-user"></i></div>
-              <div class="user-info">
-                <div class="user-name">${escapeHtml(result.username)}</div>
-                <div class="user-status">${escapeHtml(result.email || '')}</div>
-              </div>
-            `;
-            
-            item.addEventListener('click', () => {
-              if (context === 'friends') {
-                // Open chat with this friend
-                currentChatFriend = { id: result.uid, name: result.username };
-                currentChatName.textContent = result.username;
-                loadChatMessages(result.uid);
-                showPage('chat');
-              } else if (context === 'users') {
-                // Show in users list
-                showPage('requests');
-              }
-              searchResults.style.display = 'none';
-              if (searchHeader) {
-                searchHeader.style.display = 'none';
-              }
-              isSearchActive = false;
-            });
-          }
-          
-          searchResults.appendChild(item);
-        });
-      }
-      
-      searchResults.style.display = 'block';
-      hideLoading();
-    }
-
-    // Show specific page
-    function showPage(pageName) {
-      // Hide all pages
-      Object.values(pages).forEach(page => {
-        page.classList.remove('active');
-      });
-      
-      // Show selected page
-      pages[pageName].classList.add('active');
-      
-      // Update active nav item
-      Object.values(navItems).forEach(item => {
-        item.classList.remove('active');
-      });
-      
-      if (pageName !== 'admin') {
-        navItems[pageName].classList.add('active');
-      }
-      
-      // Hide bottom nav in chat page
-      if (pageName === 'chat') {
-        bottomNav.style.display = 'none';
-      } else {
-        bottomNav.style.display = 'flex';
-      }
-      
-      // Hide search results when changing pages
-      searchResults.style.display = 'none';
-      if (searchHeader) {
-        searchHeader.style.display = 'none';
-      }
-      isSearchActive = false;
-      
-      // Load data if needed
-      if (pageName === 'friends') {
-        listenFriendRequests();
-        loadFriendsListForPage();
-      } else if (pageName === 'requests') {
-        loadAllUsers();
-      } else if (pageName === 'profile') {
-        updateProfileDisplay();
-      } else if (pageName === 'home') {
-        loadFriendsList();
-      }
-    }
-
-    // Handle authentication state changes
-    function handleAuthStateChange(user) {
-      if (user) {
-        currentUser = user;
-        initializeAppAfterLogin();
-      } else {
-        currentUser = null;
-        currentUserData = null;
-        loginPage.style.display = 'flex';
-        appContainer.style.display = 'none';
-      }
-    }
-
-    // Initialize app after successful login
-    function initializeAppAfterLogin() {
-      showLoading();
-      
-      // Ensure user record exists
-      db.ref('users/' + currentUser.uid).once('value').then(snap => {
-        if (!snap.exists()) {
-          const username = currentUser.email ? currentUser.email.split('@')[0] : 'user';
-          return saveUserToDB(currentUser.uid, {
-            uid: currentUser.uid,
-            username: username,
-            email: currentUser.email,
-            role: 'user',
-            friends: {},
-            blocked: false
-          });
-        }
-      }).catch(error => {
-        console.error("Error checking user record:", error);
-      }).finally(() => {
-        // Attach listener for user data
-        db.ref('users/' + currentUser.uid).on('value', snap => {
-          currentUserData = snap.val();
-          if (currentUserData) {
-            updateProfileDisplay();
-            
-            // Show admin panel if user is admin
-            if (currentUserData.role === 'admin') {
-              document.getElementById('admin-page').style.display = 'flex';
-            }
-          }
-          hideLoading();
-        });
-
-        // Show app UI
-        loginPage.style.display = 'none';
-        appContainer.style.display = 'flex';
-
-        // Load initial data
-        loadFriendsList();
-        showPage('home');
-      });
-    }
-
-    // Update profile display
-    function updateProfileDisplay() {
-      if (currentUserData) {
-        profileNameDisplay.textContent = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
-        profileEmailDisplay.textContent = currentUserData.email || currentUser.email || '';
-      }
-    }
-
-    // Handle login
-    function handleLogin() {
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-      
-      if (!email || !password) {
-        alert('Please enter both email and password');
-        return;
-      }
-      
-      showLoading();
-      
-      auth.signInWithEmailAndPassword(email, password)
+    function signup() {
+      const email = document.getElementById('auth-email').value.trim();
+      const pass  = document.getElementById('auth-pass').value;
+      const username = prompt('Choose a username:');
+      if (!email || !pass || !username) return alert('All fields required');
+      auth.createUserWithEmailAndPassword(email, pass)
         .then(cred => {
-          currentUser = cred.user;
+          return db.ref('users/' + cred.user.uid).set({
+            username, email, following: {}, followers: {}, likes: 0, friends: {}
+          }).then(() => afterAuth(cred.user));
         })
-        .catch(err => {
-          hideLoading();
-          alert(err.message);
-        });
+        .catch(err => alert(err.message));
     }
-
-    // Handle forgot password
-    function handleForgotPassword() {
-      const email = document.getElementById('login-email').value.trim();
-      
-      if (!email) {
-        alert('Please enter your email address first');
-        return;
+    
+    function afterAuth(user) {
+      currentUser = user;
+      pages.auth.classList.remove('active');
+      document.getElementById('app').style.display = 'flex';
+      showPage('home');
+      loadGlobalFeed();
+      loadProfile(user.uid);
+      updateMessageBadge();
+    }
+    
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        document.getElementById('app').style.display = 'none';
+        pages.auth.classList.add('active');
       }
-      
-      showLoading();
-      
-      auth.sendPasswordResetEmail(email)
-        .then(() => {
-          hideLoading();
-          alert('Password reset email sent. Please check your inbox.');
-        })
-        .catch(err => {
-          hideLoading();
-          alert('Error: ' + err.message);
-        });
-    }
+    });
 
-    // Handle account creation
-    function handleCreateAccount() {
-      const email = prompt('Enter your email:');
-      if (!email) return;
-      
-      const password = prompt('Enter your password (min 6 chars):');
-      if (!password || password.length < 6) {
-        alert('Password must be at least 6 characters');
-        return;
-      }
-      
-      const username = prompt('Enter your username:');
-      if (!username) {
-        alert('Username is required');
-        return;
-      }
-      
-      showLoading();
-      
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((cred) => {
-          currentUser = cred.user;
-          return saveUserToDB(currentUser.uid, {
-            uid: currentUser.uid,
-            username: username,
-            email: email,
-            role: 'user',
-            friends: {},
-            blocked: false
-          });
-        })
-        .catch(err => {
-          hideLoading();
-          alert(err.message);
-        });
-    }
-
-    // Handle logout
-    function handleLogout() {
-      showLoading();
-      auth.signOut().then(() => {
-        currentUser = null;
-        currentUserData = null;
-        loginPage.style.display = 'flex';
-        appContainer.style.display = 'none';
-        hideLoading();
-      }).catch(error => {
-        hideLoading();
-        console.error("Logout error:", error);
-      });
-    }
-
-    // Save user to database
-    function saveUserToDB(uid, userData) {
-      return db.ref('users/' + uid).update(userData);
-    }
-
-    // Load all users for friend requests
-    function loadAllUsers() {
-      showLoading('users-list-container');
-      
-      db.ref('users').on('value', snapshot => {
-        allUsers = snapshot.val() || {};
-        usersListContainer.innerHTML = '';
-
-        for (const uid in allUsers) {
-          if (uid !== currentUser.uid) {
-            const user = allUsers[uid];
-            const userItem = createUserItem(uid, user);
-            usersListContainer.appendChild(userItem);
+    // ---------- Navigation ----------
+    document.querySelectorAll('.nav-item').forEach(el => {
+      if (el.id !== 'upload-nav') {
+        el.addEventListener('click', () => {
+          const p = el.dataset.page;
+          showPage(p);
+          document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+          el.classList.add('active');
+          
+          if (p === 'inbox') {
+            loadInbox();
+          } else if (p === 'friends') {
+            loadFriendsPage();
           }
-        }
-        
-        hideLoading('users-list-container');
-      }, error => {
-        hideLoading('users-list-container');
-        console.error("Error loading users:", error);
-      });
-    }
-
-    // Load friends list for home page
-    function loadFriendsList() {
-      showLoading('friends-list-container');
-      
-      const ref = db.ref(`users/${currentUser.uid}/friends`);
-      
-      ref.on('value', snapshot => {
-        friendsList = {};
-        const friends = snapshot.val() || {};
-        friendsListContainer.innerHTML = '';
-        
-        if (Object.keys(friends).length === 0) {
-          friendsListContainer.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from the People tab.</div>';
-          hideLoading('friends-list-container');
-          return;
-        }
-        
-        const promises = [];
-        for (const friendId in friends) {
-          promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
-            const friend = snap.val() || { username: 'Unknown', uid: friendId };
-            friendsList[friendId] = friend;
-            createFriendItem(friendId, friend, friendsListContainer);
-          }).catch(err => console.error('Error loading friend data', err)));
-        }
-
-        Promise.all(promises).then(() => hideLoading('friends-list-container')).catch(() => hideLoading('friends-list-container'));
-      }, error => {
-        hideLoading('friends-list-container');
-        console.error("Error loading friends list:", error);
-      });
-    }
-
-    // Load friends list for friends page
-    function loadFriendsListForPage() {
-      showLoading('friends-list-page-container');
-      
-      const ref = db.ref(`users/${currentUser.uid}/friends`);
-      
-      ref.on('value', snapshot => {
-        friendsList = {};
-        const friends = snapshot.val() || {};
-        friendsListPageContainer.innerHTML = '';
-        
-        if (Object.keys(friends).length === 0) {
-          friendsListPageContainer.innerHTML = '<div style="padding:12px;color:#666;">No friends yet. Add friends from the People tab.</div>';
-          hideLoading('friends-list-page-container');
-          return;
-        }
-        
-        const promises = [];
-        for (const friendId in friends) {
-          promises.push(db.ref(`users/${friendId}`).once('value').then(snap => {
-            const friend = snap.val() || { username: 'Unknown', uid: friendId };
-            friendsList[friendId] = friend;
-            createFriendItem(friendId, friend, friendsListPageContainer);
-          }).catch(err => console.error('Error loading friend data', err)));
-        }
-
-        Promise.all(promises).then(() => hideLoading('friends-list-page-container')).catch(() => hideLoading('friends-list-page-container'));
-      }, error => {
-        hideLoading('friends-list-page-container');
-        console.error("Error loading friends list:", error);
-      });
-    }
-
-    // Create friend item for friends list
-    function createFriendItem(friendId, friend, container) {
-      const item = document.createElement('div');
-      item.className = 'user-item clickable';
-      
-      item.innerHTML = `
-        <div class="user-avatar"><i class="fas fa-user"></i></div>
-        <div class="user-info">
-          <div class="user-name">${escapeHtml(friend.username)}</div>
-          <div class="user-status">Online</div>
-        </div>
-      `;
-      
-      container.appendChild(item);
-      
-      item.addEventListener('click', () => {
-        currentChatFriend = { id: friendId, name: friend.username };
-        currentChatName.textContent = friend.username;
-        loadChatMessages(friendId);
-        showPage('chat');
-      });
-    }
-
-    // Create user item for all users list
-    function createUserItem(uid, user) {
-      const item = document.createElement('div');
-      item.className = 'user-item';
-
-      const actionDiv = document.createElement('div');
-      actionDiv.style.marginLeft = '8px';
-
-      item.innerHTML = `
-        <div class="user-avatar"><i class="fas fa-user"></i></div>
-        <div class="user-info">
-          <div class="user-name">${escapeHtml(user.username || '(no-name)')}</div>
-          <div class="user-status">${escapeHtml(user.email || '')}</div>
-        </div>
-      `;
-      
-      createFriendActionButton(uid, actionDiv);
-      item.appendChild(actionDiv);
-      
-      return item;
-    }
-
-    // Create friend action button
-    function createFriendActionButton(uid, container) {
-      const btn = document.createElement('button');
-      btn.setAttribute('data-uid', uid);
-
-      Promise.all([
-        db.ref(`users/${currentUser.uid}/friends/${uid}`).once('value'),
-        db.ref(`users/${uid}/friendRequests/${currentUser.uid}`).once('value'),
-        db.ref(`users/${currentUser.uid}/friendRequests/${uid}`).once('value')
-      ]).then(([fsnap, rsnap, incomingSnap]) => {
-        if (fsnap.exists()) {
-          btn.textContent = 'Friends';
-          btn.disabled = true;
-          btn.style.background = '#6c757d';
-          container.appendChild(btn);
-        } else if (rsnap.exists()) {
-          btn.textContent = 'Cancel';
-          btn.className = 'cancel-request-btn';
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            cancelFriendRequest(uid);
-          });
-          container.appendChild(btn);
-        } else if (incomingSnap.exists()) {
-          btn.textContent = 'Respond';
-          btn.className = 'add-friend-btn';
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showPage('friends');
-          });
-          container.appendChild(btn);
-        } else {
-          btn.textContent = 'Add Friend';
-          btn.className = 'add-friend-btn';
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sendFriendRequest(uid);
-          });
-          container.appendChild(btn);
-        }
-      }).catch(err => {
-        console.error('Error creating friend button:', err);
-        btn.textContent = 'Add Friend';
-        btn.className = 'add-friend-btn';
-        btn.addEventListener('click', (e) => { e.stopPropagation(); sendFriendRequest(uid); });
-        container.appendChild(btn);
-      });
-    }
-
-    // Send friend request
-    async function sendFriendRequest(toUid) {
-      if (!currentUserData || !currentUser) return;
-      if (toUid === currentUser.uid) return;
-
-      showLoading();
-
-      try {
-        const fsnap = await db.ref(`users/${currentUser.uid}/friends/${toUid}`).once('value');
-        if (fsnap.exists()) {
-          alert('You are already friends.');
-          hideLoading();
-          return;
-        }
-
-        const alreadySent = await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).once('value');
-        if (alreadySent.exists()) {
-          alert('Friend request already sent.');
-          hideLoading();
-          return;
-        }
-
-        const senderUsername = currentUserData.username || (currentUser.email ? currentUser.email.split('@')[0] : 'Someone');
-        await db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).set({
-          fromUid: currentUser.uid,
-          fromUsername: senderUsername,
-          status: 'pending',
-          timestamp: Date.now()
         });
+      }
+    });
 
-        await db.ref(`users/${toUid}/notifications`).push({
-          type: 'friend_request',
-          fromUid: currentUser.uid,
-          message: `${senderUsername} sent you a friend request`,
-          timestamp: Date.now()
-        });
+    // Upload button
+    document.getElementById('upload-nav').onclick = () => {
+      showModal('upload-modal');
+    };
 
-        alert('Friend request sent!');
-      } catch (error) {
-        console.error('Failed to send friend request:', error);
-        alert('Failed to send friend request: ' + (error.message || 'Unknown error'));
-      } finally {
-        hideLoading();
+    function showPage(name) {
+      // Hide chat page first if showing
+      if (name !== 'chat') {
+        pages.chat.style.display = 'none';
+      }
+      
+      Object.values(pages).forEach(p => {
+        if (p !== pages.chat) {
+          p.classList.remove('active');
+        }
+      });
+      
+      if (name !== 'chat') {
+        pages[name].classList.add('active');
       }
     }
 
-    // Cancel friend request
-    function cancelFriendRequest(toUid) {
-      if (!confirm('Are you sure you want to cancel this friend request?')) return;
-      
-      showLoading();
-      
-      db.ref(`users/${toUid}/friendRequests/${currentUser.uid}`).remove()
-        .then(() => {
-          alert('Friend request cancelled.');
-        })
-        .catch(err => {
-          alert('Error cancelling request: ' + err.message);
-        })
-        .finally(() => {
-          hideLoading();
-        });
+    // ---------- Modal Functions ----------
+    function showModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
     }
 
-    // Listen for incoming friend requests
-    function listenFriendRequests() {
-      const ref = db.ref(`users/${currentUser.uid}/friendRequests`);
-      
-      ref.on('value', snapshot => {
-        const requests = snapshot.val() || {};
-        pendingRequests = requests;
-        renderFriendRequests(requests);
+    function hideModal() {
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.style.display = 'none';
+      });
+      // Reset file input
+      document.getElementById('media-file').value = '';
+      document.getElementById('upload-preview').style.display = 'none';
+      document.getElementById('video-preview').style.display = 'none';
+      document.getElementById('upload-caption').value = '';
+      selectedMediaFile = null;
+    }
+
+    // Upload modal options
+    document.getElementById('gallery-upload-btn').onclick = () => {
+      hideModal();
+      showModal('gallery-modal');
+    };
+
+    document.getElementById('video-upload-btn').onclick = () => {
+      hideModal();
+      uploadVideo();
+    };
+
+    document.getElementById('create-draft-btn').onclick = () => {
+      hideModal();
+      createDraft();
+    };
+
+    document.getElementById('view-drafts-btn').onclick = () => {
+      hideModal();
+      showDrafts();
+    };
+
+    // File input handler
+    document.getElementById('media-file').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        selectedMediaFile = file;
+        const preview = document.getElementById('upload-preview');
+        const videoPreview = document.getElementById('video-preview');
         
-        const pendingCount = Object.keys(requests).filter(
-          k => requests[k].status === 'pending'
-        ).length;
-        
-        if (pendingCount > 0) {
-          reqCountBadge.style.display = 'inline-block';
-          reqCountBadge.textContent = pendingCount;
-        } else {
-          reqCountBadge.style.display = 'none';
+        if (file.type.startsWith('image/')) {
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = 'block';
+          videoPreview.style.display = 'none';
+        } else if (file.type.startsWith('video/')) {
+          videoPreview.innerHTML = `<video controls class="upload-preview"><source src="${URL.createObjectURL(file)}" type="${file.type}"></video>`;
+          videoPreview.style.display = 'block';
+          preview.style.display = 'none';
         }
-      }, error => {
-        console.error("Error listening to friend requests:", error);
+      }
+    });
+
+    // ---------- Video Feed ----------
+    let lastVideoKey = null;
+    function loadGlobalFeed() {
+      const feedContainer = document.getElementById('feed');
+      feedContainer.innerHTML = '<div class="spinner"></div>';
+      let ref = db.ref('videos').orderByChild('timestamp').limitToLast(10);
+      if (lastVideoKey) ref = ref.endBefore(lastVideoKey);
+      ref.once('value').then(snap => {
+        const videos = snap.val() || {};
+        const keys = Object.keys(videos).reverse();
+        if (keys.length) lastVideoKey = keys[keys.length-1];
+        renderVideos(videos, feedContainer, true);
       });
     }
 
-    // Render friend requests UI
-    function renderFriendRequests(requests) {
-      friendRequestsContainer.innerHTML = '';
-      
-      if (Object.keys(requests).length === 0) {
-        friendRequestsContainer.innerHTML = '<div style="padding:12px;color:#666;">No pending friend requests</div>';
+    function renderVideos(videosObj, container, isGlobal = false) {
+      if (!Object.keys(videosObj).length) {
+        container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No videos yet</div>';
         return;
       }
-      
-      for (const fromUid in requests) {
-        const request = requests[fromUid];
-        if (request.status !== 'pending') continue;
-        
-        db.ref(`users/${fromUid}`).once('value').then(snap => {
-          const sender = snap.val() || { 
-            username: request.fromUsername || 'Unknown', 
-            email: '' 
-          };
-          
-          const item = document.createElement('div');
-          item.className = 'request-item';
-          item.innerHTML = `
-            <div class="user-avatar"><i class="fas fa-user"></i></div>
+      const fragment = document.createDocumentFragment();
+      Object.entries(videosObj).reverse().forEach(([vid, data]) => {
+        // Skip drafts in main feed
+        if (data.isDraft) return;
+
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+          <video src="${data.url}" loop playsinline></video>
+          <div class="video-overlay">
             <div class="user-info">
-              <div class="user-name">${escapeHtml(sender.username)}</div>
-              <div class="user-status">${escapeHtml(sender.email || request.fromUsername || '')}</div>
+              <div class="avatar"><i class="fas fa-user"></i></div>
+              <div>
+                <div class="username">@${data.username}</div>
+                <div class="caption">${escape(data.caption||'')}</div>
+              </div>
             </div>
-            <div class="request-actions">
-              <button class="accept-btn" data-uid="${fromUid}">Accept</button>
-              <button class="decline-btn" data-uid="${fromUid}">Decline</button>
+          </div>
+          <div class="actions">
+            <div class="action-btn like-btn ${data.likedBy?.[currentUser.uid]?'liked':''}" data-vid="${vid}">
+              <i class="fas fa-heart"></i>
+              <div class="action-count">${Object.keys(data.likedBy||{}).length}</div>
             </div>
-          `;
-          
-          friendRequestsContainer.appendChild(item);
-          
-          item.querySelector('.accept-btn').addEventListener('click', (e) => { 
-            e.stopPropagation(); 
-            acceptFriendRequest(fromUid); 
+            <div class="action-btn comment-btn"><i class="fas fa-comment"></i><div class="action-count">0</div></div>
+            <div class="action-btn share-btn"><i class="fas fa-share"></i></div>
+          </div>
+        `;
+        const video = card.querySelector('video');
+        const likeBtn = card.querySelector('.like-btn');
+
+        // Play / pause on visibility
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) video.play();
+            else video.pause();
           });
-          
-          item.querySelector('.decline-btn').addEventListener('click', (e) => { 
-            e.stopPropagation(); 
-            declineFriendRequest(fromUid); 
-          });
-        });
-      }
-    }
+        }, {threshold: 0.7});
+        observer.observe(card);
 
-    // Accept friend request
-    function acceptFriendRequest(friendUid) {
-      if (!confirm('Accept this friend request?')) return;
-      
-      showLoading();
-      
-      const updates = {};
-      updates[`users/${currentUser.uid}/friends/${friendUid}`] = true;
-      updates[`users/${friendUid}/friends/${currentUser.uid}`] = true;
-      updates[`users/${currentUser.uid}/friendRequests/${friendUid}`] = null;
-      updates[`users/${friendUid}/friendRequests/${currentUser.uid}`] = null;
+        // Like
+        likeBtn.onclick = () => toggleLike(vid, likeBtn, data);
 
-      db.ref().update(updates)
-        .then(() => {
-          alert('Friend request accepted!');
-          loadFriendsList();
-          loadFriendsListForPage();
-          
-          db.ref(`users/${friendUid}/notifications`).push({
-            type: 'request_accepted',
-            fromUid: currentUser.uid,
-            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} accepted your friend request.`,
-            timestamp: Date.now()
-          });
-        })
-        .catch(err => {
-          alert('Error accepting request: ' + err.message);
-        })
-        .finally(() => {
-          hideLoading();
-        });
-    }
-
-    // Decline friend request
-    function declineFriendRequest(friendUid) {
-      if (!confirm('Decline this friend request?')) return;
-      
-      showLoading();
-      
-      db.ref(`users/${currentUser.uid}/friendRequests/${friendUid}`).remove()
-        .then(() => {
-          db.ref(`users/${friendUid}/notifications`).push({
-            type: 'request_rejected',
-            fromUid: currentUser.uid,
-            message: `${currentUserData && currentUserData.username ? currentUserData.username : 'Someone'} declined your friend request.`,
-            timestamp: Date.now()
-          });
-          alert('Friend request declined!');
-        })
-        .catch(err => {
-          alert('Error declining request: ' + err.message);
-        })
-        .finally(() => {
-          hideLoading();
-        });
-    }
-
-    // Load chat messages
-    function loadChatMessages(friendId) {
-      showLoading('chat-messages');
-      
-      const chatId = [currentUser.uid, friendId].sort().join('_');
-      const ref = db.ref(`chats/${chatId}`);
-      
-      ref.off();
-      chatMessages.innerHTML = '';
-      
-      ref.orderByChild('timestamp').on('child_added', snap => {
-        const message = snap.val();
-        addMessageToChat(message);
-        hideLoading('chat-messages');
-      }, error => {
-        hideLoading('chat-messages');
-        console.error("Error loading messages:", error);
-      });
-    }
-
-    // Add message to chat UI
-    function addMessageToChat(message) {
-      const div = document.createElement('div');
-      div.className = 'message ' + 
-        (message.sender === currentUser.uid ? 'sent' : 'received');
-      
-      div.innerHTML = `
-        <div>${escapeHtml(message.text)}</div>
-        <div class="message-time">${formatTime(message.timestamp)}</div>
-      `;
-      
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    // Format time for messages
-    function formatTime(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
-    // Send message
-    async function sendMessage() {
-      const text = messageInput.value.trim();
-      if (!text || !currentChatFriend) return;
-      
-      showLoading();
-      
-      try {
-        const [meSnap, friendSnap] = await Promise.all([
-          db.ref(`users/${currentUser.uid}/blocked`).once('value'),
-          db.ref(`users/${currentChatFriend.id}/blocked`).once('value')
-        ]);
-        
-        const meBlocked = meSnap.exists() && meSnap.val() === true;
-        const friendBlocked = friendSnap.exists() && friendSnap.val() === true;
-
-        if (meBlocked) {
-          alert('You are blocked and cannot send messages.');
-          hideLoading();
-          return;
-        }
-        
-        if (friendBlocked) {
-          alert('This user is blocked. Cannot send messages.');
-          hideLoading();
-          return;
-        }
-
-        const chatId = [currentUser.uid, currentChatFriend.id].sort().join('_');
-        const message = {
-          text: text,
-          sender: currentUser.uid,
-          timestamp: Date.now()
+        // Click user → profile
+        card.querySelector('.user-info').onclick = () => {
+          loadProfile(data.uid);
+          showPage('profile');
         };
-        
-        await db.ref(`chats/${chatId}`).push(message);
-        messageInput.value = '';
-      } catch (error) {
-        alert('Failed to send message: ' + error.message);
-      } finally {
-        hideLoading();
+
+        fragment.appendChild(card);
+      });
+      container.innerHTML = '';
+      container.appendChild(fragment);
+    }
+
+    async function toggleLike(vid, btn, data) {
+      const uid = currentUser.uid;
+      const liked = !!data.likedBy?.[uid];
+      const updates = {};
+      if (liked) {
+        updates[`videos/${vid}/likedBy/${uid}`] = null;
+        updates[`users/${data.uid}/likes`] = firebase.database.ServerValue.increment(-1);
+      } else {
+        updates[`videos/${vid}/likedBy/${uid}`] = true;
+        updates[`users/${data.uid}/likes`] = firebase.database.ServerValue.increment(1);
+      }
+      await db.ref().update(updates);
+      btn.classList.toggle('liked');
+      const countEl = btn.querySelector('.action-count');
+      countEl.textContent = (Object.keys(data.likedBy||{}).length + (liked?-1:1));
+    }
+
+    // ---------- Friends Page ----------
+    function loadFriendsPage() {
+      loadStories();
+      const activeTab = document.querySelector('.friends-tab.active').dataset.tab;
+      const content = document.getElementById('friends-content');
+      
+      if (activeTab === 'videos') {
+        loadFriendsVideos(content);
+      } else {
+        loadAllUsers(content);
       }
     }
 
-    // Admin: view all chats
-    function viewAllChats() {
-      if (!currentUserData || currentUserData.role !== 'admin') {
-        alert('Admin access required');
-        return;
-      }
+    function loadStories() {
+      const storiesContainer = document.getElementById('stories-scroll');
+      storiesContainer.innerHTML = '<div class="spinner"></div>';
       
-      showLoading('admin-output');
-      
-      db.ref('chats').once('value').then(snap => {
-        const chats = snap.val() || {};
-        let outputHtml = '';
+      // Get friends for stories
+      db.ref('users/' + currentUser.uid + '/friends').once('value').then(snap => {
+        const friends = snap.val() || {};
+        storiesContainer.innerHTML = '';
         
-        for (const chatId in chats) {
-          const messages = chats[chatId] || {};
-          outputHtml += `
-            <div style="padding:6px;border-bottom:1px solid #eee;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <strong>${chatId}</strong>
-                <button data-chat="${chatId}" class="admin-btn" style="padding:5px 10px; font-size:12px;">View</button>
-              </div>
-              <div id="chat-${escapeHtml(chatId)}" style="display:none; margin-top:8px; padding-left:8px;"></div>
-            </div>
-          `;
-        }
-        
-        adminOutput.innerHTML = outputHtml || '<div>No chats yet</div>';
-        
-        const viewButtons = adminOutput.querySelectorAll('[data-chat]');
-        viewButtons.forEach(button => {
-          button.addEventListener('click', (e) => {
-            const chatId = e.target.getAttribute('data-chat');
-            toggleChatView(chatId);
+        Object.keys(friends).forEach(fid => {
+          db.ref('users/' + fid).once('value').then(userSnap => {
+            const user = userSnap.val();
+            if (!user) return;
+            
+            // Check if user has recent videos for stories
+            db.ref('videos').orderByChild('uid').equalTo(fid).limitToLast(1).once('value').then(videoSnap => {
+              const videos = videoSnap.val() || {};
+              if (Object.keys(videos).length > 0) {
+                const storyEl = document.createElement('div');
+                storyEl.className = 'story-item';
+                storyEl.innerHTML = `
+                  <div class="story-avatar">
+                    <i class="fas fa-user" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;"></i>
+                  </div>
+                  <div class="story-username">${user.username}</div>
+                `;
+                storyEl.onclick = () => viewFriendVideos(fid, user.username);
+                storiesContainer.appendChild(storyEl);
+              }
+            });
           });
         });
-        
-        hideLoading('admin-output');
-      }).catch(error => {
-        hideLoading('admin-output');
-        console.error("Error loading chats:", error);
       });
     }
 
-    // Toggle chat view in admin panel
-    function toggleChatView(chatId) {
-      const container = adminOutput.querySelector(`#chat-${cssEscape(chatId)}`);
-      if (!container) return;
+    function loadFriendsVideos(container) {
+      container.innerHTML = '<div class="spinner"></div>';
       
-      if (container.style.display === 'block') {
-        container.style.display = 'none';
-        return;
-      }
-      
-      container.innerHTML = 'Loading messages...';
-      container.style.display = 'block';
-      
-      db.ref(`chats/${chatId}`).once('value').then(snap => {
-        const messages = snap.val() || {};
-        let messagesHtml = '';
+      // Get friends
+      db.ref('users/' + currentUser.uid + '/friends').once('value').then(snap => {
+        const friends = snap.val() || {};
+        container.innerHTML = '';
         
-        for (const mid in messages) {
-          const message = messages[mid];
-          messagesHtml += `
-            <div style="padding:8px;border-bottom:1px dashed #eee;">
-              <div style="font-size:13px;">
-                <strong>${escapeHtml(message.sender)}</strong>
-                <span style="color:#888;font-size:12px;">
-                  ${new Date(message.timestamp).toLocaleString()}
-                </span>
-              </div>
-              <div style="margin-top:6px;">${escapeHtml(message.text)}</div>
-            </div>
-          `;
+        if (Object.keys(friends).length === 0) {
+          container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No friends yet</div>';
+          return;
         }
         
-        container.innerHTML = messagesHtml || '<div>No messages</div>';
+        // Get videos from friends
+        const friendsVideos = [];
+        Object.keys(friends).forEach(fid => {
+          db.ref('videos').orderByChild('uid').equalTo(fid).once('value').then(videoSnap => {
+            const videos = videoSnap.val() || {};
+            Object.entries(videos).forEach(([vid, video]) => {
+              if (!video.isDraft) {
+                friendsVideos.push({vid, ...video});
+              }
+            });
+            
+            // Render all collected videos
+            renderFriendsVideos(friendsVideos, container);
+          });
+        });
       });
     }
 
-    // Admin: view all users
-    function viewAllUsers() {
-      if (!currentUserData || currentUserData.role !== 'admin') {
-        alert('Admin access required');
+    function renderFriendsVideos(videos, container) {
+      if (videos.length === 0) {
+        container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No videos from friends</div>';
         return;
       }
       
-      showLoading('admin-output');
+      // Sort by timestamp
+      videos.sort((a, b) => b.timestamp - a.timestamp);
       
+      container.innerHTML = '<div class="friends-videos" id="friends-videos-grid"></div>';
+      const grid = document.getElementById('friends-videos-grid');
+      
+      videos.forEach(video => {
+        const videoEl = document.createElement('div');
+        videoEl.className = 'friend-video';
+        videoEl.innerHTML = `
+          <video src="${video.url}" loop muted></video>
+          <div class="friend-video-overlay">
+            <i class="fas fa-heart"></i> ${Object.keys(video.likedBy||{}).length}
+          </div>
+        `;
+        videoEl.onclick = () => playFriendVideo(video);
+        grid.appendChild(videoEl);
+      });
+    }
+
+    function viewFriendVideos(fid, username) {
+      // Show all videos from this friend
+      const container = document.getElementById('friends-content');
+      container.innerHTML = '<div class="spinner"></div>';
+      
+      db.ref('videos').orderByChild('uid').equalTo(fid).once('value').then(videoSnap => {
+        const videos = videoSnap.val() || {};
+        container.innerHTML = `
+          <div style="padding:15px;background:#111;border-bottom:1px solid #333;">
+            <button onclick="loadFriendsPage()" style="background:none;border:none;color:#ff0050;font-size:16px;">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h3 style="margin:10px 0;">@${username}'s Videos</h3>
+          </div>
+          <div class="friends-videos" id="friend-videos-grid"></div>
+        `;
+        
+        const grid = document.getElementById('friend-videos-grid');
+        Object.entries(videos).reverse().forEach(([vid, video]) => {
+          if (!video.isDraft) {
+            const videoEl = document.createElement('div');
+            videoEl.className = 'friend-video';
+            videoEl.innerHTML = `
+              <video src="${video.url}" loop muted></video>
+              <div class="friend-video-overlay">
+                <i class="fas fa-heart"></i> ${Object.keys(video.likedBy||{}).length}
+              </div>
+            `;
+            videoEl.onclick = () => playFriendVideo(video);
+            grid.appendChild(videoEl);
+          }
+        });
+        
+        if (grid.innerHTML === '') {
+          grid.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;grid-column:1/-1;">No videos</div>';
+        }
+      });
+    }
+
+    function playFriendVideo(video) {
+      // Play video in full screen view (simplified)
+      const container = document.getElementById('friends-content');
+      container.innerHTML = `
+        <div style="position:relative;height:100%;background:#000;">
+          <button onclick="viewFriendVideos('${video.uid}', '${video.username}')" style="position:absolute;top:15px;left:15px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;width:40px;height:40px;z-index:10;">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <video src="${video.url}" loop controls autoplay style="width:100%;height:100%;object-fit:contain;"></video>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,.7));">
+            <div class="username">@${video.username}</div>
+            <div class="caption">${escape(video.caption||'')}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function loadAllUsers(container) {
+      container.innerHTML = '<div class="spinner"></div>';
       db.ref('users').once('value').then(snap => {
         const users = snap.val() || {};
-        let outputHtml = '';
+        container.innerHTML = '';
         
-        for (const uid in users) {
-          const user = users[uid] || {};
-          outputHtml += `
-            <div style="padding:8px;border-bottom:1px solid #eee;">
-              <div>
-                <strong>${escapeHtml(user.username || uid)}</strong>
-                — ${escapeHtml(user.email || '')}
-              </div>
-              <div style="margin-top:6px;">
-                Role: ${escapeHtml(user.role || 'user')}
-                — Blocked: ${user.blocked ? 'yes' : 'no'}
-              </div>
+        Object.entries(users).forEach(([uid, user]) => {
+          if (uid === currentUser.uid) return;
+          
+          const isFollowing = !!user.followers?.[currentUser.uid];
+          const isFriend = !!user.friends?.[currentUser.uid];
+          
+          const userEl = document.createElement('div');
+          userEl.className = 'user-item';
+          userEl.innerHTML = `
+            <div class="avatar"><i class="fas fa-user"></i></div>
+            <div class="user-info">
+              <div class="username">@${user.username}</div>
+              <div style="color:#aaa;font-size:12px;">${user.email}</div>
+            </div>
+            <div class="user-actions">
+              ${isFriend ? 
+                '<button class="request-btn" style="background:#333;">Friends</button>' :
+                `<button class="request-btn ${isFollowing ? 'following' : ''}" data-uid="${uid}">
+                  ${isFollowing ? 'Following' : 'Follow'}
+                </button>`
+              }
             </div>
           `;
-        }
-        
-        adminOutput.innerHTML = outputHtml || '<div>No users</div>';
-        hideLoading('admin-output');
-      }).catch(error => {
-        hideLoading('admin-output');
-        console.error("Error loading users:", error);
+          
+          const followBtn = userEl.querySelector('.request-btn');
+          if (!isFriend) {
+            followBtn.onclick = () => sendFriendRequest(uid, user);
+          }
+          
+          // Click on user item to view profile
+          userEl.querySelector('.user-info').onclick = () => {
+            loadProfile(uid);
+            showPage('profile');
+          };
+          
+          container.appendChild(userEl);
+        });
       });
     }
 
-    // Show loading indicator
-    function showLoading(containerId) {
-      const container = containerId ? document.getElementById(containerId) : document.body;
-      const spinner = document.createElement('div');
-      spinner.className = 'spinner';
-      spinner.id = 'loading-spinner';
+    function sendFriendRequest(targetUid, targetUser) {
+      const updates = {};
+      updates[`users/${currentUser.uid}/following/${targetUid}`] = true;
+      updates[`users/${targetUid}/followers/${currentUser.uid}`] = true;
       
-      if (containerId) {
-        container.innerHTML = '';
-        container.appendChild(spinner);
+      // Send friend request
+      updates[`friendRequests/${targetUid}/${currentUser.uid}`] = {
+        from: currentUser.uid,
+        username: currentUser.displayName || currentUser.email.split('@')[0],
+        timestamp: Date.now()
+      };
+      
+      db.ref().update(updates).then(() => {
+        loadFriendsPage();
+        updateMessageBadge();
+      });
+    }
+
+    // Friends tabs
+    document.querySelectorAll('.friends-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.friends-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        loadFriendsPage();
+      });
+    });
+
+    // ---------- Profile ----------
+    async function loadProfile(uid) {
+      const snap = await db.ref('users/' + uid).once('value');
+      const user = snap.val();
+      if (!user) return;
+      
+      document.getElementById('profile-username').textContent = '@' + user.username;
+      document.getElementById('following-count').textContent = Object.keys(user.following||{}).length;
+      document.getElementById('followers-count').textContent = Object.keys(user.followers||{}).length;
+      document.getElementById('likes-count').textContent = user.likes || 0;
+
+      const editBtn = document.getElementById('edit-profile-btn');
+      if (uid === currentUser.uid) {
+        editBtn.textContent = 'Edit Profile';
+        editBtn.onclick = () => editProfile();
       } else {
-        if (!document.getElementById('loading-spinner')) {
-          document.body.appendChild(spinner);
+        const isFriend = !!user.friends?.[currentUser.uid];
+        const isFollowing = !!user.followers?.[currentUser.uid];
+        editBtn.textContent = isFriend ? 'Friends' : (isFollowing ? 'Following' : 'Follow');
+        editBtn.className = 'follow-btn ' + (isFriend ? 'following' : (isFollowing ? 'following' : ''));
+        editBtn.onclick = () => toggleFollow(uid, editBtn, user);
+      }
+
+      // Load user videos in grid format
+      const profileVideos = document.getElementById('profile-videos');
+      profileVideos.innerHTML = '<div class="spinner"></div>';
+      db.ref('videos').orderByChild('uid').equalTo(uid).once('value').then(s => {
+        const videos = s.val() || {};
+        renderProfileVideos(videos, uid === currentUser.uid);
+      });
+    }
+    
+    function renderProfileVideos(videosObj, isOwnProfile = false) {
+      const profileVideos = document.getElementById('profile-videos');
+      
+      if (!Object.keys(videosObj).length) {
+        profileVideos.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;grid-column:1/-1;">No videos yet</div>';
+        return;
+      }
+      
+      profileVideos.innerHTML = '';
+      Object.entries(videosObj).reverse().forEach(([vid, data]) => {
+        // Don't show drafts to other users
+        if (data.isDraft && !isOwnProfile) return;
+        
+        const videoEl = document.createElement('div');
+        videoEl.className = 'profile-video';
+        videoEl.innerHTML = `
+          <video src="${data.url}" loop muted></video>
+          <div class="profile-video-overlay">
+            <i class="fas fa-heart"></i> ${Object.keys(data.likedBy||{}).length}
+            ${data.isDraft ? '<i class="fas fa-edit" style="margin-left:10px;"></i> Draft' : ''}
+          </div>
+        `;
+        
+        if (isOwnProfile && data.isDraft) {
+          const actions = document.createElement('div');
+          actions.className = 'draft-actions';
+          actions.innerHTML = `
+            <button onclick="postDraft('${vid}')" style="background:#ff0050;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:12px;">Post</button>
+            <button onclick="deleteDraft('${vid}')" style="background:#333;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:12px;">Delete</button>
+          `;
+          videoEl.appendChild(actions);
+        }
+        
+        profileVideos.appendChild(videoEl);
+      });
+    }
+    
+    async function toggleFollow(targetUid, btn, targetData) {
+      const meFollowing = !!targetData.followers?.[currentUser.uid];
+      const updates = {};
+      
+      if (meFollowing) {
+        updates[`users/${currentUser.uid}/following/${targetUid}`] = null;
+        updates[`users/${targetUid}/followers/${currentUser.uid}`] = null;
+        
+        // Remove from friends if they were friends
+        updates[`users/${currentUser.uid}/friends/${targetUid}`] = null;
+        updates[`users/${targetUid}/friends/${currentUser.uid}`] = null;
+      } else {
+        updates[`users/${currentUser.uid}/following/${targetUid}`] = true;
+        updates[`users/${targetUid}/followers/${currentUser.uid}`] = true;
+        
+        // Check if it's mutual follow to make friends
+        const myData = await db.ref('users/' + currentUser.uid).once('value');
+        if (myData.val().following && myData.val().following[targetUid] && targetData.followers && targetData.followers[currentUser.uid]) {
+          updates[`users/${currentUser.uid}/friends/${targetUid}`] = true;
+          updates[`users/${targetUid}/friends/${currentUser.uid}`] = true;
         }
       }
+      
+      await db.ref().update(updates);
+      loadProfile(targetUid);
+      updateMessageBadge();
     }
 
-    // Hide loading indicator
-    function hideLoading(containerId) {
-      if (containerId) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        const spinner = container.querySelector('#loading-spinner');
-        if (spinner) spinner.remove();
-      } else {
-        const spinner = document.getElementById('loading-spinner');
-        if (spinner) spinner.remove();
+    function editProfile() {
+      const newUsername = prompt('Enter new username:');
+      if (newUsername) {
+        db.ref('users/' + currentUser.uid + '/username').set(newUsername);
+        loadProfile(currentUser.uid);
       }
     }
 
-    // Utility: escape HTML
-    function escapeHtml(unsafe) {
-      if (unsafe === null || unsafe === undefined) return '';
-      return String(unsafe)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    // ---------- Inbox ----------
+    function loadInbox() {
+      const activeTab = document.querySelector('.inbox-tab.active').dataset.tab;
+      const content = document.getElementById('inbox-content');
+      
+      if (activeTab === 'requests') {
+        loadFriendRequests(content);
+      } else {
+        loadMessageList(content);
+      }
+    }
+    
+    function loadFriendRequests(container) {
+      container.innerHTML = '<div class="spinner"></div>';
+      
+      db.ref('friendRequests/' + currentUser.uid).once('value').then(snap => {
+        const requests = snap.val() || {};
+        
+        if (!Object.keys(requests).length) {
+          container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No friend requests</div>';
+          return;
+        }
+        
+        container.innerHTML = '';
+        Object.entries(requests).forEach(([fromUid, req]) => {
+          db.ref('users/' + fromUid).once('value').then(userSnap => {
+            const user = userSnap.val();
+            if (!user) return;
+            
+            const reqEl = document.createElement('div');
+            reqEl.className = 'request-item';
+            reqEl.innerHTML = `
+              <div class="avatar"><i class="fas fa-user"></i></div>
+              <div class="request-info">
+                <div class="username">@${user.username}</div>
+                <div style="color:#aaa;font-size:12px;">Wants to be friends</div>
+              </div>
+              <div class="request-actions">
+                <button class="request-btn accept" data-uid="${fromUid}">Accept</button>
+                <button class="request-btn decline" data-uid="${fromUid}">Delete</button>
+              </div>
+            `;
+            container.appendChild(reqEl);
+            
+            // Add event listeners
+            reqEl.querySelector('.accept').onclick = () => acceptFriendRequest(fromUid);
+            reqEl.querySelector('.decline').onclick = () => declineFriendRequest(fromUid);
+          });
+        });
+      });
+    }
+    
+    function loadMessageList(container) {
+      container.innerHTML = '<div class="spinner"></div>';
+      
+      // Get all friends
+      db.ref('users/' + currentUser.uid + '/friends').once('value').then(snap => {
+        const friends = snap.val() || {};
+        
+        if (Object.keys(friends).length === 0) {
+          container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No messages</div>';
+          return;
+        }
+        
+        container.innerHTML = '';
+        Object.keys(friends).forEach(uid => {
+          db.ref('users/' + uid).once('value').then(userSnap => {
+            const u = userSnap.val();
+            if (!u) return;
+            
+            // Get last message
+            const chatId = [currentUser.uid, uid].sort().join('_');
+            db.ref('chats/' + chatId).orderByKey().limitToLast(1).once('value').then(msgSnap => {
+              const messages = msgSnap.val() || {};
+              const lastMsg = Object.values(messages)[0] || {text: 'No messages yet'};
+              
+              const msgEl = document.createElement('div');
+              msgEl.className = 'message-item';
+              msgEl.innerHTML = `
+                <div class="avatar"><i class="fas fa-user"></i></div>
+                <div class="message-info">
+                  <div class="message-header">
+                    <div class="username">@${u.username}</div>
+                  </div>
+                  <div class="message-preview">${escape(lastMsg.text)}</div>
+                </div>
+              `;
+              msgEl.onclick = () => openChat(uid, u.username);
+              container.appendChild(msgEl);
+            });
+          });
+        });
+      });
+    }
+    
+    function acceptFriendRequest(fromUid) {
+      const updates = {};
+      updates[`friendRequests/${currentUser.uid}/${fromUid}`] = null;
+      updates[`users/${currentUser.uid}/friends/${fromUid}`] = true;
+      updates[`users/${fromUid}/friends/${currentUser.uid}`] = true;
+      
+      db.ref().update(updates).then(() => {
+        loadInbox();
+        updateMessageBadge();
+      });
+    }
+    
+    function declineFriendRequest(fromUid) {
+      db.ref(`friendRequests/${currentUser.uid}/${fromUid}`).remove().then(() => {
+        loadInbox();
+        updateMessageBadge();
+      });
+    }
+    
+    // Inbox tabs
+    document.querySelectorAll('.inbox-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.inbox-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        loadInbox();
+      });
+    });
+
+    // ---------- Chat (Full Screen) ----------
+    function openChat(uid, username) {
+      currentChatUid = uid;
+      document.getElementById('chat-username').textContent = '@' + username;
+      
+      // Hide main app and show chat page
+      document.getElementById('app').style.display = 'none';
+      pages.chat.style.display = 'flex';
+      
+      loadMessages(uid);
+    }
+    
+    function loadMessages(uid) {
+      const chatId = [currentUser.uid, uid].sort().join('_');
+      const messagesContainer = document.getElementById('chat-messages');
+      messagesContainer.innerHTML = '';
+      
+      // Clear previous listeners
+      db.ref('chats/' + chatId).off();
+      
+      db.ref('chats/' + chatId).on('child_added', s => {
+        const m = s.val();
+        const div = document.createElement('div');
+        div.className = 'message ' + (m.sender===currentUser.uid?'sent':'received');
+        div.innerHTML = escape(m.text);
+        messagesContainer.appendChild(div);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      });
+    }
+    
+    document.getElementById('send-msg').onclick = () => {
+      const txt = document.getElementById('msg-input').value.trim();
+      if (!txt || !currentChatUid) return;
+      const chatId = [currentUser.uid, currentChatUid].sort().join('_');
+      db.ref('chats/' + chatId).push({
+        sender: currentUser.uid,
+        text: txt,
+        ts: Date.now()
+      });
+      document.getElementById('msg-input').value = '';
+    };
+    
+    document.getElementById('back-from-chat').onclick = () => {
+      // Show main app and hide chat page
+      document.getElementById('app').style.display = 'flex';
+      pages.chat.style.display = 'none';
+      showPage('inbox');
+    };
+
+    // ---------- Upload Functions ----------
+    function uploadMedia() {
+      if (!selectedMediaFile) {
+        alert('Please select a file first');
+        return;
+      }
+
+      const caption = document.getElementById('upload-caption').value;
+      
+      // For demo, we'll use a placeholder URL since we can't actually upload files
+      // In a real app, you would upload to Firebase Storage
+      const demoUrl = selectedMediaFile.type.startsWith('video/') 
+        ? 'https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4'
+        : 'https://picsum.photos/400/700';
+      
+      db.ref('videos').push({
+        uid: currentUser.uid,
+        username: currentUser.displayName || currentUser.email.split('@')[0],
+        url: demoUrl, 
+        caption,
+        likedBy: {}, 
+        timestamp: Date.now(),
+        isDraft: false,
+        type: selectedMediaFile.type.startsWith('video/') ? 'video' : 'image'
+      }).then(() => {
+        alert('Media uploaded successfully!');
+        hideModal();
+        loadProfile(currentUser.uid);
+      });
     }
 
-    // Utility: escape for CSS IDs
-    function cssEscape(str) {
-      return str.replace(/[^a-zA-Z0-9_-]/g, '_');
+    function uploadVideo() {
+      const url = prompt('Paste video URL (any public mp4):');
+      const caption = prompt('Caption:');
+      if (!url) return;
+      
+      db.ref('videos').push({
+        uid: currentUser.uid,
+        username: currentUser.displayName || currentUser.email.split('@')[0],
+        url, 
+        caption,
+        likedBy: {}, 
+        timestamp: Date.now(),
+        isDraft: false,
+        type: 'video'
+      }).then(() => alert('Video uploaded!'));
     }
 
-    // Initialize the app
-    init();
+    function createDraft() {
+      const url = prompt('Paste media URL for draft:');
+      const caption = prompt('Caption (optional):');
+      if (!url) return;
+      
+      db.ref('videos').push({
+        uid: currentUser.uid,
+        username: currentUser.displayName || currentUser.email.split('@')[0],
+        url, 
+        caption: caption || '',
+        likedBy: {}, 
+        timestamp: Date.now(),
+        isDraft: true
+      }).then(() => alert('Draft saved!'));
+    }
+
+    function showDrafts() {
+      showModal('drafts-modal');
+      loadDrafts();
+    }
+
+    function loadDrafts() {
+      const container = document.getElementById('drafts-container');
+      container.innerHTML = '<div class="spinner"></div>';
+      
+      db.ref('videos').orderByChild('uid').equalTo(currentUser.uid).once('value').then(snap => {
+        const videos = snap.val() || {};
+        container.innerHTML = '';
+        
+        Object.entries(videos).forEach(([vid, data]) => {
+          if (!data.isDraft) return;
+          
+          const draftEl = document.createElement('div');
+          draftEl.className = 'draft-item';
+          draftEl.innerHTML = `
+            <video src="${data.url}" loop muted></video>
+            <div class="draft-actions">
+              <button onclick="postDraft('${vid}')" style="background:#ff0050;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:12px;">Post</button>
+              <button onclick="deleteDraft('${vid}')" style="background:#333;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:12px;">Delete</button>
+            </div>
+          `;
+          container.appendChild(draftEl);
+        });
+        
+        if (container.innerHTML === '') {
+          container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;grid-column:1/-1;">No drafts</div>';
+        }
+      });
+    }
+
+    function postDraft(vid) {
+      db.ref('videos/' + vid + '/isDraft').set(false);
+      hideModal();
+      alert('Draft posted!');
+      loadProfile(currentUser.uid);
+    }
+
+    function deleteDraft(vid) {
+      if (confirm('Delete this draft?')) {
+        db.ref('videos/' + vid).remove();
+        hideModal();
+        loadProfile(currentUser.uid);
+      }
+    }
+
+    // ---------- Message Badge ----------
+    function updateMessageBadge() {
+      db.ref('friendRequests/' + currentUser.uid).once('value').then(snap => {
+        const requests = snap.val() || {};
+        const badge = document.getElementById('msg-badge');
+        
+        if (Object.keys(requests).length > 0) {
+          badge.textContent = Object.keys(requests).length;
+          badge.style.display = 'block';
+        } else {
+          badge.style.display = 'none';
+        }
+      });
+    }
+
+    // ---------- Utils ----------
+    function escape(s){return s?s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]):'';}
+
+    // Listen for new videos
+    db.ref('videos').orderByChild('timestamp').limitToLast(1).on('child_added', () => {
+      if (pages.home.classList.contains('active')) {
+        loadGlobalFeed();
+      }
+    });
+
+    // Auto update message badge
+    setInterval(updateMessageBadge, 5000);
+
   </script>
 </body>
 </html>
