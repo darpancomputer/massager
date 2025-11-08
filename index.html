@@ -3,149 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TikTok-Style Social</title>
+  <title>TikTok Social</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;}
     body{background:#000;color:#fff;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
-    header{display:flex;justify-content:space-between;align-items:center;padding:10px 15px;background:#111;position:sticky;top:0;z-index:100;}
-    .logo{font-size:20px;font-weight:bold;}
-    .header-icons{display:flex;gap:15px;}
-    .header-icon{font-size:18px;cursor:pointer;}
+    
+    /* Header */
+    header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#000;position:sticky;top:0;z-index:100;border-bottom:1px solid #2f2f2f;}
+    .logo{font-size:20px;font-weight:bold;background:linear-gradient(45deg,#ff0050,#ff9000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .header-icons{display:flex;gap:20px;}
+    .header-icon{font-size:20px;cursor:pointer;}
     .badge{background:#ff0050;color:#fff;font-size:10px;padding:2px 6px;border-radius:12px;position:absolute;top:-5px;right:-5px;}
 
-    /* Bottom navigation */
-    .bottom-nav{display:flex;background:#111;border-top:1px solid #333;position:fixed;bottom:0;width:100%;z-index:100;}
-    .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0;color:#888;cursor:pointer;}
-    .nav-item.active{color:#ff0050;}
-    .nav-icon{font-size:22px;margin-bottom:4px;}
+    /* Bottom Navigation */
+    .bottom-nav{display:flex;background:#000;border-top:1px solid #2f2f2f;position:fixed;bottom:0;width:100%;z-index:100;padding:8px 0;}
+    .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:4px 0;color:#b0b0b0;cursor:pointer;font-size:12px;}
+    .nav-item.active{color:#fff;}
+    .nav-icon{font-size:22px;margin-bottom:2px;}
+    .nav-item.active .nav-icon{color:#ff0050;}
 
     /* Pages */
     .page{display:none;flex-direction:column;height:100%;overflow:hidden;}
     .page.active{display:flex;}
 
-    /* Video feed */
+    /* Home Feed */
     .feed{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:y mandatory;}
     .video-card{position:relative;width:100%;height:100vh;background:#000;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;}
-    video{width:100%;height:100%;object-fit:contain;background:#000;}
-    .video-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px 15px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.7));}
-    .user-info{display:flex;align-items:center;gap:10px;color:#fff;cursor:pointer;}
-    .username{font-weight:bold;}
-    .caption{margin-top:5px;font-size:14px;}
-    .actions{position:absolute;right:15px;bottom:80px;display:flex;flex-direction:column;gap:15px;align-items:center;}
-    .action-btn{background:rgba(255,255,255,.1);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;}
+    video{width:100%;height:100%;object-fit:cover;background:#000;}
+    .video-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px 15px;background:linear-gradient(transparent,rgba(0,0,0,.7));}
+    .user-info{display:flex;align-items:center;gap:12px;color:#fff;cursor:pointer;}
+    .user-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff9000);display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .user-details{flex:1;}
+    .username{font-weight:600;font-size:16px;}
+    .caption{margin-top:8px;font-size:14px;line-height:1.4;}
+    .hashtag{color:#84d8ff;}
+    .actions{position:absolute;right:16px;bottom:100px;display:flex;flex-direction:column;gap:20px;align-items:center;}
+    .action-btn{background:rgba(255,255,255,.1);width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;backdrop-filter:blur(10px);}
     .action-btn.liked{color:#ff0050;}
-    .action-count{font-size:12px;margin-top:4px;}
+    .action-count{font-size:12px;margin-top:4px;font-weight:500;}
 
-    /* Profile */
-    .profile-header{text-align:center;padding:20px;}
-    .avatar{width:90px;height:90px;border-radius:50%;background:#333;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:40px;}
-    .stats{display:flex;justify-content:center;gap:30px;margin:15px 0;}
+    /* Profile Page */
+    .profile-page{background:#000;}
+    .profile-header{padding:20px 16px;}
+    .profile-top{display:flex;align-items:center;gap:20px;margin-bottom:20px;}
+    .profile-avatar{width:90px;height:90px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff9000);display:flex;align-items:center;justify-content:center;font-size:36px;}
+    .profile-stats{flex:1;}
+    .stats{display:flex;justify-content:space-around;text-align:center;}
     .stat-value{font-weight:bold;font-size:18px;}
-    .stat-label{font-size:12px;color:#aaa;}
-    .follow-btn{background:#ff0050;color:#fff;border:none;border-radius:4px;padding:8px 20px;cursor:pointer;}
-    .follow-btn.following{background:#333;}
-
-    /* Login / Register */
-    .auth-page{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#111;}
-    .auth-card{background:#222;padding:30px;border-radius:12px;width:90%;max-width:380px;text-align:center;}
-    .auth-card input{width:100%;padding:12px;margin:10px 0;border-radius:6px;border:none;outline:none;}
-    .auth-card button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:6px;background:#ff0050;color:#fff;font-weight:bold;cursor:pointer;}
-
-    /* Loading */
-    .spinner{border:4px solid #333;border-left:4px solid #ff0050;border-radius:50%;width:36px;height:36px;animation:s 1s linear infinite;margin:20px auto;}
-    @keyframes s{to{transform:rotate(360deg)}}
-
-    /* Friends Page */
-    .friends-page{background:#111;}
-    .friends-tabs{display:flex;background:#111;border-bottom:1px solid #333;}
-    .friends-tab{flex:1;text-align:center;padding:15px;cursor:pointer;border-bottom:2px solid transparent;}
-    .friends-tab.active{color:#ff0050;border-bottom-color:#ff0050;}
-    .friends-content{flex:1;overflow-y:auto;}
-    .user-item{display:flex;align-items:center;padding:15px;border-bottom:1px solid #333;cursor:pointer;}
-    .user-info{flex:1;margin-left:15px;}
-    .user-actions{display:flex;gap:10px;}
-
-    /* Stories Section */
-    .stories-container{padding:15px;border-bottom:1px solid #333;background:#111;}
-    .stories-scroll{display:flex;gap:15px;overflow-x:auto;}
-    .story-item{display:flex;flex-direction:column;align-items:center;min-width:70px;}
-    .story-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff9000);padding:3px;}
-    .story-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #000;}
-    .story-username{font-size:12px;margin-top:5px;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-
-    /* Friends Videos Grid */
-    .friends-videos{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;padding:10px;}
-    .friend-video{position:relative;aspect-ratio:9/16;background:#222;overflow:hidden;}
-    .friend-video video{width:100%;height:100%;object-fit:cover;}
-    .friend-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:5px;background:rgba(0,0,0,.5);font-size:12px;}
-
-    /* Inbox */
-    .inbox-page{background:#111;}
-    .inbox-tabs{display:flex;background:#111;border-bottom:1px solid #333;}
-    .inbox-tab{flex:1;text-align:center;padding:15px;cursor:pointer;border-bottom:2px solid transparent;}
-    .inbox-tab.active{color:#ff0050;border-bottom-color:#ff0050;}
-    .inbox-content{flex:1;overflow-y:auto;}
-    .request-item, .message-item{display:flex;align-items:center;padding:15px;border-bottom:1px solid #333;}
-    .request-info, .message-info{flex:1;margin-left:15px;}
-    .request-actions{display:flex;gap:10px;}
-    .request-btn{background:#ff0050;color:#fff;border:none;border-radius:4px;padding:6px 12px;cursor:pointer;}
-    .request-btn.decline{background:#333;}
-    .message-item{flex-direction:column;align-items:flex-start;cursor:pointer;}
-    .message-header{display:flex;justify-content:space-between;width:100%;margin-bottom:5px;}
-    .message-preview{color:#aaa;font-size:14px;}
-
-    /* Chat Page - Full Screen */
-    .chat-page{background:#111;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;}
-    .chat-header{display:flex;align-items:center;padding:15px;background:#111;border-bottom:1px solid #333;}
-    .chat-header .avatar{width:40px;height:40px;font-size:18px;margin:0 10px 0 0;}
-    .chat-messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;}
-    .message{max-width:80%;padding:10px 15px;border-radius:18px;margin:5px 0;word-break:break-word;}
-    .sent{background:#ff0050;align-self:flex-end;}
-    .received{background:#333;align-self:flex-start;}
-    .chat-input{display:flex;padding:10px;background:#111;gap:8px;border-top:1px solid #333;}
-    .chat-input input{flex:1;padding:10px;border-radius:20px;background:#222;color:#fff;outline:none;border:none;}
-
+    .stat-label{font-size:12px;color:#b0b0b0;margin-top:4px;}
+    .profile-bio{margin:16px 0;}
+    .bio-text{font-size:14px;color:#fff;margin-bottom:8px;}
+    .bio-link{color:#84d8ff;font-size:14px;text-decoration:none;display:block;margin:4px 0;}
+    .profile-actions{display:flex;gap:8px;margin:16px 0;}
+    .edit-btn{flex:1;background:#2f2f2f;color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;cursor:pointer;}
+    .follow-btn{background:#ff0050;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;cursor:pointer;}
+    .follow-btn.following{background:#2f2f2f;}
+    
+    /* Drafts Section */
+    .drafts-section{background:#111;padding:16px;margin:16px 0;border-radius:12px;}
+    .drafts-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+    .drafts-title{font-size:16px;font-weight:600;}
+    .drafts-stats{display:flex;gap:20px;}
+    .draft-stat{text-align:center;}
+    .draft-value{font-size:14px;font-weight:600;}
+    .draft-label{font-size:11px;color:#b0b0b0;margin-top:2px;}
+    
     /* Profile Videos Grid */
     .profile-videos{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
     .profile-video{position:relative;aspect-ratio:9/16;background:#222;overflow:hidden;}
     .profile-video video{width:100%;height:100%;object-fit:cover;}
-    .profile-video-overlay{position:absolute;bottom:0;left:0;right:0;padding:5px;background:rgba(0,0,0,.5);font-size:12px;display:flex;align-items:center;gap:5px;}
+    .video-stats{position:absolute;bottom:0;left:0;right:0;padding:8px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:12px;display:flex;align-items:center;gap:4px;}
+
+    /* Friends Page */
+    .friends-page{background:#000;}
+    .friends-header{padding:16px;border-bottom:1px solid #2f2f2f;}
+    .friends-title{font-size:20px;font-weight:600;margin-bottom:16px;}
+    .friend-post{background:#111;border-radius:12px;padding:16px;margin-bottom:12px;}
+    .friend-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+    .friend-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff9000);display:flex;align-items:center;justify-content:center;}
+    .friend-info{flex:1;}
+    .friend-name{font-weight:600;font-size:16px;}
+    .friend-time{font-size:12px;color:#b0b0b0;margin-top:2px;}
+    .post-content{font-size:14px;line-height:1.4;margin-bottom:12px;}
+    .post-actions{display:flex;gap:16px;}
+    .post-action{display:flex;align-items:center;gap:6px;color:#b0b0b0;font-size:13px;cursor:pointer;}
+
+    /* Inbox Page */
+    .inbox-page{background:#000;}
+    .inbox-header{padding:16px;border-bottom:1px solid #2f2f2f;}
+    .inbox-title{font-size:20px;font-weight:600;margin-bottom:16px;}
+    .inbox-tabs{display:flex;background:#111;border-radius:8px;padding:4px;margin-bottom:16px;}
+    .inbox-tab{flex:1;text-align:center;padding:10px;border-radius:6px;cursor:pointer;font-size:14px;}
+    .inbox-tab.active{background:#2f2f2f;color:#fff;}
+    .user-list{flex:1;overflow-y:auto;}
+    .user-item{display:flex;align-items:center;padding:16px;border-bottom:1px solid #2f2f2f;cursor:pointer;}
+    .user-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff9000);display:flex;align-items:center;justify-content:center;font-size:20px;margin-right:12px;}
+    .user-details{flex:1;}
+    .user-name{font-weight:600;font-size:16px;margin-bottom:4px;}
+    .user-status{font-size:13px;color:#b0b0b0;}
+    .user-stats{text-align:right;}
+    .followers-count{font-size:12px;color:#b0b0b0;}
+    .follow-btn-small{background:#ff0050;color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;margin-top:4px;}
+    .follow-btn-small.following{background:#2f2f2f;}
+
+    /* Chat Page - Full Screen */
+    .chat-page{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:1000;display:none;flex-direction:column;}
+    .chat-header{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid #2f2f2f;}
+    .chat-back{background:none;border:none;color:#fff;font-size:18px;margin-right:12px;cursor:pointer;}
+    .chat-user{display:flex;align-items:center;gap:12px;flex:1;}
+    .chat-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff9000);display:flex;align-items:center;justify-content:center;}
+    .chat-info{flex:1;}
+    .chat-name{font-weight:600;font-size:16px;}
+    .chat-status{font-size:12px;color:#b0b0b0;}
+    .chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+    .message{max-width:70%;padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.4;}
+    .message-sent{background:#ff0050;align-self:flex-end;border-bottom-right-radius:4px;}
+    .message-received{background:#2f2f2f;align-self:flex-start;border-bottom-left-radius:4px;}
+    .chat-input{display:flex;padding:12px 16px;gap:12px;border-top:1px solid #2f2f2f;}
+    .chat-input input{flex:1;padding:12px 16px;border-radius:24px;background:#2f2f2f;border:none;outline:none;color:#fff;font-size:14px;}
+    .chat-send{background:#ff0050;color:#fff;border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 
     /* Upload Modal */
-    .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;z-index:2000;}
-    .modal-content{background:#222;padding:20px;border-radius:12px;width:90%;max-width:400px;}
-    .modal-options{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px;}
-    .modal-option{background:#333;padding:20px;border-radius:8px;text-align:center;cursor:pointer;}
-    .modal-option:hover{background:#444;}
-    .modal-option i{font-size:24px;margin-bottom:10px;}
+    .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);display:flex;align-items:flex-end;z-index:2000;display:none;}
+    .modal-content{background:#000;width:100%;border-radius:24px 24px 0 0;padding:20px;}
+    .modal-header{text-align:center;padding:10px 0 20px 0;border-bottom:1px solid #2f2f2f;}
+    .modal-title{font-size:18px;font-weight:600;}
+    .modal-options{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px 0;}
+    .modal-option{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;background:#111;border-radius:12px;cursor:pointer;}
+    .modal-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(45deg,#ff0050,#ff9000);display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .modal-label{font-size:12px;text-align:center;}
 
-    /* Gallery Upload */
-    .gallery-upload{background:#222;padding:20px;border-radius:12px;width:90%;max-width:500px;}
-    .upload-preview{width:100%;max-height:300px;object-fit:contain;margin:10px 0;border-radius:8px;}
-    .upload-options{display:flex;gap:10px;margin-top:15px;}
-    .upload-option{flex:1;padding:10px;text-align:center;background:#333;border-radius:6px;cursor:pointer;}
+    /* Live Stream Page */
+    .live-page{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:1000;display:none;flex-direction:column;}
+    .live-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(transparent,rgba(0,0,0,.5));}
+    .live-back{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;}
+    .live-title{font-weight:600;font-size:16px;}
+    .live-views{background:rgba(255,0,0,.8);color:#fff;padding:4px 12px;border-radius:12px;font-size:12px;}
+    .live-video{flex:1;background:#000;display:flex;align-items:center;justify-content:center;}
+    .live-video video{width:100%;height:100%;object-fit:cover;}
+    .live-controls{display:flex;justify-content:space-around;padding:20px;background:rgba(0,0,0,.7);}
+    .live-control{display:flex;flex-direction:column;align-items:center;gap:8px;color:#fff;}
+    .live-icon{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;}
 
-    /* Draft Videos */
-    .drafts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:15px;}
-    .draft-item{position:relative;aspect-ratio:9/16;background:#222;border-radius:8px;overflow:hidden;}
-    .draft-item video{width:100%;height:100%;object-fit:cover;}
-    .draft-actions{position:absolute;bottom:0;left:0;right:0;padding:10px;background:rgba(0,0,0,.7);display:flex;justify-content:space-between;}
-
-    /* Live Streaming */
-    .live-indicator{background:#ff0050;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:10px;}
+    /* Loading */
+    .spinner{border:3px solid #2f2f2f;border-left:3px solid #ff0050;border-radius:50%;width:24px;height:24px;animation:spin 1s linear infinite;margin:20px auto;}
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
 
   <!-- ==== AUTH ==== -->
   <div id="auth-page" class="page active">
-    <div class="auth-card">
-      <h2 style="margin-bottom:20px;">TikTok Social</h2>
-      <input type="email" id="auth-email" placeholder="Email">
-      <input type="password" id="auth-pass" placeholder="Password">
-      <button id="login-btn">Log In</button>
-      <button id="signup-btn" style="background:#333;">Create Account</button>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#000;">
+      <div style="background:#111;padding:30px;border-radius:16px;width:90%;max-width:380px;text-align:center;">
+        <h2 style="margin-bottom:20px;background:linear-gradient(45deg,#ff0050,#ff9000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">TikTok Social</h2>
+        <input type="email" id="auth-email" placeholder="Email" style="width:100%;padding:14px;margin:8px 0;border-radius:8px;border:none;outline:none;background:#2f2f2f;color:#fff;">
+        <input type="password" id="auth-pass" placeholder="Password" style="width:100%;padding:14px;margin:8px 0;border-radius:8px;border:none;outline:none;background:#2f2f2f;color:#fff;">
+        <button id="login-btn" style="width:100%;padding:14px;margin-top:12px;border:none;border-radius:8px;background:linear-gradient(45deg,#ff0050,#ff9000);color:#fff;font-weight:bold;cursor:pointer;">Log In</button>
+        <button id="signup-btn" style="width:100%;padding:14px;margin-top:8px;border:none;border-radius:8px;background:#2f2f2f;color:#fff;font-weight:bold;cursor:pointer;">Create Account</button>
+      </div>
     </div>
   </div>
 
@@ -154,7 +171,7 @@
 
     <!-- Header -->
     <header>
-      <div class="logo">TikTok Social</div>
+      <div class="logo">TikTok</div>
       <div class="header-icons">
         <i class="fas fa-search header-icon"></i>
         <i class="fas fa-inbox header-icon" id="inbox-btn"></i>
@@ -164,132 +181,236 @@
 
     <!-- ==== HOME / FEED ==== -->
     <div id="home-page" class="page active">
-      <div class="feed" id="feed"></div>
+      <div class="feed" id="feed">
+        <div class="spinner"></div>
+      </div>
     </div>
 
     <!-- ==== FRIENDS ==== -->
     <div id="friends-page" class="page friends-page">
-      <div class="stories-container">
-        <div class="stories-scroll" id="stories-scroll">
-          <!-- Stories will be loaded here -->
+      <div class="friends-header">
+        <div class="friends-title">Friends</div>
+        <div id="friends-content">
+          <div class="spinner"></div>
         </div>
       </div>
-      <div class="friends-tabs">
-        <div class="friends-tab active" data-tab="videos">Friends Videos</div>
-        <div class="friends-tab" data-tab="all">All Users</div>
-      </div>
-      <div class="friends-content" id="friends-content"></div>
-    </div>
-
-    <!-- ==== PROFILE ==== -->
-    <div id="profile-page" class="page">
-      <div class="profile-header">
-        <div class="avatar"><i class="fas fa-user"></i></div>
-        <div id="profile-username" class="username"></div>
-        <div class="stats">
-          <div><div id="following-count" class="stat-value">0</div><div class="stat-label">Following</div></div>
-          <div><div id="followers-count" class="stat-value">0</div><div class="stat-label">Followers</div></div>
-          <div><div id="likes-count" class="stat-value">0</div><div class="stat-label">Likes</div></div>
-        </div>
-        <button id="edit-profile-btn" class="follow-btn">Edit Profile</button>
-      </div>
-      <div class="profile-videos" id="profile-videos"></div>
     </div>
 
     <!-- ==== INBOX ==== -->
     <div id="inbox-page" class="page inbox-page">
-      <div class="inbox-tabs">
-        <div class="inbox-tab active" data-tab="requests">Friend Requests</div>
-        <div class="inbox-tab" data-tab="messages">Messages</div>
+      <div class="inbox-header">
+        <div class="inbox-title">Inbox</div>
+        <div class="inbox-tabs">
+          <div class="inbox-tab active" data-tab="all">All Users</div>
+          <div class="inbox-tab" data-tab="friends">Friends</div>
+          <div class="inbox-tab" data-tab="requests">Requests</div>
+        </div>
       </div>
-      <div class="inbox-content" id="inbox-content"></div>
+      <div class="user-list" id="user-list">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <!-- ==== PROFILE ==== -->
+    <div id="profile-page" class="page profile-page">
+      <div class="profile-header">
+        <div class="profile-top">
+          <div class="profile-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="profile-stats">
+            <div class="stats">
+              <div>
+                <div id="following-count" class="stat-value">0</div>
+                <div class="stat-label">Following</div>
+              </div>
+              <div>
+                <div id="followers-count" class="stat-value">0</div>
+                <div class="stat-label">Followers</div>
+              </div>
+              <div>
+                <div id="likes-count" class="stat-value">0</div>
+                <div class="stat-label">Likes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="profile-bio">
+          <div id="profile-username" class="username">Loading...</div>
+          <div id="profile-handle" style="color:#b0b0b0;font-size:14px;margin:4px 0;">@user</div>
+          <div class="bio-text" id="profile-bio-text">+ Add bio · 💷 My account is all about...</div>
+          <a href="#" class="bio-link">💡 YouTube Channel</a>
+          <a href="#" class="bio-link">📌 TikTok Studio</a>
+        </div>
+
+        <div class="profile-actions">
+          <button id="profile-action-btn" class="edit-btn">Edit profile</button>
+          <button class="edit-btn"><i class="fas fa-qrcode"></i></button>
+        </div>
+
+        <!-- Drafts Section -->
+        <div class="drafts-section">
+          <div class="drafts-header">
+            <div class="drafts-title">Drafts</div>
+            <div class="drafts-stats">
+              <div class="draft-stat">
+                <div id="drafts-count" class="draft-value">0</div>
+                <div class="draft-label">Drafts</div>
+              </div>
+              <div class="draft-stat">
+                <div class="draft-value">0MB</div>
+                <div class="draft-label">0% • 0</div>
+              </div>
+            </div>
+          </div>
+          <div id="drafts-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+            <div style="background:linear-gradient(45deg,#ff0050,#ff9000);aspect-ratio:9/16;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;" onclick="showModal('upload-modal')">
+              <i class="fas fa-plus"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="profile-videos" id="profile-videos">
+        <div class="spinner"></div>
+      </div>
     </div>
 
     <!-- Bottom Nav -->
     <div class="bottom-nav">
-      <div class="nav-item active" data-page="home"><i class="fas fa-home nav-icon"></i><span>Home</span></div>
-      <div class="nav-item" data-page="friends"><i class="fas fa-user-friends nav-icon"></i><span>Friends</span></div>
-      <div class="nav-item" id="upload-nav" style="position:relative;top:-10px;">
-        <div style="background:#ff0050;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-          <i class="fas fa-plus nav-icon" style="color:#fff;margin:0;"></i>
+      <div class="nav-item active" data-page="home">
+        <i class="fas fa-home nav-icon"></i>
+        <span>Home</span>
+      </div>
+      <div class="nav-item" data-page="friends">
+        <i class="fas fa-user-friends nav-icon"></i>
+        <span>Friends</span>
+      </div>
+      <div class="nav-item" id="upload-nav">
+        <div style="background:linear-gradient(45deg,#ff0050,#ff9000);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:-20px;">
+          <i class="fas fa-plus nav-icon" style="color:#fff;margin:0;font-size:20px;"></i>
         </div>
       </div>
-      <div class="nav-item" data-page="inbox"><i class="fas fa-inbox nav-icon"></i><span>Inbox</span></div>
-      <div class="nav-item" data-page="profile"><i class="fas fa-user nav-icon"></i><span>Profile</span></div>
+      <div class="nav-item" data-page="inbox">
+        <i class="fas fa-inbox nav-icon"></i>
+        <span>Inbox</span>
+      </div>
+      <div class="nav-item" data-page="profile">
+        <i class="fas fa-user nav-icon"></i>
+        <span>Profile</span>
+      </div>
     </div>
   </div>
 
-  <!-- ==== CHAT PAGE (Full Screen) ==== -->
-  <div id="chat-page" class="page chat-page" style="display:none;">
+  <!-- ==== CHAT PAGE ==== -->
+  <div id="chat-page" class="chat-page">
     <div class="chat-header">
-      <button id="back-from-chat" style="background:none;border:none;color:#ff0050;font-size:18px;margin-right:10px;">
+      <button class="chat-back" onclick="closeChat()">
         <i class="fas fa-arrow-left"></i>
       </button>
-      <div class="avatar"><i class="fas fa-user"></i></div>
-      <div id="chat-username" class="username"></div>
+      <div class="chat-user">
+        <div class="chat-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="chat-info">
+          <div class="chat-name" id="chat-user-name">User Name</div>
+          <div class="chat-status" id="chat-user-status">Online</div>
+        </div>
+      </div>
     </div>
-    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="spinner"></div>
+    </div>
     <div class="chat-input">
-      <input id="msg-input" placeholder="Type a message...">
-      <button id="send-msg" style="background:#ff0050;border:none;border-radius:50%;width:40px;height:40px;color:#fff;">
+      <input type="text" id="chat-input" placeholder="Type a message...">
+      <button class="chat-send" onclick="sendMessage()">
         <i class="fas fa-paper-plane"></i>
       </button>
     </div>
   </div>
 
-  <!-- Upload Modal -->
-  <div id="upload-modal" class="modal" style="display:none;">
-    <div class="modal-content">
-      <h3 style="text-align:center;margin-bottom:20px;">Create New Post</h3>
-      <div class="modal-options">
-        <div class="modal-option" id="gallery-upload-btn">
-          <i class="fas fa-images"></i>
-          <div>Gallery</div>
+  <!-- ==== LIVE STREAM PAGE ==== -->
+  <div id="live-page" class="live-page">
+    <div class="live-header">
+      <button class="live-back" onclick="closeLive()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="live-title">Live Stream</div>
+      <div class="live-views">
+        <i class="fas fa-eye"></i> <span id="live-viewers">0</span>
+      </div>
+    </div>
+    <div class="live-video">
+      <video id="live-video" autoplay muted></video>
+    </div>
+    <div class="live-controls">
+      <div class="live-control">
+        <div class="live-icon">
+          <i class="fas fa-microphone"></i>
         </div>
-        <div class="modal-option" id="video-upload-btn">
+        <div>Mic</div>
+      </div>
+      <div class="live-control">
+        <div class="live-icon" style="background:#ff0050;">
+          <i class="fas fa-stop"></i>
+        </div>
+        <div>End</div>
+      </div>
+      <div class="live-control">
+        <div class="live-icon">
           <i class="fas fa-video"></i>
-          <div>Video</div>
         </div>
-        <div class="modal-option" id="create-draft-btn">
-          <i class="fas fa-edit"></i>
-          <div>Draft</div>
-        </div>
-        <div class="modal-option" id="view-drafts-btn">
-          <i class="fas fa-folder"></i>
-          <div>My Drafts</div>
-        </div>
-      </div>
-      <button style="width:100%;padding:12px;margin-top:20px;background:#333;color:#fff;border:none;border-radius:6px;" onclick="hideModal()">Cancel</button>
-    </div>
-  </div>
-
-  <!-- Gallery Upload Modal -->
-  <div id="gallery-modal" class="modal" style="display:none;">
-    <div class="gallery-upload">
-      <h3 style="text-align:center;margin-bottom:15px;">Upload from Gallery</h3>
-      <input type="file" id="media-file" accept="image/*,video/*" style="display:none;">
-      <div style="border:2px dashed #555;padding:40px;text-align:center;border-radius:8px;cursor:pointer;" onclick="document.getElementById('media-file').click()">
-        <i class="fas fa-cloud-upload-alt" style="font-size:48px;color:#555;margin-bottom:10px;"></i>
-        <div>Click to select photo or video</div>
-      </div>
-      <img id="upload-preview" class="upload-preview" style="display:none;">
-      <div id="video-preview" style="display:none;"></div>
-      <input type="text" id="upload-caption" placeholder="Add caption..." style="width:100%;padding:10px;margin:10px 0;background:#333;border:none;border-radius:6px;color:#fff;">
-      <div class="upload-options">
-        <div class="upload-option" onclick="uploadMedia()" style="background:#ff0050;">Upload</div>
-        <div class="upload-option" onclick="hideModal()">Cancel</div>
+        <div>Camera</div>
       </div>
     </div>
   </div>
 
-  <!-- Drafts Modal -->
-  <div id="drafts-modal" class="modal" style="display:none;">
-    <div class="modal-content" style="max-width:500px;">
-      <h3 style="text-align:center;margin-bottom:20px;">My Drafts</h3>
-      <div class="drafts-grid" id="drafts-container">
-        <!-- Drafts will be loaded here -->
+  <!-- Upload Modal -->
+  <div id="upload-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Create</div>
       </div>
-      <button style="width:100%;padding:12px;margin-top:20px;background:#333;color:#fff;border:none;border-radius:6px;" onclick="hideModal()">Close</button>
+      <div class="modal-options">
+        <div class="modal-option" onclick="uploadVideo()">
+          <div class="modal-icon">
+            <i class="fas fa-photo-video"></i>
+          </div>
+          <div class="modal-label">Upload</div>
+        </div>
+        <div class="modal-option" onclick="startCamera()">
+          <div class="modal-icon">
+            <i class="fas fa-camera"></i>
+          </div>
+          <div class="modal-label">Camera</div>
+        </div>
+        <div class="modal-option">
+          <div class="modal-icon">
+            <i class="fas fa-edit"></i>
+          </div>
+          <div class="modal-label">Template</div>
+        </div>
+        <div class="modal-option" onclick="goLive()">
+          <div class="modal-icon">
+            <i class="fas fa-broadcast-tower"></i>
+          </div>
+          <div class="modal-label">Go Live</div>
+        </div>
+        <div class="modal-option" onclick="createDraft()">
+          <div class="modal-icon">
+            <i class="fas fa-file"></i>
+          </div>
+          <div class="modal-label">Draft</div>
+        </div>
+        <div class="modal-option">
+          <div class="modal-icon">
+            <i class="fas fa-music"></i>
+          </div>
+          <div class="modal-label">Add Sound</div>
+        </div>
+      </div>
+      <button style="width:100%;padding:16px;margin-top:20px;background:#2f2f2f;color:#fff;border:none;border-radius:12px;font-size:16px;cursor:pointer;" onclick="hideModal()">Cancel</button>
     </div>
   </div>
 
@@ -313,20 +434,20 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
-    // ---------- Global ----------
+    // ---------- Global Variables ----------
     let currentUser = null;
-    let currentChatUid = null;
-    let selectedMediaFile = null;
+    let currentChatUser = null;
+    let currentProfileUser = null;
+    let stream = null;
     const pages = {
       auth: document.getElementById('auth-page'),
       home: document.getElementById('home-page'),
       friends: document.getElementById('friends-page'),
       profile: document.getElementById('profile-page'),
-      inbox: document.getElementById('inbox-page'),
-      chat: document.getElementById('chat-page')
+      inbox: document.getElementById('inbox-page')
     };
 
-    // ---------- Auth ----------
+    // ---------- Auth System ----------
     document.getElementById('login-btn').onclick = () => login();
     document.getElementById('signup-btn').onclick = () => signup();
 
@@ -347,7 +468,13 @@
       auth.createUserWithEmailAndPassword(email, pass)
         .then(cred => {
           return db.ref('users/' + cred.user.uid).set({
-            username, email, following: {}, followers: {}, likes: 0, friends: {}
+            username: username,
+            email: email,
+            following: {},
+            followers: {},
+            likes: 0,
+            friends: {},
+            createdAt: Date.now()
           }).then(() => afterAuth(cred.user));
         })
         .catch(err => alert(err.message));
@@ -359,16 +486,89 @@
       document.getElementById('app').style.display = 'flex';
       showPage('home');
       loadGlobalFeed();
+      loadInboxUsers();
       loadProfile(user.uid);
       updateMessageBadge();
+      
+      // Create demo users if they don't exist
+      createDemoUsers();
     }
     
     auth.onAuthStateChanged(user => {
       if (!user) {
         document.getElementById('app').style.display = 'none';
         pages.auth.classList.add('active');
+      } else {
+        currentUser = user;
       }
     });
+
+    // ---------- Demo Users Creation ----------
+    function createDemoUsers() {
+      const demoUsers = [
+        {
+          uid: 'demo_user_1',
+          username: 'sanay_xettri',
+          email: 'sanay@demo.com',
+          following: {},
+          followers: { [currentUser.uid]: true },
+          likes: 7656,
+          friends: {},
+          createdAt: Date.now()
+        },
+        {
+          uid: 'demo_user_2',
+          username: 'rawatpharmacy',
+          email: 'pharmacy@demo.com',
+          following: {},
+          followers: {},
+          likes: 12500,
+          friends: {},
+          createdAt: Date.now()
+        },
+        {
+          uid: 'demo_user_3',
+          username: 'stem_explore',
+          email: 'stem@demo.com',
+          following: {},
+          followers: {},
+          likes: 8900,
+          friends: {},
+          createdAt: Date.now()
+        },
+        {
+          uid: 'demo_user_4',
+          username: 'tech_guru',
+          email: 'tech@demo.com',
+          following: {},
+          followers: {},
+          likes: 15600,
+          friends: {},
+          createdAt: Date.now()
+        },
+        {
+          uid: 'demo_user_5',
+          username: 'creative_arts',
+          email: 'arts@demo.com',
+          following: {},
+          followers: {},
+          likes: 7200,
+          friends: {},
+          createdAt: Date.now()
+        }
+      ];
+
+      demoUsers.forEach(demoUser => {
+        db.ref('users/' + demoUser.uid).once('value').then(snap => {
+          if (!snap.exists()) {
+            db.ref('users/' + demoUser.uid).set(demoUser);
+          }
+        });
+      });
+
+      // Create demo videos
+      createDemoVideos();
+    }
 
     // ---------- Navigation ----------
     document.querySelectorAll('.nav-item').forEach(el => {
@@ -380,9 +580,11 @@
           el.classList.add('active');
           
           if (p === 'inbox') {
-            loadInbox();
+            loadInboxUsers();
           } else if (p === 'friends') {
             loadFriendsPage();
+          } else if (p === 'profile') {
+            loadProfile(currentUser.uid);
           }
         });
       }
@@ -394,20 +596,8 @@
     };
 
     function showPage(name) {
-      // Hide chat page first if showing
-      if (name !== 'chat') {
-        pages.chat.style.display = 'none';
-      }
-      
-      Object.values(pages).forEach(p => {
-        if (p !== pages.chat) {
-          p.classList.remove('active');
-        }
-      });
-      
-      if (name !== 'chat') {
-        pages[name].classList.add('active');
-      }
+      Object.values(pages).forEach(p=>p.classList.remove('active'));
+      pages[name].classList.add('active');
     }
 
     // ---------- Modal Functions ----------
@@ -419,580 +609,268 @@
       document.querySelectorAll('.modal').forEach(modal => {
         modal.style.display = 'none';
       });
-      // Reset file input
-      document.getElementById('media-file').value = '';
-      document.getElementById('upload-preview').style.display = 'none';
-      document.getElementById('video-preview').style.display = 'none';
-      document.getElementById('upload-caption').value = '';
-      selectedMediaFile = null;
     }
 
-    // Upload modal options
-    document.getElementById('gallery-upload-btn').onclick = () => {
-      hideModal();
-      showModal('gallery-modal');
-    };
-
-    document.getElementById('video-upload-btn').onclick = () => {
-      hideModal();
-      uploadVideo();
-    };
-
-    document.getElementById('create-draft-btn').onclick = () => {
-      hideModal();
-      createDraft();
-    };
-
-    document.getElementById('view-drafts-btn').onclick = () => {
-      hideModal();
-      showDrafts();
-    };
-
-    // File input handler
-    document.getElementById('media-file').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        selectedMediaFile = file;
-        const preview = document.getElementById('upload-preview');
-        const videoPreview = document.getElementById('video-preview');
-        
-        if (file.type.startsWith('image/')) {
-          preview.src = URL.createObjectURL(file);
-          preview.style.display = 'block';
-          videoPreview.style.display = 'none';
-        } else if (file.type.startsWith('video/')) {
-          videoPreview.innerHTML = `<video controls class="upload-preview"><source src="${URL.createObjectURL(file)}" type="${file.type}"></video>`;
-          videoPreview.style.display = 'block';
-          preview.style.display = 'none';
-        }
-      }
-    });
-
     // ---------- Video Feed ----------
-    let lastVideoKey = null;
     function loadGlobalFeed() {
       const feedContainer = document.getElementById('feed');
       feedContainer.innerHTML = '<div class="spinner"></div>';
-      let ref = db.ref('videos').orderByChild('timestamp').limitToLast(10);
-      if (lastVideoKey) ref = ref.endBefore(lastVideoKey);
-      ref.once('value').then(snap => {
-        const videos = snap.val() || {};
-        const keys = Object.keys(videos).reverse();
-        if (keys.length) lastVideoKey = keys[keys.length-1];
-        renderVideos(videos, feedContainer, true);
+      
+      db.ref('videos').orderByChild('timestamp').limitToLast(20).on('value', (snapshot) => {
+        const videos = snapshot.val() || {};
+        renderVideos(videos, feedContainer);
       });
     }
 
-    function renderVideos(videosObj, container, isGlobal = false) {
+    function renderVideos(videosObj, container) {
       if (!Object.keys(videosObj).length) {
-        container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No videos yet</div>';
+        container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No videos yet. Upload the first video!</div>';
         return;
       }
-      const fragment = document.createDocumentFragment();
-      Object.entries(videosObj).reverse().forEach(([vid, data]) => {
-        // Skip drafts in main feed
-        if (data.isDraft) return;
-
+      
+      container.innerHTML = '';
+      Object.entries(videosObj).reverse().forEach(([videoId, video]) => {
+        if (video.isDraft) return;
+        
         const card = document.createElement('div');
         card.className = 'video-card';
         card.innerHTML = `
-          <video src="${data.url}" loop playsinline></video>
+          <video loop playsinline>
+            <source src="${video.url}" type="video/mp4">
+          </video>
           <div class="video-overlay">
-            <div class="user-info">
-              <div class="avatar"><i class="fas fa-user"></i></div>
-              <div>
-                <div class="username">@${data.username}</div>
-                <div class="caption">${escape(data.caption||'')}</div>
+            <div class="user-info" onclick="viewProfile('${video.uid}')">
+              <div class="user-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="user-details">
+                <div class="username">@${video.username}</div>
+                <div class="caption">${video.caption || ''}</div>
               </div>
             </div>
           </div>
           <div class="actions">
-            <div class="action-btn like-btn ${data.likedBy?.[currentUser.uid]?'liked':''}" data-vid="${vid}">
+            <div class="action-btn like-btn ${video.likedBy && video.likedBy[currentUser.uid] ? 'liked' : ''}" onclick="toggleLike('${videoId}', this)">
               <i class="fas fa-heart"></i>
-              <div class="action-count">${Object.keys(data.likedBy||{}).length}</div>
+              <div class="action-count">${Object.keys(video.likedBy || {}).length}</div>
             </div>
-            <div class="action-btn comment-btn"><i class="fas fa-comment"></i><div class="action-count">0</div></div>
-            <div class="action-btn share-btn"><i class="fas fa-share"></i></div>
+            <div class="action-btn" onclick="openChat('${video.uid}', '${video.username}')">
+              <i class="fas fa-comment"></i>
+              <div class="action-count">${video.comments || 0}</div>
+            </div>
+            <div class="action-btn">
+              <i class="fas fa-share"></i>
+              <div class="action-count">Share</div>
+            </div>
           </div>
         `;
-        const video = card.querySelector('video');
-        const likeBtn = card.querySelector('.like-btn');
-
-        // Play / pause on visibility
+        
+        const videoEl = card.querySelector('video');
+        
+        // Auto-play when visible
         const observer = new IntersectionObserver(entries => {
           entries.forEach(e => {
-            if (e.isIntersecting) video.play();
-            else video.pause();
+            if (e.isIntersecting) {
+              videoEl.play().catch(() => {});
+            } else {
+              videoEl.pause();
+            }
           });
         }, {threshold: 0.7});
         observer.observe(card);
-
-        // Like
-        likeBtn.onclick = () => toggleLike(vid, likeBtn, data);
-
-        // Click user → profile
-        card.querySelector('.user-info').onclick = () => {
-          loadProfile(data.uid);
-          showPage('profile');
-        };
-
-        fragment.appendChild(card);
+        
+        container.appendChild(card);
       });
-      container.innerHTML = '';
-      container.appendChild(fragment);
     }
 
-    async function toggleLike(vid, btn, data) {
-      const uid = currentUser.uid;
-      const liked = !!data.likedBy?.[uid];
+    // ---------- Like System ----------
+    function toggleLike(videoId, likeBtn) {
+      const videoRef = db.ref('videos/' + videoId);
+      
+      videoRef.once('value').then(snapshot => {
+        const video = snapshot.val();
+        const likedBy = video.likedBy || {};
+        const isLiked = !!likedBy[currentUser.uid];
+        
+        const updates = {};
+        if (isLiked) {
+          updates[`videos/${videoId}/likedBy/${currentUser.uid}`] = null;
+          updates[`users/${video.uid}/likes`] = firebase.database.ServerValue.increment(-1);
+        } else {
+          updates[`videos/${videoId}/likedBy/${currentUser.uid}`] = true;
+          updates[`users/${video.uid}/likes`] = firebase.database.ServerValue.increment(1);
+        }
+        
+        db.ref().update(updates);
+      });
+    }
+
+    // ---------- Follow System ----------
+    function toggleFollow(targetUid, followBtn) {
       const updates = {};
-      if (liked) {
-        updates[`videos/${vid}/likedBy/${uid}`] = null;
-        updates[`users/${data.uid}/likes`] = firebase.database.ServerValue.increment(-1);
-      } else {
-        updates[`videos/${vid}/likedBy/${uid}`] = true;
-        updates[`users/${data.uid}/likes`] = firebase.database.ServerValue.increment(1);
-      }
-      await db.ref().update(updates);
-      btn.classList.toggle('liked');
-      const countEl = btn.querySelector('.action-count');
-      countEl.textContent = (Object.keys(data.likedBy||{}).length + (liked?-1:1));
-    }
-
-    // ---------- Friends Page ----------
-    function loadFriendsPage() {
-      loadStories();
-      const activeTab = document.querySelector('.friends-tab.active').dataset.tab;
-      const content = document.getElementById('friends-content');
+      const userRef = db.ref('users/' + currentUser.uid);
       
-      if (activeTab === 'videos') {
-        loadFriendsVideos(content);
-      } else {
-        loadAllUsers(content);
-      }
-    }
-
-    function loadStories() {
-      const storiesContainer = document.getElementById('stories-scroll');
-      storiesContainer.innerHTML = '<div class="spinner"></div>';
-      
-      // Get friends for stories
-      db.ref('users/' + currentUser.uid + '/friends').once('value').then(snap => {
-        const friends = snap.val() || {};
-        storiesContainer.innerHTML = '';
+      userRef.once('value').then(snapshot => {
+        const user = snapshot.val();
+        const isFollowing = !!user.following && !!user.following[targetUid];
         
-        Object.keys(friends).forEach(fid => {
-          db.ref('users/' + fid).once('value').then(userSnap => {
-            const user = userSnap.val();
-            if (!user) return;
-            
-            // Check if user has recent videos for stories
-            db.ref('videos').orderByChild('uid').equalTo(fid).limitToLast(1).once('value').then(videoSnap => {
-              const videos = videoSnap.val() || {};
-              if (Object.keys(videos).length > 0) {
-                const storyEl = document.createElement('div');
-                storyEl.className = 'story-item';
-                storyEl.innerHTML = `
-                  <div class="story-avatar">
-                    <i class="fas fa-user" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;"></i>
-                  </div>
-                  <div class="story-username">${user.username}</div>
-                `;
-                storyEl.onclick = () => viewFriendVideos(fid, user.username);
-                storiesContainer.appendChild(storyEl);
-              }
-            });
-          });
-        });
-      });
-    }
-
-    function loadFriendsVideos(container) {
-      container.innerHTML = '<div class="spinner"></div>';
-      
-      // Get friends
-      db.ref('users/' + currentUser.uid + '/friends').once('value').then(snap => {
-        const friends = snap.val() || {};
-        container.innerHTML = '';
-        
-        if (Object.keys(friends).length === 0) {
-          container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No friends yet</div>';
-          return;
-        }
-        
-        // Get videos from friends
-        const friendsVideos = [];
-        Object.keys(friends).forEach(fid => {
-          db.ref('videos').orderByChild('uid').equalTo(fid).once('value').then(videoSnap => {
-            const videos = videoSnap.val() || {};
-            Object.entries(videos).forEach(([vid, video]) => {
-              if (!video.isDraft) {
-                friendsVideos.push({vid, ...video});
-              }
-            });
-            
-            // Render all collected videos
-            renderFriendsVideos(friendsVideos, container);
-          });
-        });
-      });
-    }
-
-    function renderFriendsVideos(videos, container) {
-      if (videos.length === 0) {
-        container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No videos from friends</div>';
-        return;
-      }
-      
-      // Sort by timestamp
-      videos.sort((a, b) => b.timestamp - a.timestamp);
-      
-      container.innerHTML = '<div class="friends-videos" id="friends-videos-grid"></div>';
-      const grid = document.getElementById('friends-videos-grid');
-      
-      videos.forEach(video => {
-        const videoEl = document.createElement('div');
-        videoEl.className = 'friend-video';
-        videoEl.innerHTML = `
-          <video src="${video.url}" loop muted></video>
-          <div class="friend-video-overlay">
-            <i class="fas fa-heart"></i> ${Object.keys(video.likedBy||{}).length}
-          </div>
-        `;
-        videoEl.onclick = () => playFriendVideo(video);
-        grid.appendChild(videoEl);
-      });
-    }
-
-    function viewFriendVideos(fid, username) {
-      // Show all videos from this friend
-      const container = document.getElementById('friends-content');
-      container.innerHTML = '<div class="spinner"></div>';
-      
-      db.ref('videos').orderByChild('uid').equalTo(fid).once('value').then(videoSnap => {
-        const videos = videoSnap.val() || {};
-        container.innerHTML = `
-          <div style="padding:15px;background:#111;border-bottom:1px solid #333;">
-            <button onclick="loadFriendsPage()" style="background:none;border:none;color:#ff0050;font-size:16px;">
-              <i class="fas fa-arrow-left"></i> Back
-            </button>
-            <h3 style="margin:10px 0;">@${username}'s Videos</h3>
-          </div>
-          <div class="friends-videos" id="friend-videos-grid"></div>
-        `;
-        
-        const grid = document.getElementById('friend-videos-grid');
-        Object.entries(videos).reverse().forEach(([vid, video]) => {
-          if (!video.isDraft) {
-            const videoEl = document.createElement('div');
-            videoEl.className = 'friend-video';
-            videoEl.innerHTML = `
-              <video src="${video.url}" loop muted></video>
-              <div class="friend-video-overlay">
-                <i class="fas fa-heart"></i> ${Object.keys(video.likedBy||{}).length}
-              </div>
-            `;
-            videoEl.onclick = () => playFriendVideo(video);
-            grid.appendChild(videoEl);
-          }
-        });
-        
-        if (grid.innerHTML === '') {
-          grid.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;grid-column:1/-1;">No videos</div>';
-        }
-      });
-    }
-
-    function playFriendVideo(video) {
-      // Play video in full screen view (simplified)
-      const container = document.getElementById('friends-content');
-      container.innerHTML = `
-        <div style="position:relative;height:100%;background:#000;">
-          <button onclick="viewFriendVideos('${video.uid}', '${video.username}')" style="position:absolute;top:15px;left:15px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;width:40px;height:40px;z-index:10;">
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          <video src="${video.url}" loop controls autoplay style="width:100%;height:100%;object-fit:contain;"></video>
-          <div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,.7));">
-            <div class="username">@${video.username}</div>
-            <div class="caption">${escape(video.caption||'')}</div>
-          </div>
-        </div>
-      `;
-    }
-
-    function loadAllUsers(container) {
-      container.innerHTML = '<div class="spinner"></div>';
-      db.ref('users').once('value').then(snap => {
-        const users = snap.val() || {};
-        container.innerHTML = '';
-        
-        Object.entries(users).forEach(([uid, user]) => {
-          if (uid === currentUser.uid) return;
+        if (isFollowing) {
+          // Unfollow
+          updates[`users/${currentUser.uid}/following/${targetUid}`] = null;
+          updates[`users/${targetUid}/followers/${currentUser.uid}`] = null;
           
-          const isFollowing = !!user.followers?.[currentUser.uid];
-          const isFriend = !!user.friends?.[currentUser.uid];
+          // Remove from friends if exists
+          updates[`users/${currentUser.uid}/friends/${targetUid}`] = null;
+          updates[`users/${targetUid}/friends/${currentUser.uid}`] = null;
+        } else {
+          // Follow
+          updates[`users/${currentUser.uid}/following/${targetUid}`] = true;
+          updates[`users/${targetUid}/followers/${currentUser.uid}`] = true;
           
-          const userEl = document.createElement('div');
-          userEl.className = 'user-item';
-          userEl.innerHTML = `
-            <div class="avatar"><i class="fas fa-user"></i></div>
-            <div class="user-info">
-              <div class="username">@${user.username}</div>
-              <div style="color:#aaa;font-size:12px;">${user.email}</div>
-            </div>
-            <div class="user-actions">
-              ${isFriend ? 
-                '<button class="request-btn" style="background:#333;">Friends</button>' :
-                `<button class="request-btn ${isFollowing ? 'following' : ''}" data-uid="${uid}">
-                  ${isFollowing ? 'Following' : 'Follow'}
-                </button>`
-              }
-            </div>
-          `;
-          
-          const followBtn = userEl.querySelector('.request-btn');
-          if (!isFriend) {
-            followBtn.onclick = () => sendFriendRequest(uid, user);
-          }
-          
-          // Click on user item to view profile
-          userEl.querySelector('.user-info').onclick = () => {
-            loadProfile(uid);
-            showPage('profile');
+          // Send friend request
+          updates[`friendRequests/${targetUid}/${currentUser.uid}`] = {
+            from: currentUser.uid,
+            username: user.username,
+            timestamp: Date.now()
           };
-          
-          container.appendChild(userEl);
+        }
+        
+        db.ref().update(updates).then(() => {
+          updateMessageBadge();
+          if (currentProfileUser) {
+            loadProfile(currentProfileUser);
+          }
         });
       });
     }
 
-    function sendFriendRequest(targetUid, targetUser) {
-      const updates = {};
-      updates[`users/${currentUser.uid}/following/${targetUid}`] = true;
-      updates[`users/${targetUid}/followers/${currentUser.uid}`] = true;
+    // ---------- Inbox Users ----------
+    function loadInboxUsers() {
+      const userList = document.getElementById('user-list');
+      userList.innerHTML = '<div class="spinner"></div>';
       
-      // Send friend request
-      updates[`friendRequests/${targetUid}/${currentUser.uid}`] = {
-        from: currentUser.uid,
-        username: currentUser.displayName || currentUser.email.split('@')[0],
-        timestamp: Date.now()
-      };
+      const activeTab = document.querySelector('.inbox-tab.active').dataset.tab;
       
-      db.ref().update(updates).then(() => {
-        loadFriendsPage();
-        updateMessageBadge();
-      });
+      if (activeTab === 'all') {
+        // Load all users except current user
+        db.ref('users').on('value', (snapshot) => {
+          const users = snapshot.val() || {};
+          const filteredUsers = {};
+          Object.keys(users).forEach(uid => {
+            if (uid !== currentUser.uid) {
+              filteredUsers[uid] = users[uid];
+            }
+          });
+          renderUsers(filteredUsers, userList);
+        });
+      } else if (activeTab === 'friends') {
+        // Load friends
+        db.ref('users/' + currentUser.uid + '/friends').on('value', (snapshot) => {
+          const friends = snapshot.val() || {};
+          const friendIds = Object.keys(friends);
+          
+          if (friendIds.length === 0) {
+            userList.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No friends yet</div>';
+            return;
+          }
+          
+          db.ref('users').once('value').then(snapshot => {
+            const allUsers = snapshot.val() || {};
+            const friendUsers = {};
+            
+            friendIds.forEach(fid => {
+              if (allUsers[fid] && fid !== currentUser.uid) {
+                friendUsers[fid] = allUsers[fid];
+              }
+            });
+            
+            renderUsers(friendUsers, userList);
+          });
+        });
+      } else if (activeTab === 'requests') {
+        // Load friend requests
+        db.ref('friendRequests/' + currentUser.uid).on('value', (snapshot) => {
+          const requests = snapshot.val() || {};
+          
+          if (Object.keys(requests).length === 0) {
+            userList.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No friend requests</div>';
+            return;
+          }
+          
+          const requestUserIds = Object.keys(requests);
+          db.ref('users').once('value').then(snapshot => {
+            const allUsers = snapshot.val() || {};
+            const requestUsers = {};
+            
+            requestUserIds.forEach(uid => {
+              if (allUsers[uid]) {
+                requestUsers[uid] = allUsers[uid];
+              }
+            });
+            
+            renderRequestUsers(requestUsers, requests, userList);
+          });
+        });
+      }
     }
 
-    // Friends tabs
-    document.querySelectorAll('.friends-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.friends-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        loadFriendsPage();
-      });
-    });
-
-    // ---------- Profile ----------
-    async function loadProfile(uid) {
-      const snap = await db.ref('users/' + uid).once('value');
-      const user = snap.val();
-      if (!user) return;
+    function renderUsers(users, container) {
+      container.innerHTML = '';
       
-      document.getElementById('profile-username').textContent = '@' + user.username;
-      document.getElementById('following-count').textContent = Object.keys(user.following||{}).length;
-      document.getElementById('followers-count').textContent = Object.keys(user.followers||{}).length;
-      document.getElementById('likes-count').textContent = user.likes || 0;
-
-      const editBtn = document.getElementById('edit-profile-btn');
-      if (uid === currentUser.uid) {
-        editBtn.textContent = 'Edit Profile';
-        editBtn.onclick = () => editProfile();
-      } else {
-        const isFriend = !!user.friends?.[currentUser.uid];
-        const isFollowing = !!user.followers?.[currentUser.uid];
-        editBtn.textContent = isFriend ? 'Friends' : (isFollowing ? 'Following' : 'Follow');
-        editBtn.className = 'follow-btn ' + (isFriend ? 'following' : (isFollowing ? 'following' : ''));
-        editBtn.onclick = () => toggleFollow(uid, editBtn, user);
-      }
-
-      // Load user videos in grid format
-      const profileVideos = document.getElementById('profile-videos');
-      profileVideos.innerHTML = '<div class="spinner"></div>';
-      db.ref('videos').orderByChild('uid').equalTo(uid).once('value').then(s => {
-        const videos = s.val() || {};
-        renderProfileVideos(videos, uid === currentUser.uid);
-      });
-    }
-    
-    function renderProfileVideos(videosObj, isOwnProfile = false) {
-      const profileVideos = document.getElementById('profile-videos');
-      
-      if (!Object.keys(videosObj).length) {
-        profileVideos.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;grid-column:1/-1;">No videos yet</div>';
-        return;
-      }
-      
-      profileVideos.innerHTML = '';
-      Object.entries(videosObj).reverse().forEach(([vid, data]) => {
-        // Don't show drafts to other users
-        if (data.isDraft && !isOwnProfile) return;
+      Object.entries(users).forEach(([uid, user]) => {
+        const isFollowing = currentUser && user.followers && user.followers[currentUser.uid];
+        const isFriend = currentUser && user.friends && user.friends[currentUser.uid];
         
-        const videoEl = document.createElement('div');
-        videoEl.className = 'profile-video';
-        videoEl.innerHTML = `
-          <video src="${data.url}" loop muted></video>
-          <div class="profile-video-overlay">
-            <i class="fas fa-heart"></i> ${Object.keys(data.likedBy||{}).length}
-            ${data.isDraft ? '<i class="fas fa-edit" style="margin-left:10px;"></i> Draft' : ''}
+        const userEl = document.createElement('div');
+        userEl.className = 'user-item';
+        userEl.innerHTML = `
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="user-details" onclick="openChat('${uid}', '${user.username}')">
+            <div class="user-name">${user.username}</div>
+            <div class="user-status">@${user.username}</div>
+          </div>
+          <div class="user-stats">
+            <div class="followers-count">${Object.keys(user.followers || {}).length} followers</div>
+            ${!isFriend ? `
+              <button class="follow-btn-small ${isFollowing ? 'following' : ''}" onclick="toggleFollow('${uid}', this)">
+                ${isFollowing ? 'Following' : 'Follow'}
+              </button>
+            ` : `
+              <button class="follow-btn-small" style="background:#2f2f2f;">Friends</button>
+            `}
           </div>
         `;
-        
-        if (isOwnProfile && data.isDraft) {
-          const actions = document.createElement('div');
-          actions.className = 'draft-actions';
-          actions.innerHTML = `
-            <button onclick="postDraft('${vid}')" style="background:#ff0050;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:12px;">Post</button>
-            <button onclick="deleteDraft('${vid}')" style="background:#333;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:12px;">Delete</button>
-          `;
-          videoEl.appendChild(actions);
-        }
-        
-        profileVideos.appendChild(videoEl);
+        container.appendChild(userEl);
       });
-    }
-    
-    async function toggleFollow(targetUid, btn, targetData) {
-      const meFollowing = !!targetData.followers?.[currentUser.uid];
-      const updates = {};
-      
-      if (meFollowing) {
-        updates[`users/${currentUser.uid}/following/${targetUid}`] = null;
-        updates[`users/${targetUid}/followers/${currentUser.uid}`] = null;
-        
-        // Remove from friends if they were friends
-        updates[`users/${currentUser.uid}/friends/${targetUid}`] = null;
-        updates[`users/${targetUid}/friends/${currentUser.uid}`] = null;
-      } else {
-        updates[`users/${currentUser.uid}/following/${targetUid}`] = true;
-        updates[`users/${targetUid}/followers/${currentUser.uid}`] = true;
-        
-        // Check if it's mutual follow to make friends
-        const myData = await db.ref('users/' + currentUser.uid).once('value');
-        if (myData.val().following && myData.val().following[targetUid] && targetData.followers && targetData.followers[currentUser.uid]) {
-          updates[`users/${currentUser.uid}/friends/${targetUid}`] = true;
-          updates[`users/${targetUid}/friends/${currentUser.uid}`] = true;
-        }
-      }
-      
-      await db.ref().update(updates);
-      loadProfile(targetUid);
-      updateMessageBadge();
     }
 
-    function editProfile() {
-      const newUsername = prompt('Enter new username:');
-      if (newUsername) {
-        db.ref('users/' + currentUser.uid + '/username').set(newUsername);
-        loadProfile(currentUser.uid);
-      }
+    function renderRequestUsers(users, requests, container) {
+      container.innerHTML = '';
+      
+      Object.entries(users).forEach(([uid, user]) => {
+        const request = requests[uid];
+        
+        const userEl = document.createElement('div');
+        userEl.className = 'user-item';
+        userEl.innerHTML = `
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="user-details">
+            <div class="user-name">${user.username}</div>
+            <div class="user-status">Wants to be friends</div>
+          </div>
+          <div class="user-stats">
+            <button class="follow-btn-small" onclick="acceptFriendRequest('${uid}')">Accept</button>
+            <button class="follow-btn-small" onclick="declineFriendRequest('${uid}')" style="background:#2f2f2f;margin-left:8px;">Delete</button>
+          </div>
+        `;
+        container.appendChild(userEl);
+      });
     }
 
-    // ---------- Inbox ----------
-    function loadInbox() {
-      const activeTab = document.querySelector('.inbox-tab.active').dataset.tab;
-      const content = document.getElementById('inbox-content');
-      
-      if (activeTab === 'requests') {
-        loadFriendRequests(content);
-      } else {
-        loadMessageList(content);
-      }
-    }
-    
-    function loadFriendRequests(container) {
-      container.innerHTML = '<div class="spinner"></div>';
-      
-      db.ref('friendRequests/' + currentUser.uid).once('value').then(snap => {
-        const requests = snap.val() || {};
-        
-        if (!Object.keys(requests).length) {
-          container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No friend requests</div>';
-          return;
-        }
-        
-        container.innerHTML = '';
-        Object.entries(requests).forEach(([fromUid, req]) => {
-          db.ref('users/' + fromUid).once('value').then(userSnap => {
-            const user = userSnap.val();
-            if (!user) return;
-            
-            const reqEl = document.createElement('div');
-            reqEl.className = 'request-item';
-            reqEl.innerHTML = `
-              <div class="avatar"><i class="fas fa-user"></i></div>
-              <div class="request-info">
-                <div class="username">@${user.username}</div>
-                <div style="color:#aaa;font-size:12px;">Wants to be friends</div>
-              </div>
-              <div class="request-actions">
-                <button class="request-btn accept" data-uid="${fromUid}">Accept</button>
-                <button class="request-btn decline" data-uid="${fromUid}">Delete</button>
-              </div>
-            `;
-            container.appendChild(reqEl);
-            
-            // Add event listeners
-            reqEl.querySelector('.accept').onclick = () => acceptFriendRequest(fromUid);
-            reqEl.querySelector('.decline').onclick = () => declineFriendRequest(fromUid);
-          });
-        });
-      });
-    }
-    
-    function loadMessageList(container) {
-      container.innerHTML = '<div class="spinner"></div>';
-      
-      // Get all friends
-      db.ref('users/' + currentUser.uid + '/friends').once('value').then(snap => {
-        const friends = snap.val() || {};
-        
-        if (Object.keys(friends).length === 0) {
-          container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No messages</div>';
-          return;
-        }
-        
-        container.innerHTML = '';
-        Object.keys(friends).forEach(uid => {
-          db.ref('users/' + uid).once('value').then(userSnap => {
-            const u = userSnap.val();
-            if (!u) return;
-            
-            // Get last message
-            const chatId = [currentUser.uid, uid].sort().join('_');
-            db.ref('chats/' + chatId).orderByKey().limitToLast(1).once('value').then(msgSnap => {
-              const messages = msgSnap.val() || {};
-              const lastMsg = Object.values(messages)[0] || {text: 'No messages yet'};
-              
-              const msgEl = document.createElement('div');
-              msgEl.className = 'message-item';
-              msgEl.innerHTML = `
-                <div class="avatar"><i class="fas fa-user"></i></div>
-                <div class="message-info">
-                  <div class="message-header">
-                    <div class="username">@${u.username}</div>
-                  </div>
-                  <div class="message-preview">${escape(lastMsg.text)}</div>
-                </div>
-              `;
-              msgEl.onclick = () => openChat(uid, u.username);
-              container.appendChild(msgEl);
-            });
-          });
-        });
-      });
-    }
-    
     function acceptFriendRequest(fromUid) {
       const updates = {};
       updates[`friendRequests/${currentUser.uid}/${fromUid}`] = null;
@@ -1000,193 +878,398 @@
       updates[`users/${fromUid}/friends/${currentUser.uid}`] = true;
       
       db.ref().update(updates).then(() => {
-        loadInbox();
+        loadInboxUsers();
         updateMessageBadge();
       });
     }
-    
+
     function declineFriendRequest(fromUid) {
       db.ref(`friendRequests/${currentUser.uid}/${fromUid}`).remove().then(() => {
-        loadInbox();
+        loadInboxUsers();
         updateMessageBadge();
       });
     }
-    
-    // Inbox tabs
-    document.querySelectorAll('.inbox-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.inbox-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        loadInbox();
-      });
-    });
 
-    // ---------- Chat (Full Screen) ----------
-    function openChat(uid, username) {
-      currentChatUid = uid;
-      document.getElementById('chat-username').textContent = '@' + username;
-      
-      // Hide main app and show chat page
+    // ---------- Chat System ----------
+    function openChat(userId, userName) {
+      currentChatUser = { id: userId, name: userName };
+      document.getElementById('chat-user-name').textContent = userName;
+      document.getElementById('chat-page').style.display = 'flex';
       document.getElementById('app').style.display = 'none';
-      pages.chat.style.display = 'flex';
       
-      loadMessages(uid);
+      loadChatMessages(userId);
     }
-    
-    function loadMessages(uid) {
-      const chatId = [currentUser.uid, uid].sort().join('_');
+
+    function closeChat() {
+      document.getElementById('chat-page').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+      showPage('inbox');
+    }
+
+    function loadChatMessages(userId) {
       const messagesContainer = document.getElementById('chat-messages');
-      messagesContainer.innerHTML = '';
+      messagesContainer.innerHTML = '<div class="spinner"></div>';
       
-      // Clear previous listeners
-      db.ref('chats/' + chatId).off();
+      const chatId = [currentUser.uid, userId].sort().join('_');
       
-      db.ref('chats/' + chatId).on('child_added', s => {
-        const m = s.val();
-        const div = document.createElement('div');
-        div.className = 'message ' + (m.sender===currentUser.uid?'sent':'received');
-        div.innerHTML = escape(m.text);
-        messagesContainer.appendChild(div);
+      db.ref('chats/' + chatId).orderByChild('timestamp').limitToLast(50).on('value', (snapshot) => {
+        const messages = snapshot.val() || {};
+        messagesContainer.innerHTML = '';
+        
+        // Convert to array and sort by timestamp
+        const messagesArray = Object.entries(messages).map(([msgId, message]) => ({
+          id: msgId,
+          ...message
+        })).sort((a, b) => a.timestamp - b.timestamp);
+        
+        messagesArray.forEach(message => {
+          const messageEl = document.createElement('div');
+          messageEl.className = `message ${message.sender === currentUser.uid ? 'message-sent' : 'message-received'}`;
+          messageEl.textContent = message.text;
+          messagesContainer.appendChild(messageEl);
+        });
+        
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
       });
     }
-    
-    document.getElementById('send-msg').onclick = () => {
-      const txt = document.getElementById('msg-input').value.trim();
-      if (!txt || !currentChatUid) return;
-      const chatId = [currentUser.uid, currentChatUid].sort().join('_');
-      db.ref('chats/' + chatId).push({
-        sender: currentUser.uid,
-        text: txt,
-        ts: Date.now()
-      });
-      document.getElementById('msg-input').value = '';
-    };
-    
-    document.getElementById('back-from-chat').onclick = () => {
-      // Show main app and hide chat page
-      document.getElementById('app').style.display = 'flex';
-      pages.chat.style.display = 'none';
-      showPage('inbox');
-    };
 
-    // ---------- Upload Functions ----------
-    function uploadMedia() {
-      if (!selectedMediaFile) {
-        alert('Please select a file first');
-        return;
+    function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      
+      if (text && currentChatUser) {
+        const chatId = [currentUser.uid, currentChatUser.id].sort().join('_');
+        
+        db.ref('chats/' + chatId).push({
+          sender: currentUser.uid,
+          text: text,
+          timestamp: Date.now()
+        });
+        
+        input.value = '';
       }
-
-      const caption = document.getElementById('upload-caption').value;
-      
-      // For demo, we'll use a placeholder URL since we can't actually upload files
-      // In a real app, you would upload to Firebase Storage
-      const demoUrl = selectedMediaFile.type.startsWith('video/') 
-        ? 'https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4'
-        : 'https://picsum.photos/400/700';
-      
-      db.ref('videos').push({
-        uid: currentUser.uid,
-        username: currentUser.displayName || currentUser.email.split('@')[0],
-        url: demoUrl, 
-        caption,
-        likedBy: {}, 
-        timestamp: Date.now(),
-        isDraft: false,
-        type: selectedMediaFile.type.startsWith('video/') ? 'video' : 'image'
-      }).then(() => {
-        alert('Media uploaded successfully!');
-        hideModal();
-        loadProfile(currentUser.uid);
-      });
     }
 
-    function uploadVideo() {
-      const url = prompt('Paste video URL (any public mp4):');
-      const caption = prompt('Caption:');
-      if (!url) return;
+    // ---------- Live Stream ----------
+    function goLive() {
+      hideModal();
+      document.getElementById('live-page').style.display = 'flex';
+      document.getElementById('app').style.display = 'none';
       
-      db.ref('videos').push({
-        uid: currentUser.uid,
-        username: currentUser.displayName || currentUser.email.split('@')[0],
-        url, 
-        caption,
-        likedBy: {}, 
-        timestamp: Date.now(),
-        isDraft: false,
-        type: 'video'
-      }).then(() => alert('Video uploaded!'));
+      startLiveStream();
+    }
+
+    function closeLive() {
+      document.getElementById('live-page').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+      
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    }
+
+    async function startLiveStream() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          video: true, 
+          audio: true 
+        });
+        const liveVideo = document.getElementById('live-video');
+        liveVideo.srcObject = stream;
+        
+        // Create live stream in database
+        const liveId = 'live_' + Date.now();
+        db.ref('lives/' + liveId).set({
+          uid: currentUser.uid,
+          username: currentUser.displayName || currentUser.email.split('@')[0],
+          viewers: 0,
+          startedAt: Date.now(),
+          isLive: true
+        });
+        
+        // Simulate viewers
+        let viewers = 125;
+        setInterval(() => {
+          viewers += Math.floor(Math.random() * 10) - 3;
+          if (viewers < 100) viewers = 100;
+          document.getElementById('live-viewers').textContent = viewers;
+          db.ref('lives/' + liveId + '/viewers').set(viewers);
+        }, 3000);
+      } catch (err) {
+        alert('Error accessing camera: ' + err.message);
+      }
+    }
+
+    // ---------- Upload System ----------
+    function uploadVideo() {
+      hideModal();
+      const url = prompt('Enter video URL:');
+      const caption = prompt('Enter caption:');
+      
+      if (url) {
+        db.ref('videos').push({
+          uid: currentUser.uid,
+          username: currentUser.displayName || currentUser.email.split('@')[0],
+          url: url,
+          caption: caption,
+          likedBy: {},
+          timestamp: Date.now(),
+          isDraft: false
+        }).then(() => {
+          alert('Video uploaded successfully!');
+        });
+      }
+    }
+
+    function startCamera() {
+      hideModal();
+      alert('Camera started! In a real app, this would open the camera.');
     }
 
     function createDraft() {
-      const url = prompt('Paste media URL for draft:');
-      const caption = prompt('Caption (optional):');
-      if (!url) return;
+      hideModal();
+      const url = prompt('Enter video URL for draft:');
+      const caption = prompt('Enter caption (optional):');
       
-      db.ref('videos').push({
-        uid: currentUser.uid,
-        username: currentUser.displayName || currentUser.email.split('@')[0],
-        url, 
-        caption: caption || '',
-        likedBy: {}, 
-        timestamp: Date.now(),
-        isDraft: true
-      }).then(() => alert('Draft saved!'));
-    }
-
-    function showDrafts() {
-      showModal('drafts-modal');
-      loadDrafts();
-    }
-
-    function loadDrafts() {
-      const container = document.getElementById('drafts-container');
-      container.innerHTML = '<div class="spinner"></div>';
-      
-      db.ref('videos').orderByChild('uid').equalTo(currentUser.uid).once('value').then(snap => {
-        const videos = snap.val() || {};
-        container.innerHTML = '';
-        
-        Object.entries(videos).forEach(([vid, data]) => {
-          if (!data.isDraft) return;
-          
-          const draftEl = document.createElement('div');
-          draftEl.className = 'draft-item';
-          draftEl.innerHTML = `
-            <video src="${data.url}" loop muted></video>
-            <div class="draft-actions">
-              <button onclick="postDraft('${vid}')" style="background:#ff0050;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:12px;">Post</button>
-              <button onclick="deleteDraft('${vid}')" style="background:#333;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:12px;">Delete</button>
-            </div>
-          `;
-          container.appendChild(draftEl);
+      if (url) {
+        db.ref('videos').push({
+          uid: currentUser.uid,
+          username: currentUser.displayName || currentUser.email.split('@')[0],
+          url: url,
+          caption: caption || '',
+          likedBy: {},
+          timestamp: Date.now(),
+          isDraft: true
+        }).then(() => {
+          alert('Draft saved successfully!');
+          loadProfile(currentUser.uid);
         });
+      }
+    }
+
+    // ---------- Profile System ----------
+    function loadProfile(userId) {
+      currentProfileUser = userId;
+      
+      db.ref('users/' + userId).on('value', (snapshot) => {
+        const user = snapshot.val();
+        if (!user) return;
         
-        if (container.innerHTML === '') {
-          container.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;grid-column:1/-1;">No drafts</div>';
+        document.getElementById('profile-username').textContent = user.username;
+        document.getElementById('profile-handle').textContent = '@' + user.username;
+        document.getElementById('following-count').textContent = Object.keys(user.following || {}).length;
+        document.getElementById('followers-count').textContent = Object.keys(user.followers || {}).length;
+        document.getElementById('likes-count').textContent = user.likes || 0;
+        
+        const actionBtn = document.getElementById('profile-action-btn');
+        if (userId === currentUser.uid) {
+          actionBtn.textContent = 'Edit profile';
+          actionBtn.onclick = () => editProfile();
+          actionBtn.className = 'edit-btn';
+        } else {
+          const isFollowing = user.followers && user.followers[currentUser.uid];
+          actionBtn.textContent = isFollowing ? 'Following' : 'Follow';
+          actionBtn.className = isFollowing ? 'follow-btn following' : 'follow-btn';
+          actionBtn.onclick = () => toggleFollow(userId, actionBtn);
         }
+        
+        loadProfileVideos(userId);
+        loadDrafts(userId);
       });
     }
 
-    function postDraft(vid) {
-      db.ref('videos/' + vid + '/isDraft').set(false);
-      hideModal();
-      alert('Draft posted!');
-      loadProfile(currentUser.uid);
+    function loadProfileVideos(userId) {
+      const profileVideos = document.getElementById('profile-videos');
+      profileVideos.innerHTML = '<div class="spinner"></div>';
+      
+      db.ref('videos').orderByChild('uid').equalTo(userId).on('value', (snapshot) => {
+        const videos = snapshot.val() || {};
+        profileVideos.innerHTML = '';
+        
+        Object.entries(videos).reverse().forEach(([videoId, video]) => {
+          if (video.isDraft && userId !== currentUser.uid) return;
+          
+          const videoEl = document.createElement('div');
+          videoEl.className = 'profile-video';
+          
+          if (video.isDraft) {
+            videoEl.innerHTML = `
+              <video loop muted>
+                <source src="${video.url}" type="video/mp4">
+              </video>
+              <div class="video-stats">
+                <i class="fas fa-edit"></i> Draft
+              </div>
+              <div style="position:absolute;top:8px;right:8px;display:flex;gap:4px;">
+                <button onclick="postDraft('${videoId}')" style="background:#ff0050;color:#fff;border:none;border-radius:4px;padding:4px 8px;font-size:10px;">Post</button>
+                <button onclick="deleteDraft('${videoId}')" style="background:#2f2f2f;color:#fff;border:none;border-radius:4px;padding:4px 8px;font-size:10px;">Delete</button>
+              </div>
+            `;
+          } else {
+            videoEl.innerHTML = `
+              <video loop muted>
+                <source src="${video.url}" type="video/mp4">
+              </video>
+              <div class="video-stats">
+                <i class="fas fa-heart"></i> ${Object.keys(video.likedBy || {}).length}
+              </div>
+            `;
+          }
+          
+          profileVideos.appendChild(videoEl);
+        });
+      });
     }
 
-    function deleteDraft(vid) {
-      if (confirm('Delete this draft?')) {
-        db.ref('videos/' + vid).remove();
-        hideModal();
+    function loadDrafts(userId) {
+      if (userId !== currentUser.uid) return;
+      
+      db.ref('videos').orderByChild('uid').equalTo(userId).once('value').then((snapshot) => {
+        const videos = snapshot.val() || {};
+        let draftCount = 0;
+        
+        Object.values(videos).forEach(video => {
+          if (video.isDraft) draftCount++;
+        });
+        
+        document.getElementById('drafts-count').textContent = draftCount;
+      });
+    }
+
+    function postDraft(videoId) {
+      db.ref('videos/' + videoId + '/isDraft').set(false).then(() => {
+        alert('Draft posted successfully!');
         loadProfile(currentUser.uid);
+      });
+    }
+
+    function deleteDraft(videoId) {
+      if (confirm('Are you sure you want to delete this draft?')) {
+        db.ref('videos/' + videoId).remove().then(() => {
+          loadProfile(currentUser.uid);
+        });
       }
+    }
+
+    function editProfile() {
+      const newUsername = prompt('Enter new username:');
+      if (newUsername) {
+        db.ref('users/' + currentUser.uid + '/username').set(newUsername);
+      }
+    }
+
+    function viewProfile(userId) {
+      loadProfile(userId);
+      showPage('profile');
+    }
+
+    // ---------- Friends Page ----------
+    function loadFriendsPage() {
+      const friendsContent = document.getElementById('friends-content');
+      friendsContent.innerHTML = '<div class="spinner"></div>';
+      
+      db.ref('users/' + currentUser.uid + '/friends').once('value').then((snapshot) => {
+        const friends = snapshot.val() || {};
+        const friendIds = Object.keys(friends);
+        
+        if (friendIds.length === 0) {
+          friendsContent.innerHTML = '<div style="color:#aaa;text-align:center;padding:30px;">No friends yet. Follow people to see their posts here.</div>';
+          return;
+        }
+        
+        // Load posts from friends
+        db.ref('videos').orderByChild('timestamp').limitToLast(20).once('value').then((snapshot) => {
+          const allVideos = snapshot.val() || {};
+          const friendVideos = {};
+          
+          Object.entries(allVideos).forEach(([videoId, video]) => {
+            if (friendIds.includes(video.uid) && !video.isDraft) {
+              friendVideos[videoId] = video;
+            }
+          });
+          
+          renderFriendVideos(friendVideos, friendsContent);
+        });
+      });
+    }
+
+    function renderFriendVideos(videos, container) {
+      container.innerHTML = '';
+      
+      Object.entries(videos).reverse().forEach(([videoId, video]) => {
+        const videoEl = document.createElement('div');
+        videoEl.className = 'friend-post';
+        videoEl.innerHTML = `
+          <div class="friend-header">
+            <div class="friend-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="friend-info">
+              <div class="friend-name">@${video.username}</div>
+              <div class="friend-time">${new Date(video.timestamp).toLocaleDateString()}</div>
+            </div>
+          </div>
+          <div class="post-content">${video.caption || ''}</div>
+          <div class="post-actions">
+            <div class="post-action">
+              <i class="far fa-heart"></i>
+              <span>${Object.keys(video.likedBy || {}).length}</span>
+            </div>
+            <div class="post-action">
+              <i class="far fa-comment"></i>
+              <span>Comment</span>
+            </div>
+            <div class="post-action">
+              <i class="far fa-share-square"></i>
+              <span>Share</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(videoEl);
+      });
+    }
+
+    // ---------- Demo Videos Creation ----------
+    function createDemoVideos() {
+      const demoVideos = [
+        {
+          uid: 'demo_user_1',
+          username: 'sanay_xettri',
+          url: 'https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-partying-happily-4640-large.mp4',
+          caption: 'Amazing dance moves! 💃 #dance #foryou',
+          likedBy: {},
+          timestamp: Date.now() - 3600000,
+          isDraft: false
+        },
+        {
+          uid: 'demo_user_2',
+          username: 'rawatpharmacy',
+          url: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-woman-typing-on-a-computer-3980-large.mp4',
+          caption: 'New phone unboxing 📱 #tech #gadgets',
+          likedBy: {},
+          timestamp: Date.now() - 7200000,
+          isDraft: false
+        },
+        {
+          uid: 'demo_user_3',
+          username: 'stem_explore',
+          url: 'https://assets.mixkit.co/videos/preview/mixkit-person-cooking-a-meal-1679-large.mp4',
+          caption: 'Quick and easy recipe! 🍳 #cooking #food',
+          likedBy: {},
+          timestamp: Date.now() - 10800000,
+          isDraft: false
+        }
+      ];
+
+      demoVideos.forEach(video => {
+        db.ref('videos').push(video);
+      });
     }
 
     // ---------- Message Badge ----------
     function updateMessageBadge() {
-      db.ref('friendRequests/' + currentUser.uid).once('value').then(snap => {
-        const requests = snap.val() || {};
+      db.ref('friendRequests/' + currentUser.uid).once('value').then((snapshot) => {
+        const requests = snapshot.val() || {};
         const badge = document.getElementById('msg-badge');
         
         if (Object.keys(requests).length > 0) {
@@ -1198,18 +1281,29 @@
       });
     }
 
-    // ---------- Utils ----------
-    function escape(s){return s?s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]):'';}
+    // ---------- Inbox Tabs ----------
+    document.querySelectorAll('.inbox-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.inbox-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        loadInboxUsers();
+      });
+    });
 
-    // Listen for new videos
-    db.ref('videos').orderByChild('timestamp').limitToLast(1).on('child_added', () => {
-      if (pages.home.classList.contains('active')) {
-        loadGlobalFeed();
+    // Enter key for chat
+    document.getElementById('chat-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
       }
     });
 
-    // Auto update message badge
-    setInterval(updateMessageBadge, 5000);
+    // Auto-play first video
+    setTimeout(() => {
+      const firstVideo = document.querySelector('.video-card video');
+      if (firstVideo) {
+        firstVideo.play().catch(() => {});
+      }
+    }, 2000);
 
   </script>
 </body>
