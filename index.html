@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TikTok Social</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Social Video App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;}
     body{background:#000;color:#fff;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
     
-    /* Header */
+    /* Header - Removed TikTok branding */
     header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#000;position:sticky;top:0;z-index:100;border-bottom:1px solid #2f2f2f;}
     .logo{font-size:20px;font-weight:bold;background:linear-gradient(45deg,#ff0050,#ff9000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
     .header-icons{display:flex;gap:20px;}
@@ -149,6 +149,17 @@
     .upload-cancel{background:#2f2f2f;color:#fff;}
     .upload-post{background:#ff0050;color:#fff;}
 
+    /* Camera Modal */
+    .camera-modal{background:#000;width:100%;height:100%;display:flex;flex-direction:column;z-index:2000;display:none;}
+    .camera-header{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #2f2f2f;}
+    .camera-title{font-size:18px;font-weight:600;}
+    .camera-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;}
+    .camera-preview{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+    .camera-video{width:100%;height:100%;object-fit:cover;}
+    .camera-controls{display:flex;justify-content:center;align-items:center;padding:20px;gap:30px;}
+    .camera-btn{background:#2f2f2f;color:#fff;border:none;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
+    .camera-record{background:#ff0050;width:70px;height:70px;}
+
     /* Settings Modal */
     .settings-modal{background:#000;width:100%;height:70%;position:fixed;bottom:0;border-radius:20px 20px 0 0;display:none;flex-direction:column;z-index:2000;}
     .settings-header{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #2f2f2f;}
@@ -191,6 +202,15 @@
 
     /* Success Message */
     .success-message{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#00ff88;color:#000;padding:12px 20px;border-radius:8px;font-weight:600;z-index:3000;display:none;}
+
+    /* Toast Notification */
+    .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.9);color:#000;padding:12px 20px;border-radius:8px;font-weight:500;z-index:3000;display:none;}
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .modal-options{grid-template-columns:repeat(2,1fr);}
+      .share-options{grid-template-columns:repeat(3,1fr);}
+    }
   </style>
 </head>
 <body>
@@ -199,7 +219,7 @@
   <div id="auth-page" class="page active">
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#000;">
       <div style="background:#111;padding:30px;border-radius:16px;width:90%;max-width:380px;text-align:center;">
-        <h2 style="margin-bottom:20px;background:linear-gradient(45deg,#ff0050,#ff9000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">TikTok Social</h2>
+        <h2 style="margin-bottom:20px;background:linear-gradient(45deg,#ff0050,#ff9000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">VideoShare</h2>
         <input type="email" id="auth-email" placeholder="Email" style="width:100%;padding:14px;margin:8px 0;border-radius:8px;border:none;outline:none;background:#2f2f2f;color:#fff;">
         <input type="password" id="auth-pass" placeholder="Password" style="width:100%;padding:14px;margin:8px 0;border-radius:8px;border:none;outline:none;background:#2f2f2f;color:#fff;">
         <button id="login-btn" style="width:100%;padding:14px;margin-top:12px;border:none;border-radius:8px;background:linear-gradient(45deg,#ff0050,#ff9000);color:#fff;font-weight:bold;cursor:pointer;">Log In</button>
@@ -211,9 +231,9 @@
   <!-- ==== MAIN APP ==== -->
   <div id="app" class="page" style="display:none;">
 
-    <!-- Header -->
+    <!-- Header - Updated without TikTok branding -->
     <header>
-      <div class="logo">TikTok</div>
+      <div class="logo">VideoShare</div>
       <div class="header-icons">
         <i class="fas fa-search header-icon"></i>
         <i class="fas fa-inbox header-icon" id="inbox-btn"></i>
@@ -286,7 +306,7 @@
           <div id="profile-handle" style="color:#b0b0b0;font-size:14px;margin:4px 0;">@user</div>
           <div class="bio-text" id="profile-bio-text">+ Add bio · 💷 My account is all about...</div>
           <a href="#" class="bio-link">💡 YouTube Channel</a>
-          <a href="#" class="bio-link">📌 TikTok Studio</a>
+          <a href="#" class="bio-link">📌 Video Studio</a>
         </div>
 
         <div class="profile-actions">
@@ -379,7 +399,7 @@
   <div id="upload-modal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title">Create</div>
+        <div class="modal-title">Create Video</div>
       </div>
       <div class="modal-options">
         <div class="modal-option" onclick="openGalleryUpload()">
@@ -448,6 +468,31 @@
           <button class="upload-action upload-post" onclick="uploadMedia()">Post</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Camera Modal -->
+  <div id="camera-modal" class="camera-modal">
+    <div class="camera-header">
+      <div class="camera-title">Camera</div>
+      <button class="camera-close" onclick="closeCamera()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="camera-preview">
+      <video id="camera-video" class="camera-video" autoplay playsinline></video>
+      <canvas id="camera-canvas" style="display:none;"></canvas>
+    </div>
+    <div class="camera-controls">
+      <button class="camera-btn" onclick="switchCamera()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <button id="record-btn" class="camera-btn camera-record" onclick="toggleRecording()">
+        <i class="fas fa-circle"></i>
+      </button>
+      <button class="camera-btn" onclick="takePhoto()">
+        <i class="fas fa-camera"></i>
+      </button>
     </div>
   </div>
 
@@ -610,10 +655,14 @@
     <i class="fas fa-check-circle"></i> Post uploaded successfully!
   </div>
 
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
   <!-- ==== Firebase ==== -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
   <script>
     // ---------- Firebase Config ----------
@@ -629,6 +678,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
+    const storage = firebase.storage();
 
     // ---------- Global Variables ----------
     let currentUser = null;
@@ -636,6 +686,12 @@
     let currentProfileUser = null;
     let currentVideoId = null;
     let selectedFile = null;
+    let mediaStream = null;
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let isRecording = false;
+    let isFrontCamera = true;
+    
     const pages = {
       auth: document.getElementById('auth-page'),
       home: document.getElementById('home-page'),
@@ -651,17 +707,17 @@
     function login() {
       const email = document.getElementById('auth-email').value.trim();
       const pass  = document.getElementById('auth-pass').value;
-      if (!email || !pass) return alert('Fill all fields');
+      if (!email || !pass) return showToast('Fill all fields');
       auth.signInWithEmailAndPassword(email, pass)
         .then(cred => afterAuth(cred.user))
-        .catch(err => alert(err.message));
+        .catch(err => showToast(err.message));
     }
     
     function signup() {
       const email = document.getElementById('auth-email').value.trim();
       const pass  = document.getElementById('auth-pass').value;
       const username = prompt('Choose a username:');
-      if (!email || !pass || !username) return alert('All fields required');
+      if (!email || !pass || !username) return showToast('All fields required');
       auth.createUserWithEmailAndPassword(email, pass)
         .then(cred => {
           return db.ref('users/' + cred.user.uid).set({
@@ -674,7 +730,7 @@
             createdAt: Date.now()
           }).then(() => afterAuth(cred.user));
         })
-        .catch(err => alert(err.message));
+        .catch(err => showToast(err.message));
     }
     
     function afterAuth(user) {
@@ -798,6 +854,183 @@
       showModal('gallery-modal');
     }
 
+    // ---------- Camera Functions ----------
+    function startCamera() {
+      hideModal();
+      showModal('camera-modal');
+      
+      const constraints = {
+        video: { 
+          facingMode: isFrontCamera ? 'user' : 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: true
+      };
+      
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => {
+          mediaStream = stream;
+          document.getElementById('camera-video').srcObject = stream;
+        })
+        .catch(err => {
+          console.error('Error accessing camera:', err);
+          showToast('Cannot access camera');
+        });
+    }
+    
+    function closeCamera() {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        mediaStream = null;
+      }
+      hideModal();
+    }
+    
+    function switchCamera() {
+      isFrontCamera = !isFrontCamera;
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+      }
+      startCamera();
+    }
+    
+    function takePhoto() {
+      const video = document.getElementById('camera-video');
+      const canvas = document.getElementById('camera-canvas');
+      const context = canvas.getContext('2d');
+      
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      canvas.toBlob(blob => {
+        selectedFile = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+        showPreview(selectedFile);
+        closeCamera();
+        showModal('gallery-modal');
+      }, 'image/jpeg');
+    }
+    
+    function toggleRecording() {
+      if (!isRecording) {
+        startRecording();
+      } else {
+        stopRecording();
+      }
+    }
+    
+    function startRecording() {
+      recordedChunks = [];
+      const options = { mimeType: 'video/webm; codecs=vp9' };
+      mediaRecorder = new MediaRecorder(mediaStream, options);
+      
+      mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+          recordedChunks.push(event.data);
+        }
+      };
+      
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        selectedFile = new File([blob], 'video.webm', { type: 'video/webm' });
+        showPreview(selectedFile);
+        closeCamera();
+        showModal('gallery-modal');
+      };
+      
+      mediaRecorder.start();
+      isRecording = true;
+      document.getElementById('record-btn').style.background = '#ff0000';
+      document.getElementById('record-btn').innerHTML = '<i class="fas fa-square"></i>';
+    }
+    
+    function stopRecording() {
+      if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+        document.getElementById('record-btn').style.background = '#ff0050';
+        document.getElementById('record-btn').innerHTML = '<i class="fas fa-circle"></i>';
+      }
+    }
+
+    // ---------- File Upload Handling ----------
+    document.getElementById('file-input').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        selectedFile = file;
+        showPreview(file);
+      }
+    });
+
+    function showPreview(file) {
+      const preview = document.getElementById('upload-preview');
+      
+      if (file.type.startsWith('image/')) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+      } else if (file.type.startsWith('video/')) {
+        // For videos, create a thumbnail
+        const video = document.createElement('video');
+        video.src = URL.createObjectURL(file);
+        video.addEventListener('loadeddata', () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          preview.src = canvas.toDataURL();
+          preview.style.display = 'block';
+        });
+      }
+    }
+
+    function uploadMedia() {
+      if (!selectedFile) {
+        showToast('Please select a file first');
+        return;
+      }
+
+      const caption = document.getElementById('caption-input').value.trim();
+      const timestamp = Date.now();
+      const fileName = `${currentUser.uid}_${timestamp}_${selectedFile.name}`;
+      const storageRef = storage.ref().child('videos/' + fileName);
+      
+      // Show uploading indicator
+      showToast('Uploading...');
+      
+      // Upload file to Firebase Storage
+      storageRef.put(selectedFile)
+        .then(snapshot => {
+          return snapshot.ref.getDownloadURL();
+        })
+        .then(url => {
+          // Save video data to Firebase Database
+          return db.ref('videos').push({
+            uid: currentUser.uid,
+            username: currentUser.displayName || currentUser.email.split('@')[0],
+            url: url,
+            caption: caption,
+            likedBy: {},
+            comments: {},
+            shares: 0,
+            timestamp: timestamp,
+            isDraft: false,
+            type: selectedFile.type.startsWith('video/') ? 'video' : 'image'
+          });
+        })
+        .then(() => {
+          showSuccess('Post uploaded successfully!');
+          hideModal();
+          loadGlobalFeed();
+          loadProfile(currentUser.uid);
+        })
+        .catch(error => {
+          console.error('Upload failed:', error);
+          showToast('Upload failed. Please try again.');
+        });
+    }
+
     // ---------- Settings Functions ----------
     function openSettings() {
       showModal('settings-modal');
@@ -838,7 +1071,7 @@
 
     function aboutApp() {
       closeSettings();
-      alert('TikTok Social App v1.0\nBuilt with Firebase Real-time Database');
+      alert('VideoShare App v1.0\nBuilt with Firebase Real-time Database');
     }
 
     function logout() {
@@ -862,58 +1095,14 @@
       }, 3000);
     }
 
-    // ---------- File Upload Handling ----------
-    document.getElementById('file-input').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        selectedFile = file;
-        const preview = document.getElementById('upload-preview');
-        
-        if (file.type.startsWith('image/')) {
-          preview.src = URL.createObjectURL(file);
-          preview.style.display = 'block';
-        } else if (file.type.startsWith('video/')) {
-          // For videos, we'll show a thumbnail or just the file name
-          preview.src = 'https://cdn-icons-png.flaticon.com/512/1256/1256650.png';
-          preview.style.display = 'block';
-        }
-      }
-    });
-
-    function uploadMedia() {
-      if (!selectedFile) {
-        alert('Please select a file first');
-        return;
-      }
-
-      const caption = document.getElementById('caption-input').value.trim();
-      
-      // In a real app, you would upload to Firebase Storage
-      // For demo purposes, we'll use a placeholder URL
-      let fileUrl;
-      if (selectedFile.type.startsWith('video/')) {
-        fileUrl = 'https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-partying-happily-4640-large.mp4';
-      } else {
-        fileUrl = 'https://picsum.photos/400/700';
-      }
-      
-      // Upload to Firebase Database
-      db.ref('videos').push({
-        uid: currentUser.uid,
-        username: currentUser.displayName || currentUser.email.split('@')[0],
-        url: fileUrl,
-        caption: caption,
-        likedBy: {},
-        comments: {},
-        shares: 0,
-        timestamp: Date.now(),
-        isDraft: false,
-        type: selectedFile.type.startsWith('video/') ? 'video' : 'image'
-      }).then(() => {
-        showSuccess('Post uploaded successfully!');
-        hideModal();
-        loadGlobalFeed();
-      });
+    // ---------- Toast Notification ----------
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
     }
 
     // ---------- Video Feed ----------
@@ -1082,18 +1271,18 @@
         return (currentShares || 0) + 1;
       });
       
-      alert(`Shared to ${platform}!`);
+      showToast(`Shared to ${platform}!`);
       closeShareModal();
     }
 
     function copyLink() {
       navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+      showToast('Link copied to clipboard!');
       closeShareModal();
     }
 
     function saveVideo() {
-      alert('Video saved to your device!');
+      showToast('Video saved to your device!');
       closeShareModal();
     }
 
@@ -1101,9 +1290,9 @@
     function toggleFavorite(videoId, favoriteBtn) {
       favoriteBtn.classList.toggle('liked');
       if (favoriteBtn.classList.contains('liked')) {
-        showSuccess('Added to favorites!');
+        showToast('Added to favorites!');
       } else {
-        showSuccess('Removed from favorites!');
+        showToast('Removed from favorites!');
       }
     }
 
@@ -1188,7 +1377,7 @@
 
     function playFriendVideo(video) {
       // In a real app, this would open the video in full screen
-      alert(`Playing video from @${video.username}`);
+      showToast(`Playing video from @${video.username}`);
     }
 
     // ---------- Inbox Users ----------
@@ -1602,14 +1791,9 @@
     });
 
     // ---------- Additional Features ----------
-    function startCamera() {
-      hideModal();
-      alert('Camera would open here');
-    }
-
     function goLive() {
       hideModal();
-      alert('Live streaming would start here');
+      showToast('Live streaming would start here');
     }
 
     function createDraft() {
